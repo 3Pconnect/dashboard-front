@@ -16,7 +16,7 @@ import { Profile } from '../componets/Profile';
 const { Header, Sider, Content } = Layout;
 
 const LayoutApp: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
