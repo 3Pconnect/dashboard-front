@@ -38,7 +38,7 @@ export default function NewLogin() {
               <Checkbox>Remember me</Checkbox>
               <Text color={'blue.500'}>Forgot password?</Text>
             </Stack>
-            <Button onClick={()=>{navigate('/main')}} colorScheme={'blue'} variant={'solid'}>
+            <Button onClick={()=>{navigate('/main/users')}} colorScheme={'blue'} variant={'solid'}>
              Logar
             </Button>
           </Stack>
