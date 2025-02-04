@@ -1,21 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 
+// Definindo o tipo de dados do gráfico
 interface ChartState {
-  series: Array<{ name: string; data: number[] }>;
+  series: Array<{ name: string; data: { x: number; y: number }[] }>;
   options: ApexCharts.ApexOptions;
 }
 
-interface ApexChartProps {
-  dates: number[];
-}
-
-const TotalAssociadosChart: React.FC<ApexChartProps> = ({ dates }) => {
+const TotalAssociadosChart: React.FC = () => {
   const [state, setState] = useState<ChartState>({
     series: [
       {
         name: "XYZ MOTORS",
-        data: dates,
+        data: [],
       },
     ],
     options: {
@@ -39,7 +36,7 @@ const TotalAssociadosChart: React.FC<ApexChartProps> = ({ dates }) => {
         size: 0,
       },
       title: {
-        text: "Stock Price Movement",
+        text: "Total Associados",
         align: "left",
       },
       fill: {
@@ -71,6 +68,36 @@ const TotalAssociadosChart: React.FC<ApexChartProps> = ({ dates }) => {
       },
     },
   });
+
+  // Gerando dados aleatórios no useEffect
+  useEffect(() => {
+    // Função para gerar dados aleatórios
+    const generateFakeData = () => {
+      const generatedData = [];
+      const currentDate = new Date().getTime();
+
+      // Gerar 30 pontos de dados aleatórios
+      for (let i = 0; i < 30; i++) {
+        generatedData.push({
+          x: currentDate - (30 - i) * 86400000, // Data (1 dia de diferença para cada ponto)
+          y: Math.floor(Math.random() * 1000000), // Valor aleatório entre 0 e 1.000.000
+        });
+      }
+
+      return generatedData;
+    };
+
+    const fakeData = generateFakeData();
+    setState((prevState) => ({
+      ...prevState,
+      series: [
+        {
+          name: "XYZ MOTORS",
+          data: fakeData,
+        },
+      ],
+    }));
+  }, []); // O array vazio faz com que o useEffect execute apenas uma vez após o componente ser montado
 
   return (
     <div>

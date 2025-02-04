@@ -74,7 +74,7 @@ const TotalTreinamentoRealizadosChart: React.FC = () => {
         },
       },
       title: {
-        text: "Monthly Inflation in Argentina, 2002",
+        text: "Total Treinamentos",
         floating: true,
         offsetY: 330,
         align: "center",
