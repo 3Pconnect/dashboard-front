@@ -18,6 +18,7 @@ import { UserList } from "./pages/UsersList";
 import { PerfilsList } from "./pages/PerfilsList";
 import { NovosMembrosList } from "./pages/NovosMembrosList";
 import { NovosParceirosList } from "./pages/NovosParceirosList";
+import DashboardMain from "./pages/DashboardMain";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -26,6 +27,7 @@ export const App = () => (
         <Route path="/main" element={<LayoutApp />}> {/* LayoutApp como rota pai */}
           <Route path="users" element={<UserList/>} />
           <Route path="perfis" element={<PerfilsList/>} />
+          <Route path="dashboard" element={<DashboardMain/>} />
           <Route path="novos-membros" element={<NovosMembrosList/>} />
           <Route path="apoiadores" element={<NovosParceirosList/>} />
           {/* Outras rotas dentro do LayoutApp */}

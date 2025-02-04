@@ -43,6 +43,9 @@ const LayoutApp: React.FC = () => {
               key: '1',
               icon: <UserOutlined />,
               label: 'Dashboard',
+              onClick: ()=> {
+                navigate('/main/dashboard')
+              }
             },
             {
               key: '2',
