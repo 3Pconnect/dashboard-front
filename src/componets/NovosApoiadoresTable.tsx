@@ -64,6 +64,7 @@ const NovosApoiadoresTable: React.FC = () => {
           sorter: (a, b) => a.name.length - b.name.length,
           sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
         },
         {
           title: 'Atividade',
@@ -72,6 +73,7 @@ const NovosApoiadoresTable: React.FC = () => {
           sorter: (a, b) => a.activity.length - b.activity.length,
           sortOrder: sortedInfo.columnKey === 'activity' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
         },
       ]
     : [
@@ -82,6 +84,7 @@ const NovosApoiadoresTable: React.FC = () => {
           sorter: (a, b) => a.name.length - b.name.length,
           sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>, // Aumentando o tamanho e negrito
         },
         {
           title: 'CNPJ',
@@ -90,6 +93,7 @@ const NovosApoiadoresTable: React.FC = () => {
           sorter: (a, b) => a.cnpj.localeCompare(b.cnpj),
           sortOrder: sortedInfo.columnKey === 'cnpj' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>, // Melhorando o estilo da célula
         },
         {
           title: 'E-mail',
@@ -98,6 +102,7 @@ const NovosApoiadoresTable: React.FC = () => {
           sorter: (a, b) => a.email.length - b.email.length,
           sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>, // Melhorando o estilo da célula
         },
         {
           title: 'Telefone',
@@ -106,6 +111,7 @@ const NovosApoiadoresTable: React.FC = () => {
           sorter: (a, b) => a.phone.localeCompare(b.phone),
           sortOrder: sortedInfo.columnKey === 'phone' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>, // Melhorando o estilo da célula
         },
         {
           title: 'Atividade',
@@ -114,19 +120,20 @@ const NovosApoiadoresTable: React.FC = () => {
           sorter: (a, b) => a.activity.length - b.activity.length,
           sortOrder: sortedInfo.columnKey === 'activity' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>, // Melhorando o estilo da célula
         },
       ];
 
   return (
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
-        <Heading fontSize="2xl">Apoiadores</Heading>
-        <ButtonChakra colorScheme="green" variant="solid">
+        <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>Apoiadores</Heading>
+        <ButtonChakra colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
           Adicionar
         </ButtonChakra>
       </Flex>
       <Box overflowX="auto">
-        <Table<DataType> columns={columns} dataSource={data} onChange={handleChange} />
+        <Table<DataType> columns={columns} dataSource={data} onChange={handleChange} pagination={{ pageSize: 5 }} />
       </Box>
     </>
   );

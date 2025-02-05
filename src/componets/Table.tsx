@@ -72,6 +72,7 @@ const TableUsers: React.FC = () => {
           sorter: (a, b) => a.name.length - b.name.length,
           sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
         },
         {
           title: 'Situação',
@@ -108,6 +109,7 @@ const TableUsers: React.FC = () => {
           sorter: (a, b) => a.name.length - b.name.length,
           sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
         },
         {
           title: 'Email',
@@ -116,6 +118,7 @@ const TableUsers: React.FC = () => {
           sorter: (a, b) => a.email.length - b.email.length,
           sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
         },
         {
           title: 'Cadastrado em',
@@ -124,6 +127,7 @@ const TableUsers: React.FC = () => {
           sorter: (a, b) => new Date(a.registered).getTime() - new Date(b.registered).getTime(),
           sortOrder: sortedInfo.columnKey === 'registered' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
         },
         {
           title: 'Situação',
@@ -138,7 +142,7 @@ const TableUsers: React.FC = () => {
             } else if (status === 'Pending') {
               color = 'orange';
             }
-            return <Tag color={color}>{status}</Tag>;
+            return   <Tag color={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
           },
           filters: [
             { text: 'Active', value: 'Active' },
@@ -156,20 +160,21 @@ const TableUsers: React.FC = () => {
           dataIndex: 'profiles',
           key: 'profiles',
           render: (profiles: string[]) => profiles.join(', '),
+          ellipsis: true,
         },
       ];
 
   return (
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
-        <Heading fontSize="2xl">Usuários</Heading>
-        <ButtonChakra colorScheme="green" variant="solid">
+        <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>Usuários</Heading>
+        <ButtonChakra colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
           Adicionar
         </ButtonChakra>
       </Flex>
 
       <Box overflowX="auto">
-        <Table<DataType> columns={columns} dataSource={data} onChange={handleChange} />
+        <Table<DataType> columns={columns} dataSource={data} onChange={handleChange} pagination={{ pageSize: 5 }} />
       </Box>
     </>
   );

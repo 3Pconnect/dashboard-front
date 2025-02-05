@@ -72,6 +72,7 @@ const NovosMembrosTable: React.FC = () => {
           sorter: (a, b) => a.name.length - b.name.length,
           sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
         },
         {
           title: 'Situação',
@@ -104,6 +105,7 @@ const NovosMembrosTable: React.FC = () => {
           sorter: (a, b) => a.name.length - b.name.length,
           sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
         },
         {
           title: 'Email',
@@ -112,6 +114,7 @@ const NovosMembrosTable: React.FC = () => {
           sorter: (a, b) => a.email.length - b.email.length,
           sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
         },
         {
           title: 'Empresa',
@@ -120,6 +123,7 @@ const NovosMembrosTable: React.FC = () => {
           sorter: (a, b) => a.company.length - b.company.length,
           sortOrder: sortedInfo.columnKey === 'company' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
         },
         {
           title: 'Cargo',
@@ -128,6 +132,7 @@ const NovosMembrosTable: React.FC = () => {
           sorter: (a, b) => a.role.length - b.role.length,
           sortOrder: sortedInfo.columnKey === 'role' ? sortedInfo.order : null,
           ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
         },
         {
           title: 'Situação',
@@ -148,7 +153,7 @@ const NovosMembrosTable: React.FC = () => {
               default:
                 color = 'gray';
             }
-            return <Tag color={color}>{status}</Tag>;
+            return  <Tag color={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
           },
         },
       ];
@@ -156,13 +161,13 @@ const NovosMembrosTable: React.FC = () => {
   return (
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
-        <Heading fontSize="2xl">Novos Membros</Heading>
-        <ButtonChakra colorScheme="green" variant="solid">
+        <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>Novos Membros</Heading>
+        <ButtonChakra colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
           Adicionar
         </ButtonChakra>
       </Flex>
       <Box overflowX="auto">
-        <Table<DataType> columns={columns} dataSource={data} onChange={handleChange} />
+        <Table<DataType> columns={columns} dataSource={data} onChange={handleChange} pagination={{ pageSize: 5 }} />
       </Box>
     </>
   );

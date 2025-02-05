@@ -9,7 +9,7 @@ import {
   FileOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
-import { Flex, Heading, HStack, Image, Text } from '@chakra-ui/react';
+import { Flex, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import { Outlet, useNavigate } from 'react-router-dom';  // Importa o Outlet
 import { Profile } from '../componets/Profile';
 
@@ -26,14 +26,21 @@ const LayoutApp: React.FC = () => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider theme="light" trigger={null} collapsible collapsed={collapsed}>
-        <HStack>
-        <Image m={5} w={"30px"}
-          src='https://mecanicospremium.com.br/build/assets/logo-e787336c.png'/>
-          {!collapsed && 
-          <Heading color={"#182433"} fontSize="md">Mecânicos Premium</Heading>
-          }
-          
-        </HStack>
+        {!collapsed &&
+          <HStack>
+            <Image m={5} w={"30px"}
+              src='https://mecanicospremium.com.br/build/assets/logo-e787336c.png' />
+            <Heading color={"#182433"} fontSize="md">Mecânicos Premium</Heading>
+          </HStack>
+        }
+
+        {collapsed &&
+          <VStack alignItems={"center"}>
+            <Image m={5} w={"30px"}
+              src='https://mecanicospremium.com.br/build/assets/logo-e787336c.png' />
+          </VStack>
+        }
+
         <Menu
           theme="light"
           mode="inline"
@@ -43,7 +50,7 @@ const LayoutApp: React.FC = () => {
               key: '1',
               icon: <UserOutlined />,
               label: 'Dashboard',
-              onClick: ()=> {
+              onClick: () => {
                 navigate('/main/dashboard')
               }
             },
@@ -55,28 +62,28 @@ const LayoutApp: React.FC = () => {
                 {
                   key: '2.1',
                   label: 'Usuários',
-                  onClick: ()=> {
+                  onClick: () => {
                     navigate('/main/users')
                   }
                 },
                 {
                   key: '2.2',
                   label: 'Perfis',
-                  onClick: ()=> {
+                  onClick: () => {
                     navigate('/main/perfis')
                   }
                 },
                 {
                   key: '2.3',
                   label: 'Novos Membros',
-                  onClick: ()=> {
+                  onClick: () => {
                     navigate('/main/novos-membros')
                   }
                 },
                 {
                   key: '2.4',
                   label: 'Novos Parceiros',
-                  onClick: ()=> {
+                  onClick: () => {
                     navigate('/main/apoiadores')
                   }
                 },
@@ -90,10 +97,16 @@ const LayoutApp: React.FC = () => {
                 {
                   key: '3.1',
                   label: 'Agenda de Eventos',
+                  onClick: () => {
+                    navigate('/main/agenda-eventos')
+                  }
                 },
                 {
                   key: '3.2',
                   label: 'Meus Eventos',
+                  onClick: () => {
+                    navigate('/main/meus-eventos')
+                  }
                 },
               ],
             },
@@ -101,7 +114,7 @@ const LayoutApp: React.FC = () => {
               key: '4',
               icon: <UploadOutlined />,
               label: 'Arquivos',
-              onClick: ()=> {
+              onClick: () => {
                 alert("ndndnn")
               }
             },
@@ -111,19 +124,19 @@ const LayoutApp: React.FC = () => {
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }}>
 
-           <Flex mb={10} justify="space-between" align="center" width="100%">
-           <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
-          <Profile/>
-        </Flex>
+          <Flex mb={10} justify="space-between" align="center" width="100%">
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: '16px',
+                width: 64,
+                height: 64,
+              }}
+            />
+            <Profile />
+          </Flex>
         </Header>
         <Content
           style={{

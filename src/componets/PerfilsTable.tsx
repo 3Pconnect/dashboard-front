@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { TableColumnsType, TableProps } from 'antd';
 import { Table } from 'antd';
-import { Heading, Button as ButtonChakara, Flex } from '@chakra-ui/react';
+import { Heading, Button as ButtonChakra, Flex } from '@chakra-ui/react';
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type Filters = Parameters<OnChange>[1];
@@ -55,6 +55,7 @@ const PerfilsTable: React.FC = () => {
       sorter: (a, b) => a.name.length - b.name.length,
       sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
       ellipsis: true,
+      render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
     },
     {
       title: 'Cadastrado em',
@@ -63,18 +64,25 @@ const PerfilsTable: React.FC = () => {
       sorter: (a, b) => new Date(a.registered).getTime() - new Date(b.registered).getTime(),
       sortOrder: sortedInfo.columnKey === 'registered' ? sortedInfo.order : null,
       ellipsis: true,
+      render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
     },
   ];
 
   return (
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
-        <Heading fontSize="2xl">Perfis</Heading>
-        <ButtonChakara colorScheme="green" variant="solid">
+        <Heading fontSize="2xl" fontWeight="bold">Perfis</Heading>
+        <ButtonChakra colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
           Adicionar
-        </ButtonChakara>
+        </ButtonChakra>
       </Flex>
-      <Table<DataType> columns={columns} dataSource={data} onChange={handleChange} />
+      <Table<DataType> 
+        columns={columns} 
+        dataSource={data} 
+        onChange={handleChange} 
+        pagination={{ pageSize: 5 }}
+        scroll={{ x: 'max-content' }}
+      />
     </>
   );
 };
