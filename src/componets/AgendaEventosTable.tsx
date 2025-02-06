@@ -3,6 +3,7 @@ import { useMediaQuery } from '@chakra-ui/react';
 import type { TableColumnsType, TableProps } from 'antd';
 import { Table, Tag, Button } from 'antd';
 import { Heading, Button as ButtonChakra, Flex, Box } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type Filters = Parameters<OnChange>[1];
@@ -62,6 +63,7 @@ const AgendaEventosTable: React.FC = () => {
   const [filteredInfo, setFilteredInfo] = useState<Filters>({});
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
   const [isMobile] = useMediaQuery('(max-width: 768px)');
+  const navigate = useNavigate();
 
   const handleChange: OnChange = (pagination, filters, sorter) => {
     setFilteredInfo(filters);
@@ -194,7 +196,11 @@ const AgendaEventosTable: React.FC = () => {
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>Agenda de Eventos</Heading>
-        <ButtonChakra colorScheme="green" variant="solid" style={{ fontSize: '16px' }}>
+        <ButtonChakra
+        onClick={()=>{
+          navigate("/main/create-evento")
+        }}
+        colorScheme="green" variant="solid" style={{ fontSize: '16px' }}>
           Adicionar Evento
         </ButtonChakra>
       </Flex>

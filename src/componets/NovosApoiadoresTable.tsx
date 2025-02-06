@@ -3,6 +3,7 @@ import { useMediaQuery } from '@chakra-ui/react';
 import type { TableColumnsType, TableProps } from 'antd';
 import { Table, Tag } from 'antd';
 import { Heading, Button as ButtonChakra, Flex, Box } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type Filters = Parameters<OnChange>[1];
@@ -46,6 +47,7 @@ const data: DataType[] = [
 ];
 
 const NovosApoiadoresTable: React.FC = () => {
+  const navigate = useNavigate()
   const [filteredInfo, setFilteredInfo] = useState<Filters>({});
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
   const [isMobile] = useMediaQuery('(max-width: 768px)');
@@ -128,7 +130,9 @@ const NovosApoiadoresTable: React.FC = () => {
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>Apoiadores</Heading>
-        <ButtonChakra colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+        <ButtonChakra onClick={()=>{
+          navigate("/main/create-apoiador")
+        }} colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
           Adicionar
         </ButtonChakra>
       </Flex>

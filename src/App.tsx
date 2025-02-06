@@ -22,6 +22,11 @@ import DashboardMain from "./pages/DashboardMain";
 import LayoutPremium from "./pages/LayoutPremium";
 import { AgendaEventosList } from "./pages/AgendaEventosList";
 import { MeusEventosList } from "./pages/MeusEventosList";
+import { CreateUserPage } from "./pages/CreateUserPage";
+import { CreatePerfilPage } from "./pages/CreatePerfilPage";
+import { CreateNovosMembrosPage } from "./pages/CreateNovosMembrosPage";
+import { CreateNovosApoadoresPage } from "./pages/CreateNovosApoiadoresPage";
+import { CreateNovoEvento } from "./componets/CreateNovoEvento";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -35,6 +40,11 @@ export const App = () => (
           <Route path="apoiadores" element={<NovosParceirosList/>} />
           <Route path="agenda-eventos" element={<AgendaEventosList/>} />
           <Route path="meus-eventos" element={<MeusEventosList/>} />
+          <Route path="create-user" element={<CreateUserPage/>} />
+          <Route path="create-perfil" element={<CreatePerfilPage/>} />
+          <Route path="create-membro" element={<CreateNovosMembrosPage/>} />
+          <Route path="create-apoiador" element={<CreateNovosApoadoresPage/>} />
+          <Route path="create-evento" element={<CreateNovoEvento/>} />
           {/* Outras rotas dentro do LayoutApp */}
         </Route>
 

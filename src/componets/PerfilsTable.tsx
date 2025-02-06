@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { TableColumnsType, TableProps } from 'antd';
 import { Table } from 'antd';
 import { Heading, Button as ButtonChakra, Flex } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type Filters = Parameters<OnChange>[1];
@@ -39,6 +40,7 @@ const data: DataType[] = [
 ];
 
 const PerfilsTable: React.FC = () => {
+  const navigate = useNavigate()
   const [filteredInfo, setFilteredInfo] = useState<Filters>({});
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
 
@@ -72,7 +74,11 @@ const PerfilsTable: React.FC = () => {
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Heading fontSize="2xl" fontWeight="bold">Perfis</Heading>
-        <ButtonChakra colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+        <ButtonChakra
+        onClick={()=>{
+          navigate('/main/create-perfil')
+        }}
+        colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
           Adicionar
         </ButtonChakra>
       </Flex>

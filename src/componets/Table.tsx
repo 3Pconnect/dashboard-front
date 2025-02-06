@@ -3,6 +3,7 @@ import { useMediaQuery } from '@chakra-ui/react';
 import type { TableColumnsType, TableProps } from 'antd';
 import { Table, Tag } from 'antd';
 import { Heading, Button as ButtonChakra, Flex, Box } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type Filters = Parameters<OnChange>[1];
@@ -58,6 +59,7 @@ const TableUsers: React.FC = () => {
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
   const [isMobile] = useMediaQuery('(max-width: 768px)');
 
+  const navigate = useNavigate()
   const handleChange: OnChange = (pagination, filters, sorter) => {
     setFilteredInfo(filters);
     setSortedInfo(sorter as Sorts);
@@ -168,7 +170,11 @@ const TableUsers: React.FC = () => {
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>Usuários</Heading>
-        <ButtonChakra colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+        <ButtonChakra 
+        onClick={() => {
+          navigate('/main/create-user')
+        }}
+        colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
           Adicionar
         </ButtonChakra>
       </Flex>

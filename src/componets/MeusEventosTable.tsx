@@ -189,9 +189,7 @@ const MeusEventosTable: React.FC = () => {
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>Meus Eventos</Heading>
-        <ButtonChakra colorScheme="green" variant="solid" style={{ fontSize: '16px' }}>
-          Adicionar Evento
-        </ButtonChakra>
+     
       </Flex>
       <Box overflowX="auto">
         <Table<DataType> columns={columns} dataSource={data} onChange={handleChange} pagination={{ pageSize: 5 }} />
