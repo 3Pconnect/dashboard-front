@@ -27,6 +27,7 @@ import { CreatePerfilPage } from "./pages/CreatePerfilPage";
 import { CreateNovosMembrosPage } from "./pages/CreateNovosMembrosPage";
 import { CreateNovosApoadoresPage } from "./pages/CreateNovosApoiadoresPage";
 import { CreateNovoEvento } from "./componets/CreateNovoEvento";
+import HeaderComponent from "./pages/Site";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -49,7 +50,7 @@ export const App = () => (
         </Route>
 
         <Route path="/" element={<NewLogin />} />
-        <Route path="/test" element={<LayoutPremium />} />
+        <Route path="/test" element={<HeaderComponent />} />
         <Route path="/register" element={<Register />} />
         <Route
           path="/profile"
