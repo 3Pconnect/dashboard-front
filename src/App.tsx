@@ -28,6 +28,7 @@ import { CreateNovosMembrosPage } from "./pages/CreateNovosMembrosPage";
 import { CreateNovosApoadoresPage } from "./pages/CreateNovosApoiadoresPage";
 import { CreateNovoEvento } from "./componets/CreateNovoEvento";
 import HeaderComponent from "./pages/Site";
+import Enfermeira from "./pages/Enfermeira";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -51,6 +52,7 @@ export const App = () => (
 
         <Route path="/" element={<NewLogin />} />
         <Route path="/test" element={<HeaderComponent />} />
+        <Route path="/enfermeira" element={<Enfermeira />} />
         <Route path="/register" element={<Register />} />
         <Route
           path="/profile"

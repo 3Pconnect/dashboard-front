@@ -1,52 +1,98 @@
-import React, { useState } from 'react';
-import type { TableColumnsType, TableProps } from 'antd';
-import { Table } from 'antd';
-import { Heading, Button as ButtonChakra, Flex } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker } from 'antd';
+import { Heading, Flex, Button, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import {AiFillDelete} from 'react-icons/ai'
+import { fetchProfiles, deleteProfile } from '../services/api'; // Importa a função de delete
+import dayjs, { Dayjs } from 'dayjs';
 
+// Tipagem para os dados
+interface DataType {
+  id: number;
+  name: string;
+  createdAt: string;
+}
+
+// Tipagem para filtros e ordenação
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type Filters = Parameters<OnChange>[1];
 
-type GetSingle<T> = T extends (infer U)[] ? U : never;
-type Sorts = GetSingle<Parameters<OnChange>[2]>;
-
-interface DataType {
-  key: string;
-  name: string;
-  registered: string;
+interface Sorts {
+  columnKey?: string;
+  order?: 'ascend' | 'descend';
 }
 
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'Super Admin',
-    registered: '2023-01-15',
-  },
-  {
-    key: '2',
-    name: 'Admin',
-    registered: '2022-06-22',
-  },
-  {
-    key: '3',
-    name: 'Associado',
-    registered: '2021-12-11',
-  },
-  {
-    key: '4',
-    name: 'Apoiador',
-    registered: '2023-04-30',
-  },
-];
-
 const PerfilsTable: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [filteredInfo, setFilteredInfo] = useState<Filters>({});
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
+  const [data, setData] = useState<DataType[]>([]);
+  const [pagination, setPagination] = useState<TablePaginationConfig>({ pageSize: 10, current: 1 });
+  const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
+  const toast = useToast(); // Hook do Chakra UI para o Toast
 
-  const handleChange: OnChange = (pagination, filters, sorter) => {
+  // Função para buscar os perfis da API com filtros
+  const fetchData = async (page: number) => {
+    setLoading(true);
+    try {
+      const startDate = dateRange?.[0]?.format('YYYY-MM-DD') || undefined;
+      const endDate = dateRange?.[1]?.format('YYYY-MM-DD') || undefined;
+
+      const response = await fetchProfiles(page, pagination?.pageSize || 10, searchQuery, startDate, endDate);
+      
+      setData(response.profiles);
+      setTotal(response.total);
+      setPagination((prev) => ({
+        ...prev,
+        current: page,
+        total: response.total,
+      }));
+    } catch (error) {
+      console.error("Erro ao buscar perfis:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(pagination.current || 1);
+  }, [pagination.current]);
+
+  const handleTableChange: OnChange = (pagination, filters, sorter) => {
     setFilteredInfo(filters);
     setSortedInfo(sorter as Sorts);
+    setPagination({ ...pagination, current: pagination.current || 1 });
+  };
+
+  // Função para aplicar os filtros de busca
+  const handleSearch = () => {
+    fetchData(1); // Reseta a página para 1 ao aplicar filtro
+  };
+
+  // Função para excluir um perfil
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteProfile(id); // Chama a função de exclusão
+      toast({
+        title: 'Perfil excluído',
+        description: 'O perfil foi excluído com sucesso.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      fetchData(pagination.current || 1); // Atualiza a tabela
+    } catch (error) {
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível excluir o perfil.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   const columns: TableColumnsType<DataType> = [
@@ -61,12 +107,21 @@ const PerfilsTable: React.FC = () => {
     },
     {
       title: 'Cadastrado em',
-      dataIndex: 'registered',
-      key: 'registered',
-      sorter: (a, b) => new Date(a.registered).getTime() - new Date(b.registered).getTime(),
-      sortOrder: sortedInfo.columnKey === 'registered' ? sortedInfo.order : null,
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
       ellipsis: true,
       render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+    },
+    {
+      title: 'Ações',
+      key: 'actions',
+      render: (_, record) => (
+        <Button variant={"ghost"} colorScheme="red" onClick={() => handleDelete(record.id)}>
+          <AiFillDelete/>
+        </Button>
+      ),
     },
   ];
 
@@ -74,19 +129,40 @@ const PerfilsTable: React.FC = () => {
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Heading fontSize="2xl" fontWeight="bold">Perfis</Heading>
-        <ButtonChakra
-        onClick={()=>{
-          navigate('/main/create-perfil')
-        }}
-        colorScheme="green" variant="solid" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+        <Button
+          onClick={() => navigate('/main/create-perfil')}
+          colorScheme='green'
+          style={{ fontSize: '16px', fontWeight: 'bold' }}
+        >
           Adicionar
-        </ButtonChakra>
+        </Button>
       </Flex>
-      <Table<DataType> 
-        columns={columns} 
-        dataSource={data} 
-        onChange={handleChange} 
-        pagination={{ pageSize: 5 }}
+
+      {/* Filtros */}
+      <Flex mb={4} justify="flex-start" align="center" gap={4} width="100%">
+        <Input
+          placeholder="Buscar por nome"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ width: 200, height: 40, borderRadius: "8px",border:"1px solid #CBD5E0",}}
+          allowClear
+        />
+        <DatePicker.RangePicker
+          value={dateRange ? [dateRange[0], dateRange[1]] : null}
+          onChange={(dates) => setDateRange(dates)}
+          style={{ width: 250, height: 40 }}
+        />
+        <Button colorScheme='blue' onClick={handleSearch}>
+          Buscar
+        </Button>
+      </Flex>
+
+      <Table<DataType>
+        columns={columns}
+        dataSource={data}
+        loading={loading}
+        onChange={handleTableChange}
+        pagination={{ ...pagination, total }}
         scroll={{ x: 'max-content' }}
       />
     </>

@@ -89,7 +89,7 @@ const LayoutPremium: React.FC = () => {
   } = theme.useToken();
   const navigate = useNavigate()
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout  style={{ minHeight: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
         <div className="demo-logo" />
         <Menu
