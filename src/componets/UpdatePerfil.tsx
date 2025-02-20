@@ -1,18 +1,37 @@
-import { Button, Flex, Heading, Input, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import { Button, Flex, Heading, Input, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast, Spinner } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
-import { createProfile } from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { fetchProfileById, updateProfile } from "../services/api";
+import { useNavigate, useParams } from "react-router-dom";
 
-export const CreatePerfil: React.FC = () => {
+export const UpdatePerfil: React.FC = () => {
+  const { id } = useParams<{ id: string }>(); // Pega o ID da rota
   const [permissoes, setPermissoes] = useState<string[]>([]);
   const [nomePerfil, setNomePerfil] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [saving, setSaving] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const toast = useToast(); // Hook para o Toast
+  const toast = useToast();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        if (!id) throw new Error("ID do perfil não encontrado.");
+        
+        const profile = await fetchProfileById(Number(id));
+        setNomePerfil(profile.name);
+        setPermissoes(profile.permissions);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [id]);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, permissao: string) => {
     setPermissoes((prev) =>
@@ -23,34 +42,39 @@ export const CreatePerfil: React.FC = () => {
   };
 
   const handleSave = async () => {
-    setLoading(true);
+    setSaving(true);
     setError(null);
 
     try {
-      const newProfile = await createProfile(nomePerfil, permissoes);
-      console.log("Perfil criado com sucesso:", newProfile);
-      navigate('/main/perfis')
+      if (!id) throw new Error("ID do perfil não encontrado.");
+
+      const updatedProfile = await updateProfile(Number(id), nomePerfil, permissoes);
       toast({
-        title: "Perfil Criado",
-        description: "O perfil foi criado com sucesso.",
+        title: "Perfil Atualizado",
+        description: "O perfil foi atualizado com sucesso.",
         status: "success",
         duration: 5000,
         isClosable: true,
       });
+
+      navigate('/main/perfis');
     } catch (err: any) {
       setError(err.message);
-      
       toast({
         title: "Erro",
-        description: "Ocorreu um erro ao criar o perfil.",
+        description: "Ocorreu um erro ao atualizar o perfil.",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
+
+  if (loading) {
+    return <Flex justify="center" align="center" height="100vh"><Spinner size="xl" /></Flex>;
+  }
 
   return (
     <>
@@ -79,7 +103,7 @@ export const CreatePerfil: React.FC = () => {
         </Flex>
 
         <Heading fontSize="2xl" fontWeight="semibold">
-          Cadastrar Perfil
+          Editar Perfil
         </Heading>
       </Flex>
 
@@ -114,14 +138,14 @@ export const CreatePerfil: React.FC = () => {
                 isChecked={permissoes.includes("create.usuario")}
                 onChange={(e) => handleCheckboxChange(e, "create.usuario")}
               >
-                Criar Evento
+                Criar Usuário
               </Checkbox>
               <Checkbox
                 colorScheme="gray"
                 isChecked={permissoes.includes("delete.usuario")}
                 onChange={(e) => handleCheckboxChange(e, "delete.usuario")}
               >
-                Ler Eventos
+                Deletar Usuário
               </Checkbox>
             </Stack>
           </Box>
@@ -154,7 +178,7 @@ export const CreatePerfil: React.FC = () => {
         <Button
           colorScheme="green"
           onClick={handleSave}
-          isLoading={loading}
+          isLoading={saving}
           loadingText="Salvando..."
           spinnerPlacement="end"
         >

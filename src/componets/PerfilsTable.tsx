@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker } from 'antd';
 import { Heading, Flex, Button, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import {AiFillDelete} from 'react-icons/ai'
-import { fetchProfiles, deleteProfile } from '../services/api'; // Importa a função de delete
+import { AiFillDelete } from 'react-icons/ai';
+import { fetchProfiles, deleteProfile } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
 
-// Tipagem para os dados
 interface DataType {
   id: number;
   name: string;
   createdAt: string;
 }
 
-// Tipagem para filtros e ordenação
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type Filters = Parameters<OnChange>[1];
 
@@ -32,17 +30,14 @@ const PerfilsTable: React.FC = () => {
   const [total, setTotal] = useState(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
-  const toast = useToast(); // Hook do Chakra UI para o Toast
+  const toast = useToast();
 
-  // Função para buscar os perfis da API com filtros
   const fetchData = async (page: number) => {
     setLoading(true);
     try {
       const startDate = dateRange?.[0]?.format('YYYY-MM-DD') || undefined;
       const endDate = dateRange?.[1]?.format('YYYY-MM-DD') || undefined;
-
       const response = await fetchProfiles(page, pagination?.pageSize || 10, searchQuery, startDate, endDate);
-      
       setData(response.profiles);
       setTotal(response.total);
       setPagination((prev) => ({
@@ -67,15 +62,13 @@ const PerfilsTable: React.FC = () => {
     setPagination({ ...pagination, current: pagination.current || 1 });
   };
 
-  // Função para aplicar os filtros de busca
   const handleSearch = () => {
-    fetchData(1); // Reseta a página para 1 ao aplicar filtro
+    fetchData(1);
   };
 
-  // Função para excluir um perfil
   const handleDelete = async (id: number) => {
     try {
-      await deleteProfile(id); // Chama a função de exclusão
+      await deleteProfile(id);
       toast({
         title: 'Perfil excluído',
         description: 'O perfil foi excluído com sucesso.',
@@ -83,7 +76,7 @@ const PerfilsTable: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
-      fetchData(pagination.current || 1); // Atualiza a tabela
+      fetchData(pagination.current || 1);
     } catch (error) {
       toast({
         title: 'Erro',
@@ -118,17 +111,19 @@ const PerfilsTable: React.FC = () => {
       title: 'Ações',
       key: 'actions',
       render: (_, record) => (
-        <Button variant={"ghost"} colorScheme="red" onClick={() => handleDelete(record.id)}>
-          <AiFillDelete/>
-        </Button>
+        <Flex onClick={() => navigate(`/main/update-perfil/${record.id}`)} style={{ cursor: 'pointer' }}>
+          <Button variant={'ghost'} colorScheme='red' onClick={(e) => { e.stopPropagation(); handleDelete(record.id); }}>
+            <AiFillDelete />
+          </Button>
+        </Flex>
       ),
     },
   ];
 
   return (
     <>
-      <Flex mb={10} justify="space-between" align="center" width="100%">
-        <Heading fontSize="2xl" fontWeight="bold">Perfis</Heading>
+      <Flex mb={10} justify='space-between' align='center' width='100%'>
+        <Heading fontSize='2xl' fontWeight='bold'>Perfis</Heading>
         <Button
           onClick={() => navigate('/main/create-perfil')}
           colorScheme='green'
@@ -138,13 +133,12 @@ const PerfilsTable: React.FC = () => {
         </Button>
       </Flex>
 
-      {/* Filtros */}
-      <Flex mb={4} justify="flex-start" align="center" gap={4} width="100%">
+      <Flex mb={4} justify='flex-start' align='center' gap={4} width='100%'>
         <Input
-          placeholder="Buscar por nome"
+          placeholder='Buscar por nome'
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ width: 200, height: 40, borderRadius: "8px",border:"1px solid #CBD5E0",}}
+          style={{ width: 200, height: 40, borderRadius: '8px', border: '1px solid #CBD5E0' }}
           allowClear
         />
         <DatePicker.RangePicker
@@ -164,6 +158,10 @@ const PerfilsTable: React.FC = () => {
         onChange={handleTableChange}
         pagination={{ ...pagination, total }}
         scroll={{ x: 'max-content' }}
+        onRow={(record) => ({
+          onClick: () => navigate(`/main/update-perfil/${record.id}`),
+          style: { cursor: 'pointer' }
+        })}
       />
     </>
   );

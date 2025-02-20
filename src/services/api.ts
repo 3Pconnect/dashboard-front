@@ -76,5 +76,50 @@ export const deleteProfile = async (id: number) => {
 };
 
 
+export const fetchProfileById = async (id: number) => {
+  try {
+    const response = await api.get(`/profile/${id}`);
+
+    if (!response.data || !response.data.id) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar perfil:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar perfil");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar perfil.");
+    }
+  }
+};
+
+export const updateProfile = async (id: number, name: string, permissions: string[]) => {
+  try {
+    const response = await api.put(`/profile/${id}`, { name, permissions });
+
+    if (!response.data || !response.data.id) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao atualizar perfil:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao atualizar perfil");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao atualizar perfil.");
+    }
+  }
+};
+
+
 
 export default api;
