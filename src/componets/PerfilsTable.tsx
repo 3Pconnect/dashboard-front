@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker } from 'antd';
 import { Heading, Flex, Button, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { AiFillDelete } from 'react-icons/ai';
+import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchProfiles, deleteProfile } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -122,31 +122,32 @@ const PerfilsTable: React.FC = () => {
 
   return (
     <>
-      <Flex mb={10} justify='space-between' align='center' width='100%'>
+    <Flex mb={6} justify='space-between' align='center' width='100%'>
         <Heading fontSize='2xl' fontWeight='bold'>Perfis</Heading>
         <Button
           onClick={() => navigate('/main/create-perfil')}
           colorScheme='green'
-          style={{ fontSize: '16px', fontWeight: 'bold' }}
+          fontSize='16px'
+          fontWeight='bold'
         >
           Adicionar
         </Button>
       </Flex>
 
-      <Flex mb={4} justify='flex-start' align='center' gap={4} width='100%'>
+      <Flex mb={6} justify='flex-start' align='center' gap={4} width='100%'>
         <Input
           placeholder='Buscar por nome'
           value={searchQuery}
+          style={{height:40}}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ width: 200, height: 40, borderRadius: '8px', border: '1px solid #CBD5E0' }}
-          allowClear
+          width={240}
         />
         <DatePicker.RangePicker
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
           onChange={(dates) => setDateRange(dates)}
-          style={{ width: 250, height: 40 }}
+          style={{ width: 300, height: 40 }}
         />
-        <Button colorScheme='blue' onClick={handleSearch}>
+        <Button w={200} colorScheme='blue' onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
           Buscar
         </Button>
       </Flex>

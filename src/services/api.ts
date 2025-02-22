@@ -120,6 +120,75 @@ export const updateProfile = async (id: number, name: string, permissions: strin
   }
 };
 
+export const registerUser = async (
+  username: string,
+  email: string,
+  password: string,
+  profile: string,
+  situacao: string
+) => {
+  try {
+    const response = await api.post("/auth/register", {
+      username,
+      email,
+      password,
+      profile,
+      situacao,
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao registrar usuário:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao registrar usuário");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao registrar usuário.");
+    }
+  }
+};
+
+export const fetchUsers = async (page: number, limit: number, filters: any = {}) => {
+  try {
+    const response = await api.get("/auth", {
+      params: {
+        page,
+        limit,
+        name: filters.searchQuery,  // Passando searchQuery como 'name'
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+      },
+    });
+
+    if (!response.data || !response.data.users) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar usuários:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar usuários");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar usuários.");
+    }
+  }
+};
+
+export const deleteUser = async (id: string) => {
+  try {
+    const response = await api.delete(`/auth/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao excluir usuário:", error);
+    throw error;
+  }
+};
 
 
 export default api;

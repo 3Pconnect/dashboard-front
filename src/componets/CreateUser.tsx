@@ -1,22 +1,88 @@
-import { Button, Flex, Heading, Input, Grid, Box, Text, Checkbox, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon } from "@chakra-ui/react";
-import { MdArrowBack } from "react-icons/md"; // Ícone para o botão de voltar
+import { useEffect, useState } from "react";
+import {
+  Button, Flex, Heading, Input, Grid, Box, Text, Checkbox, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Spinner, useToast
+} from "@chakra-ui/react";
+import { MdArrowBack } from "react-icons/md";
+import { fetchProfiles, registerUser } from "../services/api"; // Importando a função correta
+import { useNavigate } from "react-router-dom";
 
 export const CreateUser = () => {
+  const [profiles, setProfiles] = useState<{ id: number; name: string }[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedProfile, setSelectedProfile] = useState<number | null>(null);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("1111111");
+  const [situacao, setSituacao] = useState("");
+  const [saving, setSaving] = useState(false); // Variável para controle do loading de salvar
+  const toast = useToast(); // Hook para o Toast
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadProfiles = async () => {
+      try {
+        const data = await fetchProfiles(1, 200);
+        setProfiles(data.profiles);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfiles();
+  }, []);
+
+  const handleCheckboxChange = (id: number) => {
+    setSelectedProfile(id);
+  };
+
+  const handleSave = async () => {
+    if (!username || !email || !selectedProfile || !situacao) {
+      toast({
+        title: "Erro",
+        description: "Preencha todos os campos.",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const profileName = profiles.find((p) => p.id === selectedProfile)?.name || "";
+
+    setSaving(true); // Inicia o loading
+
+    try {
+      await registerUser(username, email, password, profileName, situacao);
+      toast({
+        title: "Usuário Cadastrado",
+        description: "Usuário cadastrado com sucesso!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate('/main/users')
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message || "Ocorreu um erro ao cadastrar o usuário.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setSaving(false); // Finaliza o loading
+    }
+  };
+
   return (
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Flex align="center">
-          {/* Botão de Voltar */}
-          <Button
-            variant="ghost"
-            leftIcon={<Icon as={MdArrowBack} />}
-            mr={4}
-            onClick={() => window.history.back()} // Vai para a página anterior
-          >
+          <Button variant="ghost" leftIcon={<Icon as={MdArrowBack} />} mr={4} onClick={() => window.history.back()}>
             Voltar
           </Button>
-
-          {/* Breadcrumb */}
           <Breadcrumb>
             <BreadcrumbItem>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -29,47 +95,49 @@ export const CreateUser = () => {
             </BreadcrumbItem>
           </Breadcrumb>
         </Flex>
-
-        <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>
-          Cadastrar Usuário
-        </Heading>
+        <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>Cadastrar Usuário</Heading>
       </Flex>
 
-      <Grid
-        templateColumns={{ base: "1fr", md: "1fr 1fr" }} // Responsivo: 1 coluna em mobile e 2 em dispositivos maiores
-        gap={4}
-      >
+      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box>
           <Text mb={2}>Nome</Text>
-          <Input placeholder="Digite seu nome" />
+          <Input placeholder="Digite seu nome" value={username} onChange={(e) => setUsername(e.target.value)} />
         </Box>
-
         <Box>
           <Text mb={2}>E-mail</Text>
-          <Input placeholder="Digite seu e-mail" />
+          <Input placeholder="Digite seu e-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
         </Box>
       </Grid>
 
       <VStack mt={5} spacing={4} align="stretch">
+
         <Box>
           <Text mb={2}>Situação do Usuário</Text>
-          <Select placeholder="Selecione a situação">
-            <option value="ativo">Ativo</option>
-            <option value="inativo">Inativo</option>
-            <option value="pendente">Pendente</option>
+          <Select placeholder="Selecione a situação" value={situacao} onChange={(e) => setSituacao(e.target.value)}>
+            <option value="ATIVO">Ativo</option>
+            <option value="INATIVO">Inativo</option>
+            <option value="PENDENTE">Pendente</option>
           </Select>
         </Box>
       </VStack>
 
       <VStack mt={5} alignItems={"start"}>
         <Text mb={2}>Perfil de Acesso</Text>
-        <Checkbox>Administrador</Checkbox>
-        <Checkbox>Editor</Checkbox>
-        <Checkbox>Leitor</Checkbox>
+        {loading ? (
+          <Spinner size="md" />
+        ) : (
+          profiles.map((profile) => (
+            <Checkbox key={profile.id} isChecked={selectedProfile === profile.id} onChange={() => handleCheckboxChange(profile.id)}>
+              {profile.name}
+            </Checkbox>
+          ))
+        )}
       </VStack>
 
-      <VStack alignItems={"end"}>
-        <Button colorScheme="green">Salvar</Button>
+      <VStack alignItems={"end"} mt={5}>
+        <Button colorScheme="green" onClick={handleSave} isLoading={saving} loadingText="Salvando...">
+          {saving ? "Salvando..." : "Salvar"}
+        </Button>
       </VStack>
     </>
   );
