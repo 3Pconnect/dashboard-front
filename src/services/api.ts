@@ -151,12 +151,16 @@ export const registerUser = async (
 };
 
 export const fetchUsers = async (page: number, limit: number, filters: any = {}) => {
+  console.log(filters.obj)
   try {
     const response = await api.get("/auth", {
       params: {
         page,
         limit,
-        name: filters.searchQuery,  // Passando searchQuery como 'name'
+        ...(filters.obj.name && { name: filters.obj.name }),
+        ...(filters.obj.email && { email: filters.obj.email }),
+        ...(filters.obj.profile && { profile: filters.obj.profile }),
+        ...(filters.obj.situacao && { situacao: filters.obj.situacao }),
         startDate: filters.startDate,
         endDate: filters.endDate,
       },

@@ -42,8 +42,16 @@ const TableUsers: React.FC = () => {
     { label: 'Perfil', value: 'profile' },
     { label: 'Situação', value: 'situacao' },
   ];
-  const [filterType, setFilterType] = useState<string>('username'); // Tipo de filtro selecionado
-const [searchValue, setSearchValue] = useState<string>('');
+
+  const situacaoFilterOptions = [
+    { label: 'Ativo', value: 'ATIVO' },
+    { label: 'Inativo', value: 'INATIVO' },
+    { label: 'Pendente', value: 'PENDENTE' },
+  ];
+  const [filterType, setFilterType] = useState<string>('username');
+  const [situacaoFilterType, setSituacaoFilterType] = useState<string>('ATIVO');
+
+  const [searchValue, setSearchValue] = useState<string>('');
 
 
   const fetchData = async (page: number) => {
@@ -51,9 +59,34 @@ const [searchValue, setSearchValue] = useState<string>('');
     try {
       const startDate = dateRange?.[0]?.format('YYYY-MM-DD') || undefined;
       const endDate = dateRange?.[1]?.format('YYYY-MM-DD') || undefined;
+      console.clear()
+      console.log(searchQuery, filterType)
 
+      const filterOptions = [
+        { label: 'Nome', value: 'username' },
+        { label: 'Email', value: 'email' },
+        { label: 'Perfil', value: 'profile' },
+        { label: 'Situação', value: 'situacao' },
+      ];
+      const obj:any = {
+
+      }
+
+      if(filterType === 'username'){
+        obj.name = searchValue
+      }
+      if(filterType === 'email'){
+        obj.email = searchValue
+      }
+      if(filterType === 'profile'){
+        obj.profile = searchValue
+      }
+      if(filterType === 'situacao'){
+        obj.situacao = situacaoFilterType
+      }
+      console.log(obj)
       // Passar searchQuery e dateRange dentro de filters
-      const response = await fetchUsers(page, pagination?.pageSize || 10, { searchQuery, startDate, endDate });
+      const response = await fetchUsers(page, pagination?.pageSize || 10, { obj, startDate, endDate });
       setData(response.users);
       setTotal(response.total);
       setPagination((prev) => ({
@@ -197,12 +230,27 @@ const [searchValue, setSearchValue] = useState<string>('');
   />
 
   {/* Input único para busca */}
+{
+  filterType === 'situacao' ?
+  <Select
+    options={situacaoFilterOptions}
+    value={situacaoFilterType}
+    onChange={setSituacaoFilterType}
+    style={{ width: 180, height: "40px" }}
+  />
+  :
   <Input
+  allowClear
     placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
     value={searchValue}
     onChange={(e) => setSearchValue(e.target.value)}
     style={{ height: "40px", width: 240 }}
   />
+
+}
+
+
+
 
   {/* Filtro por data */}
   <DatePicker.RangePicker
