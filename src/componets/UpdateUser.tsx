@@ -3,10 +3,10 @@ import {
   Button, Flex, Heading, Input, Grid, Box, Text, Checkbox, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Spinner, useToast
 } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
-import { fetchProfiles, registerUser } from "../services/api"; // Importando a função correta
-import { useNavigate } from "react-router-dom";
+import { fetchProfiles, fetchUser, registerUser, updateUser } from "../services/api"; // Importando a função correta
+import { useNavigate, useParams } from "react-router-dom";
 
-export const CreateUser = () => {
+export const UpdateUser = () => {
   const [profiles, setProfiles] = useState<{ id: number; name: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProfile, setSelectedProfile] = useState<number | null>(null);
@@ -17,6 +17,7 @@ export const CreateUser = () => {
   const [saving, setSaving] = useState(false); // Variável para controle do loading de salvar
   const toast = useToast(); // Hook para o Toast
   const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
     const loadProfiles = async () => {
@@ -29,8 +30,23 @@ export const CreateUser = () => {
         setLoading(false);
       }
     };
+    const loadUser = async () => {
+      try {
+        const data = await fetchUser(Number(id));
+        console.log(data)
+        setUsername(data?.username)
+        setEmail(data?.email)
+        setSituacao(data?.situacao)
+        setSelectedProfile(data?.profile?.id)
+      } catch (error) {
+        console.error(error);
+      } finally {
+        //setLoading(false);
+      }
+    };
 
     loadProfiles();
+    loadUser();
   }, []);
 
   const handleCheckboxChange = (id: number) => {
@@ -52,13 +68,12 @@ export const CreateUser = () => {
     const profileName = profiles.find((p) => p.id === selectedProfile)?.name || "";
 
     setSaving(true); // Inicia o loading
-    console.log(selectedProfile)
 
     try {
-      await registerUser(username, email, password, profileName, situacao);
+      await updateUser(username, email, profileName, situacao, Number(id));
       toast({
-        title: "Usuário Cadastrado",
-        description: "Usuário cadastrado com sucesso!",
+        title: "Usuário Atualizado",
+        description: "Usuário atualizado com sucesso!",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -67,7 +82,7 @@ export const CreateUser = () => {
     } catch (error: any) {
       toast({
         title: "Erro",
-        description: error.message || "Ocorreu um erro ao cadastrar o usuário.",
+        description: error.message || "Ocorreu um erro ao atualizar o usuário.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -96,7 +111,7 @@ export const CreateUser = () => {
             </BreadcrumbItem>
           </Breadcrumb>
         </Flex>
-        <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>Cadastrar Usuário</Heading>
+        <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>Atualizar Usuário</Heading>
       </Flex>
 
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
@@ -136,8 +151,8 @@ export const CreateUser = () => {
       </VStack>
 
       <VStack alignItems={"end"} mt={5}>
-        <Button colorScheme="green" onClick={handleSave} isLoading={saving} loadingText="Salvando...">
-          {saving ? "Salvando..." : "Salvar"}
+        <Button colorScheme="green" onClick={handleSave} isLoading={saving} loadingText="Atualizando...">
+          {saving ? "Atualizando..." : "Atualizar"}
         </Button>
       </VStack>
     </>

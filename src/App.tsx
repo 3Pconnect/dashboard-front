@@ -30,6 +30,7 @@ import { CreateNovoEvento } from "./componets/CreateNovoEvento";
 import HeaderComponent from "./pages/Site";
 import Enfermeira from "./pages/Enfermeira";
 import { UpdatePerfilPage } from "./pages/UpdatePerfilPage";
+import { UpdateUserPage } from "./pages/UpdateUserPage";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -49,6 +50,7 @@ export const App = () => (
           <Route path="create-membro" element={<CreateNovosMembrosPage/>} />
           <Route path="create-apoiador" element={<CreateNovosApoadoresPage/>} />
           <Route path="create-evento" element={<CreateNovoEvento/>} />
+          <Route path="update-user/:id" element={<UpdateUserPage/>} />
           {/* Outras rotas dentro do LayoutApp */}
         </Route>
 

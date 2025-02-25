@@ -199,7 +199,10 @@ const TableUsers: React.FC = () => {
       title: 'Ações',
       key: 'actions',
       render: (_, record) => (
-        <Button variant={'ghost'} colorScheme='red' onClick={() => handleDelete(record.id)}>
+        <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+          e.stopPropagation();
+          handleDelete(record.id)
+        }}>
           <AiFillDelete />
         </Button>
       ),
@@ -273,7 +276,9 @@ const TableUsers: React.FC = () => {
         pagination={{ ...pagination, total }}
         scroll={{ x: 'max-content' }}
         onRow={(record) => ({
-          onClick: () => console.log(),
+          onClick: () =>{
+            navigate('/main/update-user/'+record?.id)
+          },
           style: { cursor: 'pointer' }
         })}
       />

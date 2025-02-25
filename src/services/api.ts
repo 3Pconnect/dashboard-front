@@ -40,6 +40,33 @@ export const createProfile = async (name: string, permissions: string[]) => {
   }
 };
 
+export const fetchUser = async (userId: number) => {
+  try {
+    const response = await api.get(`/auth/user/${userId}`, {
+      headers: {
+        "accept": "*/*", // Cabeçalho aceitando todos os tipos de resposta
+      },
+    });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data; // Retorna os dados do usuário
+  } catch (error: any) {
+    console.error("Erro ao buscar usuário:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar usuário");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar usuário.");
+    }
+  }
+};
+
+
 export const fetchProfiles = async (page: number, limit: number, name?: string, startDate?: string, endDate?: string) => {
   try {
     const response = await api.get("/profile", {
@@ -149,6 +176,36 @@ export const registerUser = async (
     }
   }
 };
+
+export const updateUser = async (
+  username: string,
+  email: string,
+  profile: string,
+  situacao: string,
+  id: number,
+) => {
+  try {
+    const response = await api.put(`/auth/${id}/update`, {
+      username,
+      email,
+      profile,
+      situacao,
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao atualizar usuário:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao atualizar usuário");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao atualizar usuário.");
+    }
+  }
+};
+
 
 export const fetchUsers = async (page: number, limit: number, filters: any = {}) => {
   console.log(filters.obj)
