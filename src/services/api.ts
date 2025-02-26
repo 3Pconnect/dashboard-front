@@ -66,6 +66,39 @@ export const fetchUser = async (userId: number) => {
   }
 };
 
+export const fetchMembros = async (
+  page: number,
+  limit: number,
+  startDate?: string,
+  endDate?: string
+) => {
+  try {
+    const response = await api.get("/membros", {
+      params: {
+        page,
+        limit,
+        startDate,
+        endDate,
+      },
+    });
+
+    if (!response.data || !response.data.membros) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar membros:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar membros");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar membros.");
+    }
+  }
+};
 
 export const fetchProfiles = async (page: number, limit: number, name?: string, startDate?: string, endDate?: string) => {
   try {
@@ -99,6 +132,38 @@ export const deleteProfile = async (id: number) => {
   } catch (error) {
     console.error("Erro ao excluir perfil:", error);
     throw error;
+  }
+};
+
+export const deleteMembro = async (id: number) => {
+  try {
+    const response = await api.delete(`/membros/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao excluir membro:", error);
+    throw error;
+  }
+};
+
+export const fetchMembroById = async (id: number) => {
+  try {
+    const response = await api.get(`/membros/${id}`);
+
+    if (!response.data || !response.data.id) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar membro:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar membro");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar membro.");
+    }
   }
 };
 
@@ -173,6 +238,47 @@ export const registerUser = async (
       throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
     } else {
       throw new Error("Erro inesperado ao registrar usuário.");
+    }
+  }
+};
+
+export const registerMembro = async (
+  name: string,
+  email: string,
+  tipo_usuario: string,
+  telefone: string,
+  nome_empresa: string,
+  cargo: string,
+  cnpj: string,
+  situacao: string = "em_analise"
+) => {
+  try {
+    const response = await api.post("/membros", {
+      name,
+      email,
+      tipo_usuario,
+      telefone,
+      nome_empresa,
+      cargo,
+      cnpj,
+      situacao,
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao registrar membro:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao registrar membro");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao registrar membro.");
     }
   }
 };
