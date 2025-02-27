@@ -70,13 +70,17 @@ export const fetchMembros = async (
   page: number,
   limit: number,
   startDate?: string,
-  endDate?: string
+  endDate?: string,
+  filters: any = {}
 ) => {
   try {
     const response = await api.get("/membros", {
       params: {
         page,
         limit,
+        ...(filters.obj.name && { name: filters.obj.name }),
+        ...(filters.obj.email && { email: filters.obj.email }),
+        ...(filters.obj.situacao && { situacao: filters.obj.situacao }),
         startDate,
         endDate,
       },
@@ -308,6 +312,30 @@ export const updateUser = async (
       throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
     } else {
       throw new Error("Erro inesperado ao atualizar usuário.");
+    }
+  }
+};
+
+
+export const updateMembro = async (
+  id: number,
+  data: {}
+) => {
+  try {
+    const response = await api.put(`/membros/${id}`, {
+    ...data
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao atualizar membro:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao atualizar membro");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao atualizar membro.");
     }
   }
 };

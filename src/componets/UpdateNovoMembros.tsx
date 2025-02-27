@@ -1,7 +1,7 @@
 import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md"; // Ícone para o botão de voltar
 import { useEffect, useState } from "react";
-import { fetchMembroById, registerMembro } from "../services/api";
+import { fetchMembroById, registerMembro, updateMembro } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
 
 export const UpdateNovoMembros = () => {
@@ -19,17 +19,17 @@ export const UpdateNovoMembros = () => {
   const { id } = useParams();
 
   const handleSubmit = async () => {
-    setLoading(true); // Inicia o loading ao clicar no botão
+    setLoading(true);
     try {
-      const response = await registerMembro(
-        name,
-        email,
-        tipo_usuario,
-        telefone,
-        nome_empresa,
-        cargo,
-        cnpj,
-        situacao
+      const response = await updateMembro(
+        Number(id),
+        {
+          name,
+          email,
+          nome_empresa,
+          cargo,
+          situacao
+        }
       );
       console.log("Membro registrado com sucesso", response);
       toast({
@@ -54,26 +54,26 @@ export const UpdateNovoMembros = () => {
     }
   };
 
-    useEffect(() => {
+  useEffect(() => {
 
-      const loadMembro = async () => {
-        try {
-          const data = await fetchMembroById(Number(id));
-          console.log(data)
-          setName(data?.name)
-          setEmail(data?.email)
-          setNomeEmpresa(data?.nome_empresa)
-          setCargo(data?.cargo)
-          setSituacao(data?.situacao)
-        } catch (error) {
-          console.error(error);
-        } finally {
-          //setLoading(false);
-        }
-      };
-      loadMembro();
-    }, []);
-  
+    const loadMembro = async () => {
+      try {
+        const data = await fetchMembroById(Number(id));
+        console.log(data)
+        setName(data?.name)
+        setEmail(data?.email)
+        setNomeEmpresa(data?.nome_empresa)
+        setCargo(data?.cargo)
+        setSituacao(data?.situacao)
+      } catch (error) {
+        console.error(error);
+      } finally {
+        //setLoading(false);
+      }
+    };
+    loadMembro();
+  }, []);
+
 
   return (
     <>
@@ -171,9 +171,9 @@ export const UpdateNovoMembros = () => {
 
       {/* Botão Salvar */}
       <VStack alignItems={"end"} mt={5}>
-        <Button 
-          colorScheme="green" 
-          onClick={handleSubmit} 
+        <Button
+          colorScheme="green"
+          onClick={handleSubmit}
           isLoading={loading} // Adiciona o estado de loading
           loadingText="Cadastrando..." // Texto de carregamento
         >

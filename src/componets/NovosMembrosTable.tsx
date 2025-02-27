@@ -52,18 +52,18 @@ const NovosMembrosTable: React.FC = () => {
   const toast = useToast();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
   const filterOptions = [
-    { label: 'Nome', value: 'username' },
+    { label: 'Nome', value: 'name' },
     { label: 'Email', value: 'email' },
-    { label: 'Perfil', value: 'profile' },
     { label: 'Situação', value: 'situacao' },
   ];
+  
 
   const situacaoFilterOptions = [
     { label: 'Ativo', value: 'ATIVO' },
     { label: 'Inativo', value: 'INATIVO' },
     { label: 'Pendente', value: 'PENDENTE' },
   ];
-  const [filterType, setFilterType] = useState<string>('username');
+  const [filterType, setFilterType] = useState<string>('name');
   const [situacaoFilterType, setSituacaoFilterType] = useState<string>('ATIVO');
 
   const [searchValue, setSearchValue] = useState<string>('');
@@ -87,7 +87,7 @@ const NovosMembrosTable: React.FC = () => {
 
       }
 
-      if(filterType === 'username'){
+      if(filterType === 'name'){
         obj.name = searchValue
       }
       if(filterType === 'email'){
@@ -101,7 +101,7 @@ const NovosMembrosTable: React.FC = () => {
       }
       console.log(obj)
       // Passar searchQuery e dateRange dentro de filters
-      const response = await fetchMembros(page, 10, undefined, undefined);
+      const response = await fetchMembros(page, 10, startDate, endDate, {obj});
       setData(response.membros);
       setTotal(response.total);
       setPagination((prev) => ({
@@ -223,6 +223,15 @@ const NovosMembrosTable: React.FC = () => {
         sortOrder: sortedInfo.columnKey === 'cargo' ? sortedInfo.order : null,
         ellipsis: true,
         render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+      },
+      {
+        title: 'Cadastrado em',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
       },
       {
         title: 'Situação',
