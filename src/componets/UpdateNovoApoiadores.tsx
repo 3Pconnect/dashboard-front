@@ -1,10 +1,10 @@
 import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md"; // Ícone para o botão de voltar
-import { useState } from "react";
-import { registerApoiador, registerMembro } from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { fetchMembroById, registerApoiador, registerMembro, updateApoiador } from "../services/api";
+import { useNavigate, useParams } from "react-router-dom";
 
-export const CreateNovosApoiadores = () => {
+export const UpdateNovoApoiadores = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [tipo_usuario, setTipoUsuario] = useState("apoiador");
@@ -17,11 +17,13 @@ export const CreateNovosApoiadores = () => {
   const [loading, setLoading] = useState(false); // Estado para controlar o loading
   const toast = useToast(); // Hook para o Toast
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const handleSubmit = async () => {
     setLoading(true); // Inicia o loading ao clicar no botão
     try {
-      const response = await registerApoiador(
+      const response = await updateApoiador(
+        Number(id),
         email,
         tipo_usuario,
         cargo,
@@ -52,6 +54,26 @@ export const CreateNovosApoiadores = () => {
     }
   };
 
+
+    useEffect(() => {
+  
+      const loadMembro = async () => {
+        try {
+          const data = await fetchMembroById(Number(id));
+          setCnpj(data?.cnpj)
+          setEmail(data?.email)
+          setNomeEmpresa(data?.nome_empresa)
+          setCargo(data?.cargo)
+          setAtividade(data?.area_atuacao	)
+        } catch (error) {
+          console.error(error);
+        } finally {
+          //setLoading(false);
+        }
+      };
+      loadMembro();
+    }, []);
+
   return (
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
@@ -81,7 +103,7 @@ export const CreateNovosApoiadores = () => {
         </Flex>
 
         <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>
-          Cadastrar Novo Apoiador
+          Atualizar Apoiador
         </Heading>
       </Flex>
 
@@ -125,7 +147,7 @@ export const CreateNovosApoiadores = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Cargo</Text>
           <Input
-         placeholder="Digite o telefone do membro"
+         placeholder="Digite o cargo do membro"
             value={cargo}
             onChange={(e) => setCargo(e.target.value)}
           />

@@ -104,6 +104,44 @@ export const fetchMembros = async (
   }
 };
 
+export const fetchApoiadores = async (
+  page: number,
+  limit: number,
+  startDate?: string,
+  endDate?: string,
+  filters: any = {}
+) => {
+  try {
+    const response = await api.get("/apoiador", {
+      params: {
+        page,
+        limit,
+        ...(filters.obj.name && { name: filters.obj.name }),
+        ...(filters.obj.email && { email: filters.obj.email }),
+        ...(filters.obj.cnpj && { situacao: filters.obj.cnpj }),
+        startDate,
+        endDate,
+      },
+    });
+
+    if (!response.data || !response.data.membros) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar membros:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar membros");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar membros.");
+    }
+  }
+};
+
 export const fetchProfiles = async (page: number, limit: number, name?: string, startDate?: string, endDate?: string) => {
   try {
     const response = await api.get("/profile", {
@@ -266,6 +304,81 @@ export const registerMembro = async (
       cargo,
       cnpj,
       situacao,
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao registrar membro:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao registrar membro");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao registrar membro.");
+    }
+  }
+};
+export const registerApoiador = async (
+  email: string,
+  tipo_usuario: string,
+  cargo: string,
+  nome_empresa: string,
+  cnpj: string,
+  area_atuacao: string
+) => {
+  try {
+    const response = await api.post("/apoiador", {
+      email,
+      tipo_usuario,
+      cargo,
+      nome_empresa,
+      cnpj,
+      area_atuacao,
+      
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao registrar membro:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao registrar membro");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao registrar membro.");
+    }
+  }
+};
+export const updateApoiador = async (
+  id:number,
+  email: string,
+  tipo_usuario: string,
+  cargo: string,
+  nome_empresa: string,
+  cnpj: string,
+  area_atuacao: string
+) => {
+  try {
+    const response = await api.put("/apoiador/"+id, {
+      email,
+      tipo_usuario,
+      cargo,
+      nome_empresa,
+      cnpj,
+      area_atuacao,
+      
     }, {
       headers: {
         'Accept': 'application/json',
