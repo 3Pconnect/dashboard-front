@@ -118,7 +118,7 @@ export const fetchApoiadores = async (
         limit,
         ...(filters.obj.name && { name: filters.obj.name }),
         ...(filters.obj.email && { email: filters.obj.email }),
-        ...(filters.obj.cnpj && { situacao: filters.obj.cnpj }),
+        ...(filters.obj.cnpj && { cnpj: filters.obj.cnpj }),
         startDate,
         endDate,
       },

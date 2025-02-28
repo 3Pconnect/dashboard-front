@@ -88,7 +88,7 @@ const NovosApoiadoresTable: React.FC = () => {
         obj.profile = searchValue
       }
       if (filterType === 'cnpj') {
-        obj.cnpj = situacaoFilterType
+        obj.cnpj = searchValue
       }
       console.log(obj)
       // Passar searchQuery e dateRange dentro de filters
