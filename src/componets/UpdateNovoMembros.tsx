@@ -1,8 +1,9 @@
-import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
+import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, HStack } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md"; // Ícone para o botão de voltar
 import { useEffect, useState } from "react";
-import { fetchMembroById, registerMembro, updateMembro } from "../services/api";
+import { aprovarMembro, fetchMembroById, registerMembro, reprovarMembro, updateMembro } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
+import { hasPermission } from "../utils/util";
 
 export const UpdateNovoMembros = () => {
   const [name, setName] = useState("");
@@ -13,10 +14,17 @@ export const UpdateNovoMembros = () => {
   const [cargo, setCargo] = useState("");
   const [cnpj, setCnpj] = useState("");
   const [situacao, setSituacao] = useState("em_analise");
+  const [bosch_car_service, setBoschCarService] = useState(false);
+  const [modulo_diagnostico_bosch, setModuloDiagnosticoBosch] = useState(false);
+  const [equipamento_bosch, setEquipamentoBosch] = useState(false);
+  const [atendimento_carros_premium, setAtendimentoCarrosPremium] = useState("");
+  const [em_dia_com_obrigacoes, setEmDiaComObrigacoes] = useState(false);
+  const [afiliacao, setAfiliacao] = useState(false);
   const [loading, setLoading] = useState(false); // Estado para controlar o loading
   const toast = useToast(); // Hook para o Toast
   const navigate = useNavigate();
   const { id } = useParams();
+  const [loadingAprovarReprovar, setLoadingAprovarReprovar] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -65,6 +73,12 @@ export const UpdateNovoMembros = () => {
         setNomeEmpresa(data?.nome_empresa)
         setCargo(data?.cargo)
         setSituacao(data?.situacao)
+        setBoschCarService(data?.bosch_car_service)
+        setModuloDiagnosticoBosch(data?.modulo_diagnostico_bosch)
+        setEquipamentoBosch(data?.equipamento_bosch)
+        setAtendimentoCarrosPremium(data?.atendimento_carros_premium)
+        setEmDiaComObrigacoes(data?.em_dia_com_obrigacoes)
+        setAfiliacao(data?.afiliacao)
       } catch (error) {
         console.error(error);
       } finally {
@@ -74,6 +88,57 @@ export const UpdateNovoMembros = () => {
     loadMembro();
   }, []);
 
+  const handleAprovar = async () => {
+    setLoadingAprovarReprovar(true)
+    try {
+      await aprovarMembro(Number(id));
+      toast({
+        title: 'Usuário aprovado',
+        description: 'O usuário foi aprovado com sucesso.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate('/main/novos-membros');
+      setLoadingAprovarReprovar(false)
+      // fetchData(pagination.current || 1);
+    } catch (error) {
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível aprovar o usuário.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      setLoadingAprovarReprovar(false)
+    }
+  };
+
+  const handleReprovar = async () => {
+    setLoadingAprovarReprovar(true)
+    try {
+      await reprovarMembro(Number(id));
+      toast({
+        title: 'Usuário reprovado',
+        description: 'O usuário foi reprovado com sucesso.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate('/main/novos-membros');
+      setLoadingAprovarReprovar(false)
+      // fetchData(pagination.current || 1);
+    } catch (error) {
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível reprovar o usuário.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      setLoadingAprovarReprovar(false)
+    }
+  };
 
   return (
     <>
@@ -81,6 +146,7 @@ export const UpdateNovoMembros = () => {
         <Flex align="center">
           {/* Botão de Voltar */}
           <Button
+            colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
             mr={4}
@@ -116,6 +182,7 @@ export const UpdateNovoMembros = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Nome</Text>
           <Input
+            bg="white" color="black"
             placeholder="Digite o nome do membro"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -125,6 +192,7 @@ export const UpdateNovoMembros = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>E-mail</Text>
           <Input
+            bg="white" color="black"
             placeholder="Digite o e-mail do membro"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -139,6 +207,7 @@ export const UpdateNovoMembros = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Empresa</Text>
           <Input
+            bg="white" color="black"
             placeholder="Digite o nome da empresa"
             value={nome_empresa}
             onChange={(e) => setNomeEmpresa(e.target.value)}
@@ -148,6 +217,7 @@ export const UpdateNovoMembros = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Cargo</Text>
           <Input
+            bg="white" color="black"
             placeholder="Digite o cargo do membro"
             value={cargo}
             onChange={(e) => setCargo(e.target.value)}
@@ -155,31 +225,54 @@ export const UpdateNovoMembros = () => {
         </Box>
       </Grid>
 
-      {/* Campo Situação */}
-      <Box mt={5}>
-        <Text mb={2}>Situação</Text>
-        <Select
-          placeholder="Selecione a situação"
-          value={situacao}
-          onChange={(e) => setSituacao(e.target.value)}
-        >
-          <option value="ativo">Ativo</option>
-          <option value="inativo">Inativo</option>
-          <option value="pendente">Pendente</option>
-        </Select>
+      {/* Checklist com as informações estáticas */}
+      <Box mt={5} bg={"gray.700"} borderRadius={3} p={3}>
+        <Heading fontSize="lg" mb={4}>Checklist</Heading>
+        <VStack align="start" spacing={2}>
+          <Text><strong>É Bosch Car Service:</strong> {bosch_car_service ? 'Sim' : 'Não'}</Text>
+          <Text><strong>Módulo Diagnóstico Bosch:</strong> {modulo_diagnostico_bosch ? 'Sim' : 'Não'}</Text>
+          <Text><strong>Possui Equipamento Bosch:</strong> {equipamento_bosch ? 'Sim' : 'Não'}</Text>
+          <Text><strong>Atendimento Carros Premium:</strong> {atendimento_carros_premium || 'Não informado'}</Text>
+          <Text><strong>Em Dia com Obrigações Federais, Estaduais e Municipais:</strong> {em_dia_com_obrigacoes ? 'Sim' : 'Não'}</Text>
+          <Text><strong>Categoria da Empresa:</strong> {nome_empresa || 'Não informado'}</Text>
+          <Text><strong>Afiliado a Entidades, Sindicato ou Associação:</strong> {afiliacao ? 'Sim' : 'Não'}</Text>
+        </VStack>
       </Box>
 
       {/* Botão Salvar */}
       <VStack alignItems={"end"} mt={5}>
-        <Button
-          colorScheme="green"
-          onClick={handleSubmit}
-          isLoading={loading} // Adiciona o estado de loading
-          loadingText="Cadastrando..." // Texto de carregamento
-        >
-          Salvar
-        </Button>
+        <HStack>
+          {hasPermission('aprovar_reprovar.membro') &&
+            <>
+              <Button
+                colorScheme="red"
+                loadingText="Cadastrando..." // Texto de carregamento
+                onClick={handleReprovar}
+                isLoading={loadingAprovarReprovar}
+              >
+                Recusar
+              </Button>
+              <Button
+                colorScheme="green"
+                onClick={handleAprovar}
+                isLoading={loadingAprovarReprovar} // Adiciona o estado de loading
+                loadingText="Cadastrando..." // Texto de carregamento
+              >
+                Aprovar
+              </Button>
+            </>
+          }
+          <Button
+            colorScheme="blue"
+            onClick={handleSubmit}
+            isLoading={loading} // Adiciona o estado de loading
+            loadingText="Cadastrando..." // Texto de carregamento
+          >
+            Salvar
+          </Button>
+        </HStack>
       </VStack>
     </>
   );
 };
+

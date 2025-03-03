@@ -141,6 +141,78 @@ export const fetchApoiadores = async (
     }
   }
 };
+export const fetchMe = async () => {
+  try {
+    const response = await api.post("/auth/me");
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar informações do usuário:", error);
+
+    if (error.response) {
+      // Caso o erro venha da resposta da API (status 4xx ou 5xx)
+      throw new Error(error.response.data?.message || "Erro ao buscar informações do usuário.");
+    } else if (error.request) {
+      // Caso o erro seja por falta de resposta (sem resposta do servidor)
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      // Caso seja um erro inesperado
+      throw new Error("Erro inesperado ao buscar informações do usuário.");
+    }
+  }
+};
+export const aprovarMembro = async (id: number) => {
+  try {
+    const response = await api.put(`/membros/${id}/aprovar`);
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar informações do usuário:", error);
+
+    if (error.response) {
+      // Caso o erro venha da resposta da API (status 4xx ou 5xx)
+      throw new Error(error.response.data?.message || "Erro ao buscar informações do usuário.");
+    } else if (error.request) {
+      // Caso o erro seja por falta de resposta (sem resposta do servidor)
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      // Caso seja um erro inesperado
+      throw new Error("Erro inesperado ao buscar informações do usuário.");
+    }
+  }
+};
+export const reprovarMembro = async (id: number) => {
+  try {
+    const response = await api.put(`/membros/${id}/reprovar`);
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar informações do usuário:", error);
+
+    if (error.response) {
+      // Caso o erro venha da resposta da API (status 4xx ou 5xx)
+      throw new Error(error.response.data?.message || "Erro ao buscar informações do usuário.");
+    } else if (error.request) {
+      // Caso o erro seja por falta de resposta (sem resposta do servidor)
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      // Caso seja um erro inesperado
+      throw new Error("Erro inesperado ao buscar informações do usuário.");
+    }
+  }
+};
 
 export const fetchProfiles = async (page: number, limit: number, name?: string, startDate?: string, endDate?: string) => {
   try {
@@ -340,7 +412,7 @@ export const registerApoiador = async (
       nome_empresa,
       cnpj,
       area_atuacao,
-      
+
     }, {
       headers: {
         'Accept': 'application/json',
@@ -362,7 +434,7 @@ export const registerApoiador = async (
   }
 };
 export const updateApoiador = async (
-  id:number,
+  id: number,
   email: string,
   tipo_usuario: string,
   cargo: string,
@@ -371,14 +443,14 @@ export const updateApoiador = async (
   area_atuacao: string
 ) => {
   try {
-    const response = await api.put("/apoiador/"+id, {
+    const response = await api.put("/apoiador/" + id, {
       email,
       tipo_usuario,
       cargo,
       nome_empresa,
       cnpj,
       area_atuacao,
-      
+
     }, {
       headers: {
         'Accept': 'application/json',
@@ -436,7 +508,7 @@ export const updateMembro = async (
 ) => {
   try {
     const response = await api.put(`/membros/${id}`, {
-    ...data
+      ...data
     });
 
     return response.data;

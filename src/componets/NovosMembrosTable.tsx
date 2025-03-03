@@ -3,7 +3,7 @@ import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, Date
 import { Heading, Flex, Button, useToast, Tag, useMediaQuery } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
-import { fetchUsers, deleteUser, fetchMembros, deleteMembro } from '../services/api';
+import { fetchUsers, deleteUser, fetchMembros, deleteMembro, aprovarMembro } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
 
 
@@ -116,6 +116,8 @@ const NovosMembrosTable: React.FC = () => {
     }
   };
 
+
+  
 
   useEffect(() => {
     fetchData(pagination.current || 1);
@@ -340,7 +342,7 @@ const NovosMembrosTable: React.FC = () => {
           onClick: () =>{
             navigate('/main/update-membro/'+record?.id)
           },
-          style: { cursor: 'pointer' }
+          style: { cursor: 'pointer', minHeight: '70vh' }
         })}
       />
     </>

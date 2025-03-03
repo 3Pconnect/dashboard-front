@@ -1,5 +1,6 @@
 import {
   ChakraProvider,
+  Text,
   theme
 } from "@chakra-ui/react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
@@ -33,56 +34,78 @@ import { UpdatePerfilPage } from "./pages/UpdatePerfilPage";
 import { UpdateUserPage } from "./pages/UpdateUserPage";
 import { UpdateMembroPage } from "./pages/UpdateMembroPage";
 import { UpdateApoiadorPage } from "./pages/UpdateApoiadorPage";
+import Out from "./pages/Out";
+import { useState, useEffect } from "react"; // Importação correta dos hooks
+import { fetchMe } from "./services/api";
+import NotFound from "./pages/NotFound";
+import { hasPermission, savePermissionsToLocalStorage } from "./utils/util";
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Router>
-      <Routes>
-        <Route path="/main" element={<LayoutApp />}> {/* LayoutApp como rota pai */}
-          <Route path="users" element={<UserList/>} />
-          <Route path="perfis" element={<PerfilsList/>} />
-          <Route path="dashboard" element={<DashboardMain/>} />
-          <Route path="novos-membros" element={<NovosMembrosList/>} />
-          <Route path="apoiadores" element={<NovosParceirosList/>} />
-          <Route path="agenda-eventos" element={<AgendaEventosList/>} />
-          <Route path="meus-eventos" element={<MeusEventosList/>} />
-          <Route path="create-user" element={<CreateUserPage/>} />
-          <Route path="create-perfil" element={<CreatePerfilPage/>} />
-          <Route path="update-perfil/:id" element={<UpdatePerfilPage/>} />
-          <Route path="update-membro/:id" element={<UpdateMembroPage/>} />
-          <Route path="update-apoiador/:id" element={<UpdateApoiadorPage/>} />
-          <Route path="create-membro" element={<CreateNovosMembrosPage/>} />
-          <Route path="create-apoiador" element={<CreateNovosApoadoresPage/>} />
-          <Route path="create-evento" element={<CreateNovoEvento/>} />
-          <Route path="update-user/:id" element={<UpdateUserPage/>} />
-          {/* Outras rotas dentro do LayoutApp */}
-        </Route>
+export const App = () => {
+  const [permissoes, setPermissoes] = useState(['']);
 
-        <Route path="/" element={<NewLogin />} />
-        <Route path="/test" element={<HeaderComponent />} />
-        <Route path="/enfermeira" element={<Enfermeira />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <PostProvider>
-                <MyProfile />
-              </PostProvider>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/feed"
-          element={
-            <ProtectedRoute>
-              <FeedProvider>
-                <Feed />
-              </FeedProvider>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </Router>
-  </ChakraProvider>
-)
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const data = await fetchMe();
+        setPermissoes(data.profile.permissions);
+        savePermissionsToLocalStorage(data.profile.permissions)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    loadUser();
+  }, []);
+
+  useEffect(() => {
+    console.log(permissoes);
+
+    console.log("permissão:", hasPermission('edit.userdd'));
+  }, [permissoes]);
+
+  return (
+    <ChakraProvider theme={theme}>
+      <Router>
+        <Routes>
+          <Route path="/main" element={<Out />}> {/* LayoutApp como rota pai */}
+            {permissoes.includes('read.users') &&
+              <Route path="users" element={<UserList />} />}
+            {permissoes.includes('read.profiles') &&
+              <Route path="perfis" element={<PerfilsList />} />}
+            <Route path="dashboard" element={<DashboardMain />} />
+            {permissoes.includes('read.membros') &&
+              <Route path="novos-membros" element={<NovosMembrosList />} />}
+            {permissoes.includes('read.apoiadores') &&
+              <Route path="apoiadores" element={<NovosParceirosList />} />}
+            <Route path="agenda-eventos" element={<AgendaEventosList />} />
+            <Route path="meus-eventos" element={<MeusEventosList />} />
+            <Route path="create-user" element={<CreateUserPage />} />
+            <Route path="create-perfil" element={<CreatePerfilPage />} />
+            <Route path="update-perfil/:id" element={<UpdatePerfilPage />} />
+            <Route path="update-membro/:id" element={<UpdateMembroPage />} />
+            <Route path="update-apoiador/:id" element={<UpdateApoiadorPage />} />
+            <Route path="create-membro" element={<CreateNovosMembrosPage />} />
+            <Route path="create-apoiador" element={<CreateNovosApoadoresPage />} />
+            <Route path="create-evento" element={<CreateNovoEvento />} />
+            <Route path="update-user/:id" element={<UpdateUserPage />} />
+          </Route>
+
+          <Route path="/" element={<NewLogin />} />
+          <Route path="/test" element={<Out />} />
+          <Route path="/enfermeira" element={<Enfermeira />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <PostProvider>
+                  <MyProfile />
+                </PostProvider>
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </ChakraProvider>
+  );
+};

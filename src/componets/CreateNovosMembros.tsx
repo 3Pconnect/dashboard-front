@@ -59,6 +59,7 @@ export const CreateNovosMembros = () => {
         <Flex align="center">
           {/* Botão de Voltar */}
           <Button
+          colorScheme="white" 
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
             mr={4}
@@ -94,6 +95,7 @@ export const CreateNovosMembros = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Nome</Text>
           <Input
+          bg="white" color="black"
             placeholder="Digite o nome do membro"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -103,6 +105,7 @@ export const CreateNovosMembros = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>E-mail</Text>
           <Input
+          bg="white" color="black"
             placeholder="Digite o e-mail do membro"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -117,6 +120,7 @@ export const CreateNovosMembros = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Empresa</Text>
           <Input
+          bg="white" color="black"
             placeholder="Digite o nome da empresa"
             value={nome_empresa}
             onChange={(e) => setNomeEmpresa(e.target.value)}
@@ -126,6 +130,7 @@ export const CreateNovosMembros = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Cargo</Text>
           <Input
+          bg="white" color="black"
             placeholder="Digite o cargo do membro"
             value={cargo}
             onChange={(e) => setCargo(e.target.value)}
@@ -137,6 +142,7 @@ export const CreateNovosMembros = () => {
       <Box mt={5}>
         <Text mb={2}>Situação</Text>
         <Select
+        bg="white" color="black"
           placeholder="Selecione a situação"
           value={situacao}
           onChange={(e) => setSituacao(e.target.value)}

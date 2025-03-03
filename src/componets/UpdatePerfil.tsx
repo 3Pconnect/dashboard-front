@@ -81,6 +81,7 @@ export const UpdatePerfil: React.FC = () => {
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Flex align="center">
           <Button
+          colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
             mr={4}
@@ -110,6 +111,8 @@ export const UpdatePerfil: React.FC = () => {
       <Box mb={6}>
         <Text mb={2}>Nome do Perfil</Text>
         <Input
+        bg={"white"}
+        color={"black"}
           value={nomePerfil}
           onChange={(e) => setNomePerfil(e.target.value)}
           placeholder="Digite o nome do perfil"
@@ -135,37 +138,111 @@ export const UpdatePerfil: React.FC = () => {
             <Stack pl={4}>
               <Checkbox
                 colorScheme="gray"
-                isChecked={permissoes.includes("create.usuario")}
-                onChange={(e) => handleCheckboxChange(e, "create.usuario")}
+                isChecked={permissoes.includes("create.user")}
+                onChange={(e) => handleCheckboxChange(e, "create.user")}
               >
                 Criar Usuário
               </Checkbox>
               <Checkbox
                 colorScheme="gray"
-                isChecked={permissoes.includes("delete.usuario")}
-                onChange={(e) => handleCheckboxChange(e, "delete.usuario")}
+                isChecked={permissoes.includes("read.users")}
+                onChange={(e) => handleCheckboxChange(e, "read.users")}
               >
-                Deletar Usuário
+                Listagem Usuários
+              </Checkbox>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("edit.user")}
+                onChange={(e) => handleCheckboxChange(e, "edit.user")}
+              >
+                Editar Usuário
               </Checkbox>
             </Stack>
           </Box>
 
           <Box>
-            <Text fontWeight="semibold">Eventos</Text>
+            <Text fontWeight="semibold">Perfis</Text>
             <Stack pl={4}>
               <Checkbox
                 colorScheme="gray"
-                isChecked={permissoes.includes("create.events")}
-                onChange={(e) => handleCheckboxChange(e, "create.events")}
+                isChecked={permissoes.includes("create.profile")}
+                onChange={(e) => handleCheckboxChange(e, "create.profile")}
               >
-                Criar Evento
+                Criar Perfil
               </Checkbox>
               <Checkbox
                 colorScheme="gray"
-                isChecked={permissoes.includes("events.read")}
-                onChange={(e) => handleCheckboxChange(e, "events.read")}
+                isChecked={permissoes.includes("read.profiles")}
+                onChange={(e) => handleCheckboxChange(e, "read.profiles")}
               >
-                Ler Eventos
+                Visualizar Perfis
+              </Checkbox>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("edit.profile")}
+                onChange={(e) => handleCheckboxChange(e, "edit.profile")}
+              >
+                Editar Perfil
+              </Checkbox>
+            </Stack>
+          </Box>
+
+          <Box>
+            <Text fontWeight="semibold">Membros</Text>
+            <Stack pl={4}>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("create.membro")}
+                onChange={(e) => handleCheckboxChange(e, "create.membro")}
+              >
+                Criar Membro
+              </Checkbox>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("read.membros")}
+                onChange={(e) => handleCheckboxChange(e, "read.membros")}
+              >
+                Visualizar Membros
+              </Checkbox>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("edit.membro")}
+                onChange={(e) => handleCheckboxChange(e, "edit.membro")}
+              >
+                Editar Membro
+              </Checkbox>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("aprovar_reprovar.membro")}
+                onChange={(e) => handleCheckboxChange(e, "aprovar_reprovar.membro")}
+              >
+                Aprovar / Reprovar Membro
+              </Checkbox>
+            </Stack>
+          </Box>
+          <Box>
+            <Text fontWeight="semibold">Apoiadores</Text>
+            <Stack pl={4}>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("create.apoiador")}
+                onChange={(e) => handleCheckboxChange(e, "create.apoiador")}
+              >
+                Criar Apoiador
+              </Checkbox>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("read.apoiadores")}
+                onChange={(e) => handleCheckboxChange(e, "read.apoiadores")}
+              >
+                Visualizar Apoiadores
+              </Checkbox>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("edit.apoiador")}
+                onChange={(e) => handleCheckboxChange(e, "edit.apoiador")}
+              >
+                Editar Apoiador
               </Checkbox>
             </Stack>
           </Box>

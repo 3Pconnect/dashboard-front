@@ -81,7 +81,8 @@ export const CreateUser = () => {
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Flex align="center">
-          <Button variant="ghost" leftIcon={<Icon as={MdArrowBack} />} mr={4} onClick={() => window.history.back()}>
+          <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />}
+          mr={4} onClick={() => window.history.back()}>
             Voltar
           </Button>
           <Breadcrumb>
@@ -102,11 +103,11 @@ export const CreateUser = () => {
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box>
           <Text mb={2}>Nome</Text>
-          <Input placeholder="Digite seu nome" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <Input bg="white" color="black" placeholder="Digite seu nome" value={username} onChange={(e) => setUsername(e.target.value)} />
         </Box>
         <Box>
           <Text mb={2}>E-mail</Text>
-          <Input placeholder="Digite seu e-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input bg="white" color="black" placeholder="Digite seu e-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
         </Box>
       </Grid>
 
@@ -114,7 +115,7 @@ export const CreateUser = () => {
 
         <Box>
           <Text mb={2}>Situação do Usuário</Text>
-          <Select placeholder="Selecione a situação" value={situacao} onChange={(e) => setSituacao(e.target.value)}>
+          <Select bg="white" color="black" placeholder="Selecione a situação" value={situacao} onChange={(e) => setSituacao(e.target.value)}>
             <option value="ATIVO">Ativo</option>
             <option value="INATIVO">Inativo</option>
             <option value="PENDENTE">Pendente</option>
