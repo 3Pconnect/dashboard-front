@@ -396,6 +396,46 @@ export const registerMembro = async (
     }
   }
 };
+export const registerEvento = async (
+  name: string,
+  email: string,
+  tipo_usuario: string,
+  telefone: string,
+  nome_empresa: string,
+  cargo: string,
+  cnpj: string,
+  situacao: string = "em_analise"
+) => {
+  try {
+    const response = await api.post("/membros", {
+      name,
+      email,
+      tipo_usuario,
+      telefone,
+      nome_empresa,
+      cargo,
+      cnpj,
+      situacao,
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao registrar membro:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao registrar membro");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao registrar membro.");
+    }
+  }
+};
 export const registerApoiador = async (
   email: string,
   tipo_usuario: string,

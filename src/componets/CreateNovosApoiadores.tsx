@@ -58,6 +58,7 @@ export const CreateNovosApoiadores = () => {
         <Flex align="center">
           {/* Botão de Voltar */}
           <Button
+          colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
             mr={4}
@@ -93,6 +94,8 @@ export const CreateNovosApoiadores = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Nome</Text>
           <Input
+            bg={"white"}
+            color={"black"}
             placeholder="Digite o nome do membro" 
             value={nome_empresa}
             onChange={(e) => setNomeEmpresa(e.target.value)}
@@ -102,6 +105,8 @@ export const CreateNovosApoiadores = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>E-mail</Text>
           <Input
+            bg={"white"}
+            color={"black"}
             placeholder="Digite o e-mail do membro"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -116,6 +121,8 @@ export const CreateNovosApoiadores = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Empresa</Text>
           <Input
+            bg={"white"}
+            color={"black"}
             placeholder="Digite o CNPJ do membro"
             value={cnpj}
             onChange={(e) => setCnpj(e.target.value)}
@@ -125,6 +132,8 @@ export const CreateNovosApoiadores = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Cargo</Text>
           <Input
+            bg={"white"}
+            color={"black"}
          placeholder="Digite o telefone do membro"
             value={cargo}
             onChange={(e) => setCargo(e.target.value)}
@@ -134,6 +143,8 @@ export const CreateNovosApoiadores = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Atividade</Text>
           <Input
+            bg={"white"}
+            color={"black"}
   placeholder="Digite a atividade do membro"
             value={atividade}
             onChange={(e) => setAtividade(e.target.value)}
