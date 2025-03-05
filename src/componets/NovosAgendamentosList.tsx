@@ -3,7 +3,7 @@ import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, Date
 import { Heading, Flex, Button, useToast, Tag, useMediaQuery, HStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillCheckCircle, AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
-import { fetchUsers, deleteUser, fetchMembros, deleteMembro, aprovarMembro, fetchEventos, deleteEvento, inscreverse, fetchMeusEventos } from '../services/api';
+import { fetchUsers, deleteUser, fetchMembros, deleteMembro, aprovarMembro, fetchEventos, deleteEvento, inscreverse } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
 
 
@@ -28,7 +28,7 @@ interface Sorts {
   order?: 'ascend' | 'descend';
 }
 
-const MeusEventosTable: React.FC = () => {
+const NovosAgendamentosList: React.FC = () => {
   const navigate = useNavigate();
   const [filteredInfo, setFilteredInfo] = useState<Filters>({});
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
@@ -89,7 +89,7 @@ const MeusEventosTable: React.FC = () => {
       }
       console.log(obj)
       // Passar searchQuery e dateRange dentro de filters
-      const response = await fetchMeusEventos(page, 10, startDate, endDate, {obj});
+      const response = await fetchEventos(page, 10, startDate, endDate, {obj});
       console.log(response)
       setData(response?.eventos);
       setTotal(response?.total);
@@ -285,8 +285,14 @@ const MeusEventosTable: React.FC = () => {
             key: 'actions',
             render: (_, record) => (
             <HStack justifyContent={"center"}>
+                <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(Number(record.id))
+              }}>
+                <AiFillDelete />
+              </Button>
               
-              <Button  isDisabled={true} variant={'ghost'} colorScheme='blue' onClick={(e) => {
+              <Button  isDisabled={record?.inscrito} variant={'ghost'} colorScheme='blue' onClick={(e) => {
                 e.stopPropagation();
                 const eventDetails = {
                   nome: record?.nome_evento,
@@ -297,7 +303,7 @@ const MeusEventosTable: React.FC = () => {
                 };
                 handleIncreverSe(Number(record.id), eventDetails)
               }}>
-                Inscrito
+                {record?.inscrito ? "Inscrito": "Inscreva-se"}
               </Button>
             </HStack>
             ),
@@ -382,4 +388,4 @@ const MeusEventosTable: React.FC = () => {
   );
 };
 
-export default MeusEventosTable;
+export default NovosAgendamentosList;

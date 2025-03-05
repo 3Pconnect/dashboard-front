@@ -39,6 +39,7 @@ import { useState, useEffect } from "react"; // Importação correta dos hooks
 import { fetchMe } from "./services/api";
 import NotFound from "./pages/NotFound";
 import { hasPermission, savePermissionsToLocalStorage } from "./utils/util";
+import { TodosEventosPage } from "./pages/TodosEventosPage";
 
 export const App = () => {
   const [permissoes, setPermissoes] = useState(['']);
@@ -77,6 +78,7 @@ export const App = () => {
             {permissoes.includes('read.apoiadores') &&
               <Route path="apoiadores" element={<NovosParceirosList />} />}
             <Route path="agenda-eventos" element={<AgendaEventosList />} />
+            <Route path="todos-eventos" element={<TodosEventosPage />} />
             <Route path="meus-eventos" element={<MeusEventosList />} />
             <Route path="create-user" element={<CreateUserPage />} />
             <Route path="create-perfil" element={<CreatePerfilPage />} />

@@ -103,7 +103,78 @@ export const fetchMembros = async (
     }
   }
 };
+export const fetchEventos = async (
+  page: number,
+  limit: number,
+  startDate?: string,
+  endDate?: string,
+  filters: any = {}
+) => {
+  try {
+    const response = await api.get("/eventos", {
+      params: {
+        page,
+        limit,
+        ...(filters.obj.nome_evento && { nome_evento: filters.obj.nome_evento }),
+        ...(filters.obj.tema && { tema: filters.obj.tema }),
+        startDate,
+        endDate,
+      },
+    });
 
+    if (!response.data || !response.data.eventos) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar eventos:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar eventos");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar eventos.");
+    }
+  }
+};
+export const fetchMeusEventos = async (
+  page: number,
+  limit: number,
+  startDate?: string,
+  endDate?: string,
+  filters: any = {}
+) => {
+  try {
+    const response = await api.get("/eventos/subscribed/all", {
+      params: {
+        page,
+        limit,
+        ...(filters.obj.nome_evento && { nome_evento: filters.obj.nome_evento }),
+        ...(filters.obj.tema && { tema: filters.obj.tema }),
+        startDate,
+        endDate,
+      },
+    });
+
+    if (!response.data || !response.data.eventos) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar eventos:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar eventos");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar eventos.");
+    }
+  }
+};
 export const fetchApoiadores = async (
   page: number,
   limit: number,
@@ -258,7 +329,24 @@ export const deleteMembro = async (id: number) => {
     throw error;
   }
 };
-
+export const deleteEvento = async (id: number) => {
+  try {
+    const response = await api.delete(`/eventos/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao excluir evento:", error);
+    throw error;
+  }
+};
+export const inscreverse = async (id: number) => {
+  try {
+    const response = await api.post(`/eventos/${id}/inscrever`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao inscrever-se ao evento:", error);
+    throw error;
+  }
+};
 export const fetchMembroById = async (id: number) => {
   try {
     const response = await api.get(`/membros/${id}`);
@@ -397,25 +485,21 @@ export const registerMembro = async (
   }
 };
 export const registerEvento = async (
-  name: string,
-  email: string,
-  tipo_usuario: string,
-  telefone: string,
-  nome_empresa: string,
-  cargo: string,
-  cnpj: string,
-  situacao: string = "em_analise"
+  nome_evento: string,
+  cidade: string,
+  estado: string,
+  tema: string,
+  situacao: string = "inativo",
+  dataEvento: string,
 ) => {
   try {
-    const response = await api.post("/membros", {
-      name,
-      email,
-      tipo_usuario,
-      telefone,
-      nome_empresa,
-      cargo,
-      cnpj,
+    const response = await api.post("/eventos", {
+      nome_evento,
+      cidade,
+      estado,
+      tema,
       situacao,
+      dataEvento
     }, {
       headers: {
         'Accept': 'application/json',
@@ -425,14 +509,14 @@ export const registerEvento = async (
 
     return response.data;
   } catch (error: any) {
-    console.error("Erro ao registrar membro:", error);
+    console.error("Erro ao registrar evento:", error);
 
     if (error.response) {
-      throw new Error(error.response.data?.message || "Erro ao registrar membro");
+      throw new Error(error.response.data?.message || "Erro ao registrar evento");
     } else if (error.request) {
       throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
     } else {
-      throw new Error("Erro inesperado ao registrar membro.");
+      throw new Error("Erro inesperado ao registrar evento.");
     }
   }
 };

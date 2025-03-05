@@ -144,6 +144,17 @@ function Out() {
                     Novos Parceiros
                   </Link>
                 }
+                      <Link
+                  href="#"
+                  display="flex"
+                  alignItems="center"
+                  color="white"
+                  _hover={{ color: 'teal.400' }}
+                  onClick={() => navigate('/main/agenda-eventos')}
+                >
+                  <FaCalendarAlt style={{ marginRight: '8px' }} />
+                  Agenda de Eventos
+                </Link>
               </VStack>
             )}
           </Box>
@@ -162,16 +173,17 @@ function Out() {
             </Link>
             {activeMenu === 'eventos' && (
               <VStack align="start" spacing={2} pl={6}>
+          
                 <Link
                   href="#"
                   display="flex"
                   alignItems="center"
                   color="white"
                   _hover={{ color: 'teal.400' }}
-                  onClick={() => navigate('/main/agenda-eventos')}
+                  onClick={() => navigate('/main/todos-eventos')}
                 >
                   <FaCalendarAlt style={{ marginRight: '8px' }} />
-                  Agenda de Eventos
+                  Eventos
                 </Link>
                 <Link
                   href="#"

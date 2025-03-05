@@ -1,8 +1,10 @@
-import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon } from "@chakra-ui/react";
-import { MdArrowBack } from "react-icons/md"; // Ícone para o botão de voltar
-import { useState, useEffect } from "react"; // Importando useState e useEffect
+import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
+import { MdArrowBack } from "react-icons/md"; 
+import { useState, useEffect } from "react"; 
 import { DatePicker } from "antd";
 import { Dayjs } from "dayjs";
+import { registerEvento } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 // Tipos para os dados das respostas da API
 interface Estado {
@@ -16,61 +18,93 @@ interface Cidade {
 }
 
 export const CreateNovoEvento = () => {
-  // Estados para armazenar dados de estados e cidades
-  const [estados, setEstados] = useState<Estado[]>([]); // Tipando como um array de Estado
-  const [cidades, setCidades] = useState<Cidade[]>([]); // Tipando como um array de Cidade
+  const toast = useToast(); // Adicionando o hook useToast
+  const [estados, setEstados] = useState<Estado[]>([]);
+  const [cidades, setCidades] = useState<Cidade[]>([]);
   const [estadoSelecionado, setEstadoSelecionado] = useState<string>("");
   const [cidadeSelecionada, setCidadeSelecionada] = useState<string>("");
-  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
-  // Função para carregar os estados do IBGE
+  const [nomeEvento, setNomeEvento] = useState<string>("");
+  const [temaEvento, setTemaEvento] = useState<string>("");
+  const [situacao, setSituacao] = useState<string>("inativo");
+  const [dataEvento, setDataEvento] = useState<Dayjs | null>(null); // Estado para armazenar a data
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Estado de loading
+  const navigate = useNavigate();
+
   const carregarEstados = async () => {
     try {
       const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
       const data = await response.json();
-      setEstados(data); // Preenche o estado com a resposta da API
+      setEstados(data);
     } catch (error) {
       console.error("Erro ao carregar os estados:", error);
     }
   };
 
-  // Função para carregar as cidades de um estado específico
   const carregarCidades = async (uf: string) => {
-    if (!uf) return; // Se o estado não for selecionado, não faz nada
+    if (!uf) return;
     try {
       const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
       const data = await response.json();
-      setCidades(data); // Preenche a lista de cidades
+      setCidades(data);
     } catch (error) {
       console.error("Erro ao carregar as cidades:", error);
     }
   };
 
-  // Carregar estados ao montar o componente
   useEffect(() => {
     carregarEstados();
   }, []);
 
-  // Quando o estado é selecionado, carrega as cidades correspondentes
   useEffect(() => {
     carregarCidades(estadoSelecionado);
   }, [estadoSelecionado]);
+
+  const handleSalvar = async () => {
+    setIsLoading(true);
+    try {
+      await registerEvento(
+        nomeEvento,
+        cidadeSelecionada,
+        estadoSelecionado,
+        temaEvento,
+        situacao,
+        dataEvento ? dataEvento.format("YYYY-MM-DD") : "" // Enviando a data no formato adequado
+      );
+      
+      toast({
+        title: "Evento registrado.",
+        description: "O evento foi registrado com sucesso.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate('/main/agenda-eventos')
+    } catch (error) {
+      toast({
+        title: "Erro ao registrar evento.",
+        description:  "Algo deu errado.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false); // Finaliza o carregamento
+    }
+  };
 
   return (
     <>
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Flex align="center">
-          {/* Botão de Voltar */}
           <Button
             colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
             mr={4}
-            onClick={() => window.history.back()} // Vai para a página anterior
+            onClick={() => window.history.back()}
           >
             Voltar
           </Button>
-
-          {/* Breadcrumb */}
           <Breadcrumb>
             <BreadcrumbItem>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -89,16 +123,12 @@ export const CreateNovoEvento = () => {
         </Heading>
       </Flex>
 
-      {/* Grid para os campos de Nome do Evento, Cidade, Estado, Tema */}
-      <Grid
-        templateColumns={{ base: "1fr", md: "1fr 1fr" }} // Responsivo: 1 coluna em mobile e 2 em dispositivos maiores
-        gap={4}
-      >
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
+      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+        <Box mb={4}>
           <Text mb={2}>Nome do Evento</Text>
-          <Input color={"black"} bg={"white"} placeholder="Digite o nome do evento" />
+          <Input value={nomeEvento} onChange={(e)=>{setNomeEvento(e.target.value)}} color={"black"} bg={"white"} placeholder="Digite o nome do evento" />
         </Box>
-       <Box mb={4}> {/* Adicionado espaçamento inferior */}
+        <Box mb={4}>
           <Text mb={2}>Estados</Text>
           <Select
             color={"black"}
@@ -114,14 +144,10 @@ export const CreateNovoEvento = () => {
             ))}
           </Select>
         </Box>
-     
       </Grid>
 
-      <Grid
-        templateColumns={{ base: "1fr", md: "1fr 1fr" }} // Responsivo
-        gap={4}
-      >
-    <Box mb={4}> {/* Adicionado espaçamento inferior */}
+      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+        <Box mb={4}>
           <Text mb={2}>Cidade</Text>
           <Select
             color={"black"}
@@ -138,33 +164,37 @@ export const CreateNovoEvento = () => {
           </Select>
         </Box>
 
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
+        <Box mb={4}>
           <Text mb={2}>Tema</Text>
-          <Input color={"black"} bg={"white"} placeholder="Digite o tema do evento" />
+          <Input value={temaEvento} onChange={(e)=>{setTemaEvento(e.target.value)}}  color={"black"} bg={"white"} placeholder="Digite o tema do evento" />
         </Box>
       </Grid>
 
-      {/* Campo Data */}
       <Box mt={5}>
         <Text mb={2}>Data</Text>
-        <DatePicker
-    style={{ width: "100%", height: "40px" }}
-  />
+        <DatePicker 
+          style={{ width: "100%", height: "40px" }} 
+          onChange={(date) => setDataEvento(date)} // Atualizando o estado com a data selecionada
+        />
       </Box>
 
-      {/* Campo Situação */}
       <Box mt={5}>
         <Text mb={2}>Situação</Text>
-        <Select color={"black"} bg={"white"} placeholder="Selecione a situação">
+        <Select value={situacao} onChange={(e)=>{setSituacao(e.target.value)}} color={"black"} bg={"white"} placeholder="Selecione a situação">
           <option value="ativo">Ativo</option>
           <option value="inativo">Inativo</option>
           <option value="pendente">Pendente</option>
         </Select>
       </Box>
 
-      {/* Botão Salvar */}
       <VStack alignItems={"end"} mt={5}>
-        <Button colorScheme="green">Salvar</Button>
+        <Button
+          colorScheme="green"
+          isLoading={isLoading} // Exibe o estado de carregamento no botão
+          onClick={handleSalvar} // Chama a função de salvar
+        >
+          Salvar
+        </Button>
       </VStack>
     </>
   );
