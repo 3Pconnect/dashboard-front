@@ -315,7 +315,7 @@ const NovosAgendamentosList: React.FC = () => {
   return (
     <>
       <Flex mb={6} justify='space-between' align='center' width='100%'>
-        <Heading fontSize='2xl' fontWeight='bold'>Membros</Heading>
+        <Heading fontSize='2xl' fontWeight='bold'>Criar Eventos</Heading>
         <Button
           onClick={() => navigate('/main/create-evento')}
           colorScheme='green'
