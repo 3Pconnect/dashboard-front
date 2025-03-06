@@ -34,8 +34,10 @@ function Out() {
 
   // Função de logout
   const handleLogout = () => {
+    localStorage.clear();
     setIsLoggedOut(true);
-    alert("Você foi desconectado!");
+    navigate('/')
+    
     // Aqui você pode adicionar a lógica para logout, como limpar cookies, redirecionar para uma página de login, etc.
   };
 
@@ -154,7 +156,7 @@ function Out() {
                 >
                   <FaCalendarAlt style={{ marginRight: '8px' }} />
                   Agenda de Eventos
-                </Link>
+                </Link>:
               </VStack>
             )}
           </Box>

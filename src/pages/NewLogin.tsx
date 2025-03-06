@@ -13,9 +13,10 @@ import {
   Image,
   VStack,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../services/api';
+import api, { fetchMe } from '../services/api';
+import { savePermissionsToLocalStorage } from '../utils/util';
 
 export default function NewLogin() {
   const [email, setEmail] = useState('');
@@ -24,13 +25,32 @@ export default function NewLogin() {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState<string>()
 
+    const [permissoes, setPermissoes] = useState([''])
+  
+    const loadUser = async () => {
+      try {
+        const data = await fetchMe();
+        setPermissoes(data.profile.permissions);
+        savePermissionsToLocalStorage(data.profile.permissions)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    useEffect(() => {
+      console.log(permissoes);
+      const hasPermission = permissoes.includes('create.usuario');
+      console.log(hasPermission);
+    }, [permissoes]);
+
   const handleLogin = async () => {
     try {
       setIsLoading(true)
       const response = await api.post('/auth/login', { email, password });
       localStorage.setItem('accessToken', response.data.accessToken);
+      await loadUser()
       setIsLoading(false)
-      navigate('/main/dashboard');
+      navigate('/main/todos-eventos', { replace: true });
     } catch (error: any) {
       setErrorMsg(error?.message)
       setIsFailure(true)
