@@ -1,96 +1,89 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
+// Definindo os tipos dos dados
+interface MembroMes {
+  mes: string;
+  totalMembros: string;
+}
+
+interface TotalTreinamentoRealizadosChartProps {
+  totalMembrosPorMes: MembroMes[];
+}
+
 interface ChartState {
-  series: Array<{ name: string; data: number[] }>;
+  series: Array<{ name: string; data: { x: string; y: number }[] }>;
   options: ApexCharts.ApexOptions;
 }
 
-const TotalTreinamentoRealizadosChart: React.FC = () => {
+const TotalTreinamentoRealizadosChart: React.FC<TotalTreinamentoRealizadosChartProps> = ({
+  totalMembrosPorMes,
+}) => {
   const [state, setState] = useState<ChartState>({
     series: [
       {
-        name: "Inflation",
-        data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2],
+        name: "Treinamentos Realizados",
+        data: [],
       },
     ],
     options: {
       chart: {
+        type: "bar", // Usando gráfico de barras para representar treinamentos
         height: 350,
-        type: "bar",
+      },
+      title: {
+        text: "Treinamentos Realizados por Mês",
+        align: "left",
+      },
+      xaxis: {
+        type: "category", // Usando categorias para os meses
+      },
+      yaxis: {
+        title: {
+          text: "Treinamentos",
+        },
       },
       plotOptions: {
         bar: {
-          borderRadius: 10,
-          dataLabels: {
-            position: "top", // top, center, bottom
-          },
+          columnWidth: "60%", // Ajustando o tamanho das barras
         },
       },
-      dataLabels: {
-        enabled: true,
-        formatter: (val: number) => `${val}%`,
-        offsetY: -20,
-        style: {
-          fontSize: "12px",
-          colors: ["#304758"],
-        },
-      },
-      xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        position: "top",
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-        crosshairs: {
-          fill: {
-            type: "gradient",
-            gradient: {
-              colorFrom: "#D8E3F0",
-              colorTo: "#BED1E6",
-              stops: [0, 100],
-              opacityFrom: 0.4,
-              opacityTo: 0.5,
-            },
-          },
-        },
-        tooltip: {
-          enabled: true,
-        },
-      },
-      yaxis: {
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-        labels: {
-          show: false,
-          formatter: (val: number) => `${val}%`,
-        },
-      },
-      title: {
-        text: "Total Treinamentos",
-        floating: true,
-        offsetY: 330,
-        align: "center",
-        style: {
-          color: "#444",
-        },
+      theme: {
+        mode: "dark", // Mantendo o modo "dark" para o gráfico
       },
     },
   });
 
+  // Atualiza o estado com os dados dos treinamentos
+  useEffect(() => {
+    const data = totalMembrosPorMes.map((item) => ({
+      x: item.mes, // Usando o mês como categoria
+      y: parseInt(item.totalMembros), // Convertendo o total de membros para número (representando os treinamentos)
+    }));
+
+    // Atualiza o estado com os dados e as opções sem modificar as opções
+    setState((prevState) => ({
+      ...prevState,
+      series: [
+        {
+          name: "Treinamentos Realizados",
+          data,
+        },
+      ],
+    }));
+  }, [totalMembrosPorMes]);
+
   return (
     <div>
       <div id="chart">
-        <ReactApexChart options={state.options} series={state.series} type="bar" height={350} />
+        <ReactApexChart
+          style={{ borderRadius: "10px" }}
+          options={state.options}
+          series={state.series}
+          type="bar"
+          height={350}
+        />
       </div>
-      <div id="html-dist"></div>
     </div>
   );
 };

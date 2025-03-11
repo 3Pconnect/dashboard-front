@@ -50,7 +50,7 @@ export default function NewLogin() {
       localStorage.setItem('accessToken', response.data.accessToken);
       await loadUser()
       setIsLoading(false)
-      navigate('/main/todos-eventos', { replace: true });
+      navigate('/main/dashboard', { replace: true });
     } catch (error: any) {
       setErrorMsg(error?.message)
       setIsFailure(true)

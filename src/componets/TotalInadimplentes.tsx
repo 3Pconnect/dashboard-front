@@ -2,21 +2,21 @@ import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts"; // Importando o tipo ApexOptions para tipagem
 
-interface TaxaRenovacaoChartProps {
-  taxaRenovacao: number;
+interface TotalInadimplentesChartProps {
+  totalInadimplentes: number;
 }
 
-const TaxaRenovacaoAssociadoChart: React.FC<TaxaRenovacaoChartProps> = ({ taxaRenovacao }) => {
+const TotalInadimplentes: React.FC<TotalInadimplentesChartProps> = ({ totalInadimplentes }) => {
   // Tipando explicitamente as opções com ApexOptions
   const [state, setState] = useState<{
     series: number[];
     options: ApexOptions; // Usando ApexOptions para tipar corretamente
   }>({
-    series: [taxaRenovacao, 100 - taxaRenovacao], // Taxa de renovação e o restante para completar 100%
+    series: [totalInadimplentes, 100 - totalInadimplentes], // Total de inadimplentes e o restante para completar 100%
     options: {
       chart: { type: "donut", height: 350 },
-      title: { text: "Taxa de Renovação", align: "left" },
-      labels: ["Renovação", "Não Renovação"], // Labels para as duas partes
+      title: { text: "Total de Inadimplentes", align: "left" },
+      labels: ["Inadimplentes", "Adimplentes"], // Labels para as duas partes
       plotOptions: {
         pie: {
           donut: {
@@ -37,28 +37,33 @@ const TaxaRenovacaoAssociadoChart: React.FC<TaxaRenovacaoChartProps> = ({ taxaRe
           formatter: (val: number) => `${val.toFixed(1)}%`, // Mostra a porcentagem na tooltip
         },
       },
-      colors: ["#2E7D32", "#D32F2F"], // Definindo as cores da renovação e não renovação
+      colors: ["#D32F2F", "#2E7D32"], // Definindo as cores dos inadimplentes e adimplentes
     },
   });
 
   useEffect(() => {
-    // Atualiza os dados se a taxa de renovação mudar
+    // Atualiza os dados se o total de inadimplentes mudar
     setState({
       ...state,
-      series: [taxaRenovacao, 100 - taxaRenovacao],
+      series: [totalInadimplentes, 100 - totalInadimplentes],
     });
-  }, [taxaRenovacao]);
+  }, [totalInadimplentes]);
 
   return (
     <div>
-      <ReactApexChart   options={{
-    ...state.options,
-    theme: {
-      mode: 'dark',  // Definindo o modo para "dark"
-    },
-  }}  series={state.series} type="donut" height={350} />
+      <ReactApexChart
+        options={{
+          ...state.options,
+          theme: {
+            mode: 'dark',  // Definindo o modo para "dark"
+          },
+        }}
+        series={state.series}
+        type="donut"
+        height={350}
+      />
     </div>
   );
 };
 
-export default TaxaRenovacaoAssociadoChart;
+export default TotalInadimplentes;
