@@ -246,6 +246,25 @@ export const UpdatePerfil: React.FC = () => {
               </Checkbox>
             </Stack>
           </Box>
+          <Box>
+            <Text fontWeight="semibold">Gerenciar Eventos</Text>
+            <Stack pl={4}>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("manage.eventos")}
+                onChange={(e) => handleCheckboxChange(e, "manage.eventos")}
+              >
+              Criar / Editar / Deletar
+              </Checkbox>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("eventos.inscricao")}
+                onChange={(e) => handleCheckboxChange(e, "eventos.inscricao")}
+              >
+                Realizar Inscrição
+              </Checkbox>
+            </Stack>
+          </Box>
         </Stack>
       </Box>
 

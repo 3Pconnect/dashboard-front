@@ -37,7 +37,7 @@ function Out() {
     localStorage.clear();
     setIsLoggedOut(true);
     navigate('/')
-    
+
     // Aqui você pode adicionar a lógica para logout, como limpar cookies, redirecionar para uma página de login, etc.
   };
 
@@ -146,7 +146,8 @@ function Out() {
                     Novos Parceiros
                   </Link>
                 }
-                      <Link
+                {permissoes.includes('manage.eventos') &&
+                <Link
                   href="#"
                   display="flex"
                   alignItems="center"
@@ -156,7 +157,7 @@ function Out() {
                 >
                   <FaCalendarAlt style={{ marginRight: '8px' }} />
                   Agenda de Eventos
-                </Link>:
+                </Link>}
               </VStack>
             )}
           </Box>
@@ -175,7 +176,8 @@ function Out() {
             </Link>
             {activeMenu === 'eventos' && (
               <VStack align="start" spacing={2} pl={6}>
-          
+  {permissoes.includes('eventos.inscricao') &&
+              <>
                 <Link
                   href="#"
                   display="flex"
@@ -187,6 +189,7 @@ function Out() {
                   <FaCalendarAlt style={{ marginRight: '8px' }} />
                   Eventos
                 </Link>
+
                 <Link
                   href="#"
                   display="flex"
@@ -198,10 +201,12 @@ function Out() {
                   <FaCalendarAlt style={{ marginRight: '8px' }} />
                   Meus Eventos
                 </Link>
+              </>
+}
               </VStack>
             )}
           </Box>
-
+{/* 
           <Link
             href="#"
             display="flex"
@@ -212,7 +217,7 @@ function Out() {
           >
             <FaUpload style={{ marginRight: '8px' }} />
             Arquivos
-          </Link>
+          </Link> */}
 
           <Link
             href="#"

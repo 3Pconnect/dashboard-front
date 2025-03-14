@@ -40,6 +40,7 @@ import { fetchMe } from "./services/api";
 import NotFound from "./pages/NotFound";
 import { hasPermission, savePermissionsToLocalStorage } from "./utils/util";
 import { TodosEventosPage } from "./pages/TodosEventosPage";
+import { SejaMembroPage } from "./pages/SejaMembroPage";
 
 export const App = () => {
   const [permissoes, setPermissoes] = useState(['']);
@@ -72,39 +73,49 @@ export const App = () => {
               <Route path="users" element={<UserList />} />}
             {permissoes.includes('read.profiles') &&
               <Route path="perfis" element={<PerfilsList />} />}
-            <Route path="dashboard" element={<DashboardMain />} />
+            {permissoes.includes('dashboard') &&
+              <Route path="dashboard" element={<DashboardMain />} />}
             {permissoes.includes('read.membros') &&
               <Route path="novos-membros" element={<NovosMembrosList />} />}
             {permissoes.includes('read.apoiadores') &&
               <Route path="apoiadores" element={<NovosParceirosList />} />}
-            <Route path="agenda-eventos" element={<AgendaEventosList />} />
-            <Route path="todos-eventos" element={<TodosEventosPage />} />
-            <Route path="meus-eventos" element={<MeusEventosList />} />
-            <Route path="create-user" element={<CreateUserPage />} />
-            <Route path="create-perfil" element={<CreatePerfilPage />} />
-            <Route path="update-perfil/:id" element={<UpdatePerfilPage />} />
-            <Route path="update-membro/:id" element={<UpdateMembroPage />} />
-            <Route path="update-apoiador/:id" element={<UpdateApoiadorPage />} />
-            <Route path="create-membro" element={<CreateNovosMembrosPage />} />
-            <Route path="create-apoiador" element={<CreateNovosApoadoresPage />} />
-            <Route path="create-evento" element={<CreateNovoEvento />} />
-            <Route path="update-user/:id" element={<UpdateUserPage />} />
+            {permissoes.includes('manage.eventos') &&
+              <>
+                <Route path="agenda-eventos" element={<AgendaEventosList />} />
+                <Route path="create-evento" element={<CreateNovoEvento />} />
+              </>}
+            {permissoes.includes('eventos.inscricao') &&
+              <><Route path="todos-eventos" element={<TodosEventosPage />} />
+                <Route path="meus-eventos" element={<MeusEventosList />} /></>}
+
+            {permissoes.includes('create.user') &&
+              <>
+                <Route path="create-user" element={<CreateUserPage />} />
+                <Route path="update-user/:id" element={<UpdateUserPage />} />
+              </>
+
+            }
+            {permissoes.includes('create.profile') &&
+              <>
+                <Route path="create-perfil" element={<CreatePerfilPage />} />
+                <Route path="update-perfil/:id" element={<UpdatePerfilPage />} />
+              </>}
+            {permissoes.includes('create.membro') &&
+              <>
+                <Route path="update-membro/:id" element={<UpdateMembroPage />} />
+                <Route path="create-membro" element={<CreateNovosMembrosPage />} />
+              </>}
+
+            {permissoes.includes('create.apoiador') &&
+              <>
+                <Route path="update-apoiador/:id" element={<UpdateApoiadorPage />} />
+                <Route path="create-apoiador" element={<CreateNovosApoadoresPage />} />
+              </>}
           </Route>
 
           <Route path="/" element={<NewLogin />} />
-          <Route path="/test" element={<Out />} />
-          <Route path="/enfermeira" element={<Enfermeira />} />
+          <Route path="/seja-membro" element={<SejaMembroPage />} />
           <Route path="/register" element={<Register />} />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <PostProvider>
-                  <MyProfile />
-                </PostProvider>
-              </ProtectedRoute>
-            }
-          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
