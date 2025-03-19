@@ -391,6 +391,51 @@ export const fetchProfileById = async (id: number) => {
     }
   }
 };
+export const fetchUserCount = async (): Promise<number> => {
+  try {
+    const response = await api.get("/auth/count");
+    console.log(response.data.total)
+
+    return response.data.total;
+  } catch (error: any) {
+    console.error("Erro ao buscar a contagem de usuários:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar a contagem de usuários");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar a contagem de usuários.");
+    }
+  }
+};
+
+export const fetchTreinamentos = async () => {
+  try {
+    const response = await api.get("/eventos/dashboard/treinamentos", {
+      headers: {
+        accept: "*/*",
+      },
+    });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar treinamentos:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar treinamentos");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar treinamentos.");
+    }
+  }
+};
+
 
 export const updateProfile = async (id: number, name: string, permissions: string[]) => {
   try {
@@ -440,6 +485,28 @@ export const registerUser = async (
       throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
     } else {
       throw new Error("Erro inesperado ao registrar usuário.");
+    }
+  }
+};
+
+export const fetchTaxaRenovacao = async () => {
+  try {
+    const response = await api.get("/membros/dashboard/taxa-renovacao", {
+      headers: {
+        accept: "*/*",
+      },
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar taxa de renovação:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar taxa de renovação");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar taxa de renovação.");
     }
   }
 };

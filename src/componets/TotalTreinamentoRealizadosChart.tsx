@@ -4,7 +4,7 @@ import ReactApexChart from "react-apexcharts";
 // Definindo os tipos dos dados
 interface MembroMes {
   mes: string;
-  totalMembros: string;
+  total: string;
 }
 
 interface TotalTreinamentoRealizadosChartProps {
@@ -58,7 +58,7 @@ const TotalTreinamentoRealizadosChart: React.FC<TotalTreinamentoRealizadosChartP
   useEffect(() => {
     const data = totalMembrosPorMes.map((item) => ({
       x: item.mes, // Usando o mês como categoria
-      y: parseInt(item.totalMembros), // Convertendo o total de membros para número (representando os treinamentos)
+      y: parseInt(item.total), // Convertendo o total de membros para número (representando os treinamentos)
     }));
 
     // Atualiza o estado com os dados e as opções sem modificar as opções
