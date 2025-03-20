@@ -21,7 +21,7 @@ export const CardsIndicadoresNumericos = ({totalUser, totalMembros, renovacoes, 
             </VStack>
             <VStack borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#424242"}>
                 <Text fontSize={"x-large"}>{totalTreinamentosFuturos}</Text>
-                <Text>Total de Treinamentos Realizados</Text>
+                <Text>Total de Treinamentos Futuros</Text>
             </VStack>
             <VStack borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#424242"}>
                 <Text fontSize={"x-large"}>{renovacoes}</Text>
