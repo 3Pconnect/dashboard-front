@@ -8,7 +8,7 @@ import { Statistic } from "antd";
 import { CardsIndicadoresNumericos } from "../componets/CardsIndicadoresNumericos";
 import TotalAssociadosChartPorEstado from "../componets/TotalAssociadosChart copy";
 import { fetchTaxaRenovacao, fetchTreinamentos, fetchUserCount } from "../services/api";
-
+import '../css/css.css'
 // Definindo a estrutura do tipo de dados que vem da API
 interface MembrosDashboardData {
   taxaRenovacao: any;

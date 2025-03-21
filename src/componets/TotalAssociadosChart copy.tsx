@@ -19,20 +19,46 @@ const TotalAssociadosChartPorEstado: React.FC<{ dados: Array<Record<string, numb
       chart: {
         type: "bar",
         height: 600,
+        background: "transparent",
+        fontFamily: "Bai Jamjuree, sans-serif",
       },
       title: {
         text: "Total de Membros por Estado",
         align: "left",
+        style: {
+          color: "#FFFFFF", // Cor do título
+          fontSize: "18px",
+          fontFamily: "Bai Jamjuree, sans-serif",
+        },
       },
       xaxis: {
         categories: [],
+        labels: {
+          style: {
+            colors: "#FFFFFF", // Cor dos rótulos do eixo X
+            fontSize: "14px",
+            fontFamily: "Bai Jamjuree, sans-serif",
+          },
+        },
       },
       yaxis: {
         title: {
           text: "Total de Membros",
+          style: {
+            color: "#FFFFFF", // Cor do título do eixo Y
+            fontSize: "16px",
+            fontFamily: "Bai Jamjuree, sans-serif",
+          },
+        },
+        labels: {
+          style: {
+            colors: "#FFFFFF", // Cor dos números do eixo Y
+            fontSize: "14px",
+            fontFamily: "Bai Jamjuree, sans-serif",
+          },
         },
       },
-      colors: ["#4cb8b0"],
+      colors: ["#4cb8b0"], // Cor das barras
       theme: {
         mode: "dark",
       },
@@ -40,6 +66,13 @@ const TotalAssociadosChartPorEstado: React.FC<{ dados: Array<Record<string, numb
         bar: {
           horizontal: false,
           columnWidth: "50%",
+        },
+      },
+      dataLabels: {
+        style: {
+          colors: ["#FFFFFF"], // Cor dos valores dentro das barras
+          fontSize: "14px",
+          fontFamily: "Bai Jamjuree, sans-serif",
         },
       },
     },
@@ -56,7 +89,8 @@ const TotalAssociadosChartPorEstado: React.FC<{ dados: Array<Record<string, numb
     });
 
     if (estados.length > 0) {
-      setState({
+      setState((prevState) => ({
+        ...prevState,
         series: [
           {
             name: "Total Membros",
@@ -64,20 +98,21 @@ const TotalAssociadosChartPorEstado: React.FC<{ dados: Array<Record<string, numb
           },
         ],
         options: {
-          ...state.options,
+          ...prevState.options,
           xaxis: {
+            ...prevState.options.xaxis,
             categories: estados,
           },
         },
-      });
+      }));
     }
   }, [dados]);
 
   return (
     <SimpleGrid columns={{ base: 1, md: 1 }} spacing={4} p={4}>
-    <VStack spacing={4} p={4} w="full" h="600px" bg="#424242" justifyContent="center" borderRadius="10px">
-      <ReactApexChart style={{ width: "100%" }} options={state.options} series={state.series} type="bar" height={550} />
-    </VStack>
+      <VStack spacing={4} p={4} w="full" h="600px" bg="#0B244D" justifyContent="center" borderRadius="10px">
+        <ReactApexChart  style={{ width: "100%"}}  options={state.options} series={state.series} type="bar" height={550} />
+      </VStack>
     </SimpleGrid>
   );
 };

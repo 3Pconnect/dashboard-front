@@ -1,4 +1,4 @@
-import { VStack } from "@chakra-ui/react";
+import { SimpleGrid, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
@@ -29,20 +29,56 @@ const TotalAssociadosChart: React.FC<TotalAssociadosChartProps> = ({
     ],
     options: {
       chart: {
-        type: "area", // Tipo do gráfico
+        type: "area",
         stacked: false,
         height: 350,
+        background: "transparent",
+        fontFamily: "Bai Jamjuree, sans-serif",
       },
       title: {
         text: "Total de Membros por Mês",
         align: "left",
+        style: {
+          color: "#FFFFFF",
+          fontSize: "18px",
+          fontFamily: "Bai Jamjuree, sans-serif",
+        },
       },
       xaxis: {
         type: "datetime",
+        labels: {
+          style: {
+            colors: "#FFFFFF",
+            fontSize: "14px",
+            fontFamily: "Bai Jamjuree, sans-serif",
+          },
+        },
       },
       yaxis: {
         title: {
           text: "Membros",
+          style: {
+            color: "#FFFFFF",
+            fontSize: "16px",
+            fontFamily: "Bai Jamjuree, sans-serif",
+          },
+        },
+        labels: {
+          style: {
+            colors: "#FFFFFF",
+            fontSize: "14px",
+            fontFamily: "Bai Jamjuree, sans-serif",
+          },
+        },
+      },
+      theme: {
+        mode: "dark",
+      },
+      dataLabels: {
+        style: {
+          colors: ["#FFFFFF"],
+          fontSize: "14px",
+          fontFamily: "Bai Jamjuree, sans-serif",
         },
       },
     },
@@ -51,8 +87,8 @@ const TotalAssociadosChart: React.FC<TotalAssociadosChartProps> = ({
   // Atualiza o estado com os dados dos membros
   useEffect(() => {
     const data = totalMembrosPorMes.map((item) => ({
-      x: new Date(item.mes).getTime(), // Convertendo o mês para timestamp
-      y: parseInt(item.totalMembros),  // Convertendo o total de membros para número
+      x: new Date(item.mes).getTime(),
+      y: parseInt(item.totalMembros),
     }));
 
     setState({
@@ -67,26 +103,18 @@ const TotalAssociadosChart: React.FC<TotalAssociadosChartProps> = ({
   }, [totalMembrosPorMes]);
 
   return (
-    <div>
-      <VStack>
-        
+    <SimpleGrid columns={{ base: 1, md: 1 }} spacing={4}>
+      <VStack spacing={4} p={4} w="full" bg="#0B244D" justifyContent="center"
+       borderRadius="10px">
+        <ReactApexChart
+          style={{ borderRadius: "10px", width: "100%" }}
+          options={state.options}
+          series={state.series}
+          type="area"
+          height={350}
+        />
       </VStack>
-      <div id="chart">
-      <ReactApexChart
-      style={{borderRadius: "10px"}}
-  options={{
-    ...state.options,
-    theme: {
-      mode: 'dark',  // Definindo o modo para "dark"
-    },
-  }}
-  series={state.series}
-  type="area"
-  height={350}
-/>
-
-      </div>
-    </div>
+    </SimpleGrid>
   );
 };
 

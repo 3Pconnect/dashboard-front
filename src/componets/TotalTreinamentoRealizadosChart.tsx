@@ -1,3 +1,4 @@
+import { SimpleGrid, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
@@ -30,17 +31,37 @@ const TotalTreinamentoRealizadosChart: React.FC<TotalTreinamentoRealizadosChartP
       chart: {
         type: "bar", // Usando gráfico de barras para representar treinamentos
         height: 350,
+        background: "transparent",
+        fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada
       },
       title: {
         text: "Treinamentos Realizados por Mês",
         align: "left",
+        style: {
+          color: "#FFFFFF", // Cor do título
+          fontSize: "18px",
+          fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada
+        },
       },
       xaxis: {
         type: "category", // Usando categorias para os meses
+        labels: {
+          style: {
+            colors: "#FFFFFF", // Cor das labels do eixo X
+          },
+        },
       },
       yaxis: {
         title: {
           text: "Treinamentos",
+          style: {
+            color: "#FFFFFF", // Cor do título do eixo Y
+          },
+        },
+        labels: {
+          style: {
+            colors: "#FFFFFF", // Cor das labels do eixo Y
+          },
         },
       },
       plotOptions: {
@@ -74,17 +95,24 @@ const TotalTreinamentoRealizadosChart: React.FC<TotalTreinamentoRealizadosChartP
   }, [totalMembrosPorMes]);
 
   return (
-    <div>
-      <div id="chart">
-        <ReactApexChart
-          style={{ borderRadius: "10px" }}
-          options={state.options}
+
+    <SimpleGrid columns={{ base: 1, md: 1 }} spacing={4}>
+      <VStack spacing={4} p={4} w="full" bg="#0B244D" justifyContent="center" borderRadius="10px">
+         <ReactApexChart
+          options={{
+            ...state.options,
+            theme: {
+              mode: "dark", // Modo escuro
+            },
+          }}
+          style={{ borderRadius: "10px", width: "100%" }}
           series={state.series}
           type="bar"
           height={350}
         />
-      </div>
-    </div>
+      </VStack>
+    </SimpleGrid>
+
   );
 };
 

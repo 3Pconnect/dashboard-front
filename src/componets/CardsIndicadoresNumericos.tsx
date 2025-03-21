@@ -11,27 +11,27 @@ type CardsIndicadoresNumericosType = {
 export const CardsIndicadoresNumericos = ({totalUser, totalMembros, renovacoes, inadimplentes, totalTreinamentos, totalTreinamentosFuturos}:CardsIndicadoresNumericosType) => {
     return (
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} p={4}>
-            <VStack borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#424242"}>
-                <Text fontSize={"x-large"}>{totalMembros}</Text>
-                <Text>Total de Associados Premium</Text>
+            <VStack borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#0B244D"}>
+                <Text className="indicator-title" fontSize={"x-large"}>{totalMembros}</Text>
+                <Text className="indicator-title">Total de Associados Premium</Text>
             </VStack>
-            <VStack borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#424242"}>
-                <Text fontSize={"x-large"}>{totalTreinamentos}</Text>
-                <Text>Total de Treinamentos Realizados</Text>
+            <VStack borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#0B244D"}>
+                <Text className="indicator-title">{totalTreinamentos}</Text>
+                <Text className="indicator-title">Total de Treinamentos Realizados</Text>
             </VStack>
-            <VStack borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#424242"}>
-                <Text fontSize={"x-large"}>{totalTreinamentosFuturos}</Text>
-                <Text>Total de Treinamentos Futuros</Text>
+            <VStack  borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#0B244D"}>
+                <Text className="indicator-title" fontSize={"x-large"}>{totalTreinamentosFuturos}</Text>
+                <Text className="indicator-title">Total de Treinamentos Futuros</Text>
             </VStack>
-            <VStack borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#424242"}>
+            <VStack className="indicator-title" borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#0B244D"}>
                 <Text fontSize={"x-large"}>{renovacoes}</Text>
                 <Text>Taxa de Renovação de Associados</Text>
             </VStack>
-            <VStack borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#424242"}>
+            <VStack className="indicator-title" borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#0B244D"}>
                 <Text fontSize={"x-large"}>{inadimplentes}</Text>
                 <Text>Índice de Inadiplência</Text>
             </VStack>
-            <VStack borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#424242"}>
+            <VStack className="indicator-title" borderRadius={5} justifyContent={"center"} w={"full"} h={"100px"} bg={"#0B244D"}>
                 <Text fontSize={"x-large"}>{totalUser}</Text>
                 <Text>Total Logins</Text>
             </VStack>

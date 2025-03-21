@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts"; // Importando o tipo ApexOptions para tipagem
+import { SimpleGrid, VStack } from "@chakra-ui/react";
 
 interface TotalInadimplentesChartProps {
   totalInadimplentes: number;
@@ -14,13 +15,26 @@ const TotalInadimplentes: React.FC<TotalInadimplentesChartProps> = ({ totalInadi
   }>({
     series: [totalInadimplentes, 100 - totalInadimplentes], // Total de inadimplentes e o restante para completar 100%
     options: {
-      chart: { type: "donut", height: 350 },
-      title: { text: "Total de Inadimplentes", align: "left" },
+      chart: {
+        background: "transparent",
+        type: "donut",
+        height: 350,
+        fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada
+      },
+      title: {
+        text: "Total de Inadimplentes",
+        align: "left",
+        style: {
+          color: "#FFFFFF", // Cor do título
+          fontSize: "18px",
+          fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada no título
+        },
+      },
       labels: ["Inadimplentes", "Adimplentes"], // Labels para as duas partes
       plotOptions: {
         pie: {
           donut: {
-            size: '60%', // Controla o tamanho do buraco no meio
+            size: "60%", // Controla o tamanho do buraco no meio
           },
         },
       },
@@ -28,7 +42,8 @@ const TotalInadimplentes: React.FC<TotalInadimplentesChartProps> = ({ totalInadi
         enabled: true,
         style: {
           fontSize: "14px",
-          colors: ["#fff"],
+          colors: ["#FFFFFF"], // Cor dos dados
+          fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada nos labels de dados
         },
         formatter: (val: number) => `${val.toFixed(1)}%`, // Mostra a porcentagem com 1 casa decimal
       },
@@ -50,19 +65,22 @@ const TotalInadimplentes: React.FC<TotalInadimplentesChartProps> = ({ totalInadi
   }, [totalInadimplentes]);
 
   return (
-    <div>
-      <ReactApexChart
-        options={{
-          ...state.options,
-          theme: {
-            mode: 'dark',  // Definindo o modo para "dark"
-          },
-        }}
-        series={state.series}
-        type="donut"
-        height={350}
-      />
-    </div>
+    <SimpleGrid columns={{ base: 1, md: 1 }} spacing={4}>
+      <VStack spacing={4} p={4} w="full" bg="#0B244D" justifyContent="center" borderRadius="10px">
+        <ReactApexChart
+          options={{
+            ...state.options,
+            theme: {
+              mode: "dark", // Definindo o modo para "dark"
+            },
+          }}
+          style={{ borderRadius: "10px", width: "100%" }}
+          series={state.series}
+          type="donut"
+          height={350}
+        />
+      </VStack>
+    </SimpleGrid>
   );
 };
 

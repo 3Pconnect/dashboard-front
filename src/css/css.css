@@ -1,1 +1,173 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400&display=swap');
+
+body {
+    font-family: 'Bai Jamjuree', sans-serif;
+    font-size: 16px;
+    line-height: 50px;
+    font-weight: 700;
+    letter-spacing: normal;
+    color: #D63939;
+}
+
+.button-menu-nav {
+    font-family: 'Bai Jamjuree', sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 700;
+    letter-spacing: normal;
+    color: #D63939;
+    background-color: transparent;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.button-menu-nav:hover {
+    color: #D63939;
+}
+
+.indicator-title {
+    font-family: "Bai Jamjuree", sans-serif;
+    line-height: 25.6px;
+    font-weight: 400;
+    letter-spacing: normal;
+}
+
+.button-premium {
+    font-family: "Bai Jamjuree", sans-serif !important;
+    line-height: 25.6px !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+    color: aliceblue !important;
+}
+.button-premium input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important; /* Cor do placeholder */
+  }
+.ant-input {
+    font-family: 'Bai Jamjuree', sans-serif;
+    
+    border-radius: 40px !important;
+    /* Arredondar bordas */
+    color: white !important;
+    /* Cor do texto */
+}
+
+.ant-picker input {
+    font-family: "Bai Jamjuree", sans-serif !important;
+    border-radius: 8px !important;
+    /* Arredondar bordas */
+    border-color: blue !important;
+    /* Cor do texto */
+}
+
+.input-premium {
+    font-family: 'Bai Jamjuree', sans-serif;
+    font-weight: 400;
+    /* Regular weight */
+}
+
+.ant-picker-range .ant-picker-input > input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Cor do texto */
+  }
+  
+  /* Para os rótulos "Start date" e "End date" */
+  .ant-picker-range .ant-picker-label {
+    color: rgba(255, 255, 255, 0.7); /* Cor do rótulo */
+    font-size: 14px; /* Tamanho da fonte */
+    font-family: "Bai Jamjuree", sans-serif; /* Fonte customizada */
+  }
+
+
+
+  /* Estilo para o campo de entrada do Select */
+.button-premium .ant-select-selector {
+    background-color: transparent !important;  /* Cor do fundo do campo */
+    color: white !important;           /* Cor do texto */
+    border-radius: 0px !important;     /* Borda arredondada */
+    border-color: #2596be !important; /* Cor da borda */
+  }
+  
+  /* Estilo para a lista de opções do Select */
+  .button-premium .ant-select-dropdown {
+    background-color: transparent !important; /* Cor de fundo da lista de opções */
+    color: white !important;          /* Cor do texto nas opções */
+    border-radius: 8px !important;    /* Borda arredondada nas opções */
+  }
+  
+  /* Se quiser garantir que o botão de "filtro" também tenha a cor de fundo vermelha */
+  .button-premium .ant-select-arrow {
+    color: white !important; /* Cor da seta */
+  }
+  
+
+/* Estiliza o campo de input do Select */
+.ant-select-selector {
+    background-color: #07104A !important; /* Cor de fundo do campo */
+    color: white !important;              /* Cor do texto no campo */
+    border-radius: 8px !important;        /* Borda arredondada */
+    border-color: #2596be !important;     /* Cor da borda */
+    font-family: "Bai Jamjuree", sans-serif !important; /* Fonte customizada */
+  }
+  
+  /* Estiliza a lista de opções no dropdown */
+  .ant-select-dropdown {
+    background-color: #07104A !important; /* Cor de fundo do dropdown */
+    color: white !important;               /* Cor do texto no dropdown */
+    font-family: "Bai Jamjuree", sans-serif !important; /* Fonte customizada */
+  }
+  
+  /* Estiliza as opções no dropdown */
+  .ant-select-item-option {
+    background-color: #07104A !important; /* Cor de fundo das opções */
+    color: white !important;               /* Cor do texto das opções */
+    font-family: "Bai Jamjuree", sans-serif !important; /* Fonte customizada */
+  }
+  
+  /* Estiliza a opção selecionada */
+  .ant-select-item-option-selected {
+    background-color: #2596be !important; /* Cor de fundo da opção selecionada */
+    font-family: "Bai Jamjuree", sans-serif !important; /* Fonte customizada */
+  }
+  
+  /* Estilo geral para a Tabela */
+.ant-table {
+    font-family: 'Bai Jamjuree', sans-serif !important;
+    background-color: #0B244D !important; /* Cor escura para o fundo da tabela */
+    color: #FFFFFF !important; /* Cor do texto */
+}
+
+/* Estilo para as células da tabela */
+.ant-table-tbody > tr > td {
+    color: #FFFFFF !important; /* Cor do texto nas células */
+    background-color: #0B244D !important; /* Garantir que o fundo da célula seja a cor escura */
+    border-color: #0B244D !important; /* Bordas da mesma cor de fundo */
+}
+
+/* Estilo para os cabeçalhos da tabela */
+.ant-table-thead > tr > th {
+    color: #FFFFFF !important; /* Cor branca para o texto */
+    background-color: #0B244D !important; /* Fundo do cabeçalho com a cor escolhida */
+    font-weight: 700 !important; /* Negrito nos cabeçalhos */
+}
+
+/* Estilo para bordas da tabela */
+.ant-table-bordered .ant-table-cell {
+    border-color: #0B244D !important; /* Bordas da mesma cor de fundo */
+}
+
+/* Estilo para o efeito de hover nas linhas */
+.ant-table-row:hover {
+    background-color: #1c3650 !important; /* Cor mais clara ao passar o mouse */
+    color: white !important; /* Cor do texto ao passar o mouse */
+}
+
+/* Efeito para as células ao passar o mouse */
+.ant-table-tbody > tr > td:hover {
+    background-color: #1c3650 !important; /* Efeito suave de hover nas células */
+}
+
+/* Garantir que o fundo da célula não fique branco após o hover */
+.ant-table-tbody > tr > td:not(:hover) {
+    background-color: #0B244D !important; /* Mantém a cor de fundo original quando não está em hover */
+}

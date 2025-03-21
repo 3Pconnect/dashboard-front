@@ -215,6 +215,7 @@ const TableUsers: React.FC = () => {
       <Flex mb={6} justify='space-between' align='center' width='100%'>
         <Heading fontSize='2xl' fontWeight='bold'>Usuários</Heading>
         <Button
+        className='button-premium'
           onClick={() => navigate('/main/create-user')}
           colorScheme='green'
           fontSize='16px'
@@ -226,16 +227,21 @@ const TableUsers: React.FC = () => {
       <Flex mb={6} justify="flex-start" align="center" gap={4} width="100%">
   {/* Select para escolher o tipo de filtro */}
   <Select
-    options={filterOptions}
-    value={filterType}
-    onChange={setFilterType}
-    style={{ width: 180, height: "40px" }}
-  />
-
+  className="button-premium"
+  options={filterOptions}
+  value={filterType}
+  onChange={setFilterType}
+  style={{
+    width: 180, 
+    height: "40px", 
+    color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
+  }}
+/>
   {/* Input único para busca */}
 {
   filterType === 'situacao' ?
   <Select
+  className='button-premium'
     options={situacaoFilterOptions}
     value={situacaoFilterType}
     onChange={setSituacaoFilterType}
@@ -243,11 +249,19 @@ const TableUsers: React.FC = () => {
   />
   :
   <Input
+  className='button-premium'
   allowClear
     placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
     value={searchValue}
     onChange={(e) => setSearchValue(e.target.value)}
-    style={{ height: "40px", width: 240 }}
+    style={{
+       height: "40px", width: 240,
+       backgroundColor: "transparent",
+       color: "white",
+       borderRadius: "0px", borderColor: "#2596be",
+      
+       borderWidth: "1px" 
+      }}
   />
 
 }
@@ -259,11 +273,19 @@ const TableUsers: React.FC = () => {
   <DatePicker.RangePicker
     value={dateRange ? [dateRange[0], dateRange[1]] : null}
     onChange={(dates) => setDateRange(dates)}
-    style={{ width: 300, height: "40px" }}
+    dropdownClassName="custom-dropdown"
+    style={{
+      width: 300, height: "40px",
+      backgroundColor: "transparent",
+      color: "white",
+      borderRadius: "0px", borderColor: "#2596be",
+
+      borderWidth: "1px" }}
+      inputReadOnly={false} // Impede a leitura do placeholder, permitindo estilização
   />
 
   {/* Botão de busca */}
-  <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
+  <Button className='button-premium' colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
     Buscar
   </Button>
 </Flex>

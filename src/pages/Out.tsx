@@ -4,6 +4,7 @@ import { FaHome, FaInfoCircle, FaCog, FaSignOutAlt, FaBars, FaUser, FaUsersCog, 
 import { Outlet, useNavigate } from 'react-router-dom';
 import { NovosMembrosList } from './NovosMembrosList';
 import { fetchMe } from '../services/api';
+import '../css/css.css'
 
 function Out() {
   const [isLoggedOut, setIsLoggedOut] = useState(false);
@@ -50,11 +51,11 @@ function Out() {
   };
 
   return (
-    <Flex minHeight="100vh" backgroundColor="gray.800" color="white">
+    <Flex minHeight="100vh" backgroundColor="#060c32" color="white">
       {/* Menu Lateral para dispositivos grandes */}
-      <Box
+      <Box 
         width={{ base: '100%', md: '250px' }}
-        backgroundColor="gray.700"
+        backgroundColor="#07104A"
         padding={4}
         boxShadow="md"
         display={{ base: 'none', md: 'flex' }}
@@ -69,11 +70,12 @@ function Out() {
         <VStack spacing={4} align="start" width="100%">
           {/* Menu de Navegação */}
           <Link
+          className='button-menu-nav'
             href="#"
             display="flex"
             alignItems="center"
             color="white"
-            _hover={{ color: 'teal.400' }}
+  
             onClick={() => navigate('/main/dashboard')}
           >
             <FaHome style={{ marginRight: '8px' }} />
@@ -82,11 +84,12 @@ function Out() {
 
           <Box width="100%">
             <Link
+             className='button-menu-nav'
               href="#"
               display="flex"
               alignItems="center"
               color="white"
-              _hover={{ color: 'teal.400' }}
+      
               onClick={() => toggleSubMenu('cadastros')}
             >
               <FaUser style={{ marginRight: '8px' }} />
@@ -100,7 +103,7 @@ function Out() {
                     display="flex"
                     alignItems="center"
                     color="white"
-                    _hover={{ color: 'teal.400' }}
+          className='button-menu-nav'
                     onClick={() => navigate('/main/users')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
@@ -113,7 +116,7 @@ function Out() {
                     display="flex"
                     alignItems="center"
                     color="white"
-                    _hover={{ color: 'teal.400' }}
+                  className='button-menu-nav'
                     onClick={() => navigate('/main/perfis')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
@@ -126,7 +129,7 @@ function Out() {
                     display="flex"
                     alignItems="center"
                     color="white"
-                    _hover={{ color: 'teal.400' }}
+             className='button-menu-nav'
                     onClick={() => navigate('/main/novos-membros')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
@@ -139,7 +142,7 @@ function Out() {
                     display="flex"
                     alignItems="center"
                     color="white"
-                    _hover={{ color: 'teal.400' }}
+            className='button-menu-nav'
                     onClick={() => navigate('/main/apoiadores')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
@@ -152,7 +155,7 @@ function Out() {
                   display="flex"
                   alignItems="center"
                   color="white"
-                  _hover={{ color: 'teal.400' }}
+       className='button-menu-nav'
                   onClick={() => navigate('/main/agenda-eventos')}
                 >
                   <FaCalendarAlt style={{ marginRight: '8px' }} />
@@ -168,7 +171,7 @@ function Out() {
               display="flex"
               alignItems="center"
               color="white"
-              _hover={{ color: 'teal.400' }}
+     className='button-menu-nav'
               onClick={() => toggleSubMenu('eventos')}
             >
               <FaCalendarAlt style={{ marginRight: '8px' }} />
@@ -183,7 +186,7 @@ function Out() {
                   display="flex"
                   alignItems="center"
                   color="white"
-                  _hover={{ color: 'teal.400' }}
+           className='button-menu-nav'
                   onClick={() => navigate('/main/todos-eventos')}
                 >
                   <FaCalendarAlt style={{ marginRight: '8px' }} />
@@ -195,7 +198,7 @@ function Out() {
                   display="flex"
                   alignItems="center"
                   color="white"
-                  _hover={{ color: 'teal.400' }}
+           className='button-menu-nav'
                   onClick={() => navigate('/main/meus-eventos')}
                 >
                   <FaCalendarAlt style={{ marginRight: '8px' }} />
@@ -224,7 +227,7 @@ function Out() {
             display="flex"
             alignItems="center"
             color="white"
-            _hover={{ color: 'teal.400' }}
+         className='button-menu-nav'
             onClick={handleLogout}
           >
             <FaSignOutAlt style={{ marginRight: '8px' }} />
