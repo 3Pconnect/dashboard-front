@@ -41,6 +41,8 @@ import NotFound from "./pages/NotFound";
 import { hasPermission, savePermissionsToLocalStorage } from "./utils/util";
 import { TodosEventosPage } from "./pages/TodosEventosPage";
 import { SejaMembroPage } from "./pages/SejaMembroPage";
+import { ListProductPage } from "./pages/ListProductPage";
+import { CreateProductPage } from "./pages/CreateProductPage";
 
 export const App = () => {
   const [permissoes, setPermissoes] = useState(['']);
@@ -95,6 +97,8 @@ export const App = () => {
               </>
 
             }
+            <Route path="list-product" element={<ListProductPage />} />
+            <Route path="create-product" element={<CreateProductPage />} />
             {permissoes.includes('create.profile') &&
               <>
                 <Route path="create-perfil" element={<CreatePerfilPage />} />

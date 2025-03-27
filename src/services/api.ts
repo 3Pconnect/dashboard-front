@@ -715,10 +715,68 @@ export const updateMembro = async (
     }
   }
 };
+export const createProduct = async (product: { nome: string; descricao: string; preco: number; estoque: number }) => {
+  try {
+    const response = await api.post("/produtos", product, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao criar produto:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao criar produto");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao criar produto.");
+    }
+  }
+};
+
+export const fetchProducts = async (nome: string, page: number = 1, limit: number = 10) => {
+  try {
+    const response = await api.get("/produtos", {
+      params: {
+        nome,
+        limit,
+        page,
+      },
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar produtos:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar produtos");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar produtos.");
+    }
+  }
+};
+
 
 
 export const fetchUsers = async (page: number, limit: number, filters: any = {}) => {
-  console.log(filters.obj)
+
   try {
     const response = await api.get("/auth", {
       params: {
@@ -761,5 +819,18 @@ export const deleteUser = async (id: string) => {
   }
 };
 
+export const deleteProduto = async (id: string) => {
+  try {
+    const response = await api.delete(`/produtos/${id}`, {
+      headers: {
+        accept: '*/*',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao excluir produto:", error);
+    throw error;
+  }
+};
 
 export default api;

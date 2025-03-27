@@ -136,6 +136,7 @@ function Out() {
                     Novos Membros
                   </Link>
                 }
+
                 {permissoes.includes('read.apoiadores') &&
                   <Link
                     href="#"
@@ -149,6 +150,17 @@ function Out() {
                     Novos Parceiros
                   </Link>
                 }
+                                  <Link
+                    href="#"
+                    display="flex"
+                    alignItems="center"
+                    color="white"
+             className='button-menu-nav'
+                    onClick={() => navigate('/main/list-product')}
+                  >
+                    <FaUsersCog style={{ marginRight: '8px' }} />
+                    Produtos
+                  </Link>
                 {permissoes.includes('manage.eventos') &&
                 <Link
                   href="#"

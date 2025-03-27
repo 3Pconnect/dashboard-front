@@ -213,7 +213,7 @@ const TableUsers: React.FC = () => {
   return (
     <>
       <Flex mb={6} justify='space-between' align='center' width='100%'>
-        <Heading fontSize='2xl' fontWeight='bold'>Usuários</Heading>
+        <Heading className='heading-title' fontSize='2xl' fontWeight='bold'>Usuários</Heading>
         <Button
         className='button-premium'
           onClick={() => navigate('/main/create-user')}

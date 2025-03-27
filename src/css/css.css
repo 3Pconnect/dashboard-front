@@ -28,10 +28,16 @@ body {
 }
 
 .indicator-title {
-    font-family: "Bai Jamjuree", sans-serif;
-    line-height: 25.6px;
-    font-weight: 400;
-    letter-spacing: normal;
+    font-family: "Bai Jamjuree", sans-serif !important;
+    line-height: 25.6px !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+}
+.heading-title {
+    font-family: "Bai Jamjuree", sans-serif !important;
+    line-height: 25.6px !important;
+    font-weight: 600 !important;
+    letter-spacing: normal !important;
 }
 
 .button-premium {
