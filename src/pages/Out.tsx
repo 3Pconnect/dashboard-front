@@ -53,7 +53,7 @@ function Out() {
   return (
     <Flex minHeight="100vh" backgroundColor="#060c32" color="white">
       {/* Menu Lateral para dispositivos grandes */}
-      <Box 
+      <Box
         width={{ base: '100%', md: '250px' }}
         backgroundColor="#07104A"
         padding={4}
@@ -70,12 +70,12 @@ function Out() {
         <VStack spacing={4} align="start" width="100%">
           {/* Menu de Navegação */}
           <Link
-          className='button-menu-nav'
+            className='button-menu-nav'
             href="#"
             display="flex"
             alignItems="center"
             color="white"
-  
+
             onClick={() => navigate('/main/dashboard')}
           >
             <FaHome style={{ marginRight: '8px' }} />
@@ -84,12 +84,12 @@ function Out() {
 
           <Box width="100%">
             <Link
-             className='button-menu-nav'
+              className='button-menu-nav'
               href="#"
               display="flex"
               alignItems="center"
               color="white"
-      
+
               onClick={() => toggleSubMenu('cadastros')}
             >
               <FaUser style={{ marginRight: '8px' }} />
@@ -103,7 +103,7 @@ function Out() {
                     display="flex"
                     alignItems="center"
                     color="white"
-          className='button-menu-nav'
+                    className='button-menu-nav'
                     onClick={() => navigate('/main/users')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
@@ -116,7 +116,7 @@ function Out() {
                     display="flex"
                     alignItems="center"
                     color="white"
-                  className='button-menu-nav'
+                    className='button-menu-nav'
                     onClick={() => navigate('/main/perfis')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
@@ -129,7 +129,7 @@ function Out() {
                     display="flex"
                     alignItems="center"
                     color="white"
-             className='button-menu-nav'
+                    className='button-menu-nav'
                     onClick={() => navigate('/main/novos-membros')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
@@ -143,36 +143,48 @@ function Out() {
                     display="flex"
                     alignItems="center"
                     color="white"
-            className='button-menu-nav'
+                    className='button-menu-nav'
                     onClick={() => navigate('/main/apoiadores')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
                     Novos Parceiros
                   </Link>
                 }
-                                  <Link
-                    href="#"
-                    display="flex"
-                    alignItems="center"
-                    color="white"
-             className='button-menu-nav'
-                    onClick={() => navigate('/main/list-product')}
-                  >
-                    <FaUsersCog style={{ marginRight: '8px' }} />
-                    Produtos
-                  </Link>
-                {permissoes.includes('manage.eventos') &&
+
                 <Link
                   href="#"
                   display="flex"
                   alignItems="center"
                   color="white"
-       className='button-menu-nav'
-                  onClick={() => navigate('/main/agenda-eventos')}
+                  className='button-menu-nav'
+                  onClick={() => navigate('/main/list-evento-compras')}
                 >
-                  <FaCalendarAlt style={{ marginRight: '8px' }} />
-                  Agenda de Eventos
-                </Link>}
+                  <FaUsersCog style={{ marginRight: '8px' }} />
+                  Produtos
+                </Link>
+                <Link
+                  href="#"
+                  display="flex"
+                  alignItems="center"
+                  color="white"
+                  className='button-menu-nav'
+                  onClick={() => navigate('/main/list-product')}
+                >
+                  <FaUsersCog style={{ marginRight: '8px' }} />
+                  Produtos
+                </Link>
+                {permissoes.includes('manage.eventos') &&
+                  <Link
+                    href="#"
+                    display="flex"
+                    alignItems="center"
+                    color="white"
+                    className='button-menu-nav'
+                    onClick={() => navigate('/main/agenda-eventos')}
+                  >
+                    <FaCalendarAlt style={{ marginRight: '8px' }} />
+                    Agenda de Eventos
+                  </Link>}
               </VStack>
             )}
           </Box>
@@ -183,7 +195,7 @@ function Out() {
               display="flex"
               alignItems="center"
               color="white"
-     className='button-menu-nav'
+              className='button-menu-nav'
               onClick={() => toggleSubMenu('eventos')}
             >
               <FaCalendarAlt style={{ marginRight: '8px' }} />
@@ -191,37 +203,37 @@ function Out() {
             </Link>
             {activeMenu === 'eventos' && (
               <VStack align="start" spacing={2} pl={6}>
-  {permissoes.includes('eventos.inscricao') &&
-              <>
-                <Link
-                  href="#"
-                  display="flex"
-                  alignItems="center"
-                  color="white"
-           className='button-menu-nav'
-                  onClick={() => navigate('/main/todos-eventos')}
-                >
-                  <FaCalendarAlt style={{ marginRight: '8px' }} />
-                  Eventos
-                </Link>
+                {permissoes.includes('eventos.inscricao') &&
+                  <>
+                    <Link
+                      href="#"
+                      display="flex"
+                      alignItems="center"
+                      color="white"
+                      className='button-menu-nav'
+                      onClick={() => navigate('/main/todos-eventos')}
+                    >
+                      <FaCalendarAlt style={{ marginRight: '8px' }} />
+                      Eventos
+                    </Link>
 
-                <Link
-                  href="#"
-                  display="flex"
-                  alignItems="center"
-                  color="white"
-           className='button-menu-nav'
-                  onClick={() => navigate('/main/meus-eventos')}
-                >
-                  <FaCalendarAlt style={{ marginRight: '8px' }} />
-                  Meus Eventos
-                </Link>
-              </>
-}
+                    <Link
+                      href="#"
+                      display="flex"
+                      alignItems="center"
+                      color="white"
+                      className='button-menu-nav'
+                      onClick={() => navigate('/main/meus-eventos')}
+                    >
+                      <FaCalendarAlt style={{ marginRight: '8px' }} />
+                      Meus Eventos
+                    </Link>
+                  </>
+                }
               </VStack>
             )}
           </Box>
-{/* 
+          {/* 
           <Link
             href="#"
             display="flex"
@@ -239,7 +251,7 @@ function Out() {
             display="flex"
             alignItems="center"
             color="white"
-         className='button-menu-nav'
+            className='button-menu-nav'
             onClick={handleLogout}
           >
             <FaSignOutAlt style={{ marginRight: '8px' }} />

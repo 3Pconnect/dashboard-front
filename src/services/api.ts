@@ -772,6 +772,46 @@ export const fetchProducts = async (nome: string, page: number = 1, limit: numbe
     }
   }
 };
+export const fetchVendasDisponiveis = async (
+  page: number = 1,
+  limit: number = 10,
+  dataInicio?: string,
+  dataFim?: string
+) => {
+  try {
+    const params: any = { page, limit };
+
+    if (dataInicio) params.dataInicio = dataInicio;
+    if (dataFim) params.dataFim = dataFim;
+
+    const response = await api.get("/vendas/disponiveis", {
+      params,
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: unknown) {
+    console.error("Erro ao buscar vendas disponíveis:", error);
+
+    if (error instanceof Error) {
+      if ((error as any).response) {
+        throw new Error((error as any).response.data?.message || "Erro ao buscar vendas");
+      } else if ((error as any).request) {
+        throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+      }
+      throw new Error(error.message);
+    }
+
+    throw new Error("Erro desconhecido ao buscar vendas.");
+  }
+};
+
 
 
 

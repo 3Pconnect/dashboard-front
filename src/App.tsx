@@ -43,6 +43,8 @@ import { TodosEventosPage } from "./pages/TodosEventosPage";
 import { SejaMembroPage } from "./pages/SejaMembroPage";
 import { ListProductPage } from "./pages/ListProductPage";
 import { CreateProductPage } from "./pages/CreateProductPage";
+import { EventoCompraPage } from "./pages/EventoCompraPage";
+import { CreateEventoCompraPage } from "./pages/CreateEventoCompraPage";
 
 export const App = () => {
   const [permissoes, setPermissoes] = useState(['']);
@@ -99,6 +101,10 @@ export const App = () => {
             }
             <Route path="list-product" element={<ListProductPage />} />
             <Route path="create-product" element={<CreateProductPage />} />
+
+            <Route path="list-evento-compras" element={<EventoCompraPage />} />
+            <Route path="create-event-compras" element={<CreateEventoCompraPage />} />
+
             {permissoes.includes('create.profile') &&
               <>
                 <Route path="create-perfil" element={<CreatePerfilPage />} />
