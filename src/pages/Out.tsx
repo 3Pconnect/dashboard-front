@@ -12,6 +12,7 @@ function Out() {
   const navigate = useNavigate();
   const buttonSize = useBreakpointValue({ base: 'sm', md: 'md' });
   const [permissoes, setPermissoes] = useState([''])
+  const padding = useBreakpointValue({ base: 0, md: 10 });
 
   useEffect(() => {
     const loadUser = async () => {
@@ -371,7 +372,7 @@ function Out() {
       </Box>
 
       {/* Conteúdo Principal */}
-      <Box p={10} w={"full"}>
+      <Box  pl={padding} pt={10} pr={10} pb={10} w={"full"}>
         <Outlet />
       </Box>
     </Flex>

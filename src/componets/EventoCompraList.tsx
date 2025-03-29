@@ -29,6 +29,8 @@ const VendasDisponiveisList: React.FC = () => {
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
   const toast = useToast();
 
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   const datePickerWidth = useBreakpointValue({ base: "100%", md: "300px" });
 
   const handleDelete = async (id: string) => {
@@ -119,32 +121,31 @@ const VendasDisponiveisList: React.FC = () => {
       sorter: (a, b) => a.preco - b.preco,
       render: (preco) => `R$ ${preco.toFixed(2)}`,
     },
-    {
+    ...(isMobile ? [] : [{
       title: 'Período',
       dataIndex: 'dataInicio',
       key: 'dataInicio',
-      render: (text, record) => {
+      render: (_: string, record: VendaType) => {
         const formatDate = (dateString: string) => {
           return new Date(dateString).toLocaleDateString('pt-BR');
         };
-
         return <span>{`${formatDate(record.inicio)} - ${formatDate(record.fim)}`}</span>;
       },
-    },
+    }]),
     {
       title: 'Ações',
       key: 'actions',
-      render: (_, record) => (
+      render: (_: any, record: VendaType) => (
         <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
           e.stopPropagation();
-          handleDelete(record.id)
+          handleDelete(record.id);
         }}>
           <AiFillDelete />
         </Button>
       ),
     },
-  ];
-
+  ] as TableColumnsType<VendaType>;
+  
   return (
     <>
       <Flex mb={6} justify="space-between" align="center" width="100%">
