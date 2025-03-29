@@ -4,7 +4,7 @@ import {
   Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Spinner, useToast
 } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
-import { fetchProfiles, registerUser } from "../services/api"; // Importando a função correta
+import { fetchProfiles, registerUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { Input, Select } from "antd";
 
@@ -16,14 +16,15 @@ export const CreateUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("1111111");
   const [situacao, setSituacao] = useState("");
-  const [saving, setSaving] = useState(false); // Variável para controle do loading de salvar
-  const toast = useToast(); // Hook para o Toast
+  const [saving, setSaving] = useState(false);
+  const toast = useToast();
   const navigate = useNavigate();
   const situacaoFilterOptions = [
     { label: 'Ativo', value: 'ATIVO' },
     { label: 'Inativo', value: 'INATIVO' },
     { label: 'Pendente', value: 'PENDENTE' },
   ];
+  
   useEffect(() => {
     const loadProfiles = async () => {
       try {
@@ -35,14 +36,14 @@ export const CreateUser = () => {
         setLoading(false);
       }
     };
-
+    
     loadProfiles();
   }, []);
-
+  
   const handleCheckboxChange = (id: number) => {
     setSelectedProfile(id);
   };
-
+  
   const handleSave = async () => {
     if (!username || !email || !selectedProfile || !situacao) {
       toast({
@@ -54,12 +55,11 @@ export const CreateUser = () => {
       });
       return;
     }
-
+    
     const profileName = profiles.find((p) => p.id === selectedProfile)?.name || "";
-
-    setSaving(true); // Inicia o loading
-    console.log(selectedProfile)
-
+    
+    setSaving(true);
+    
     try {
       await registerUser(username, email, password, profileName, situacao);
       toast({
@@ -69,7 +69,7 @@ export const CreateUser = () => {
         duration: 5000,
         isClosable: true,
       });
-      navigate('/main/users')
+      navigate('/main/users');
     } catch (error: any) {
       toast({
         title: "Erro",
@@ -79,16 +79,15 @@ export const CreateUser = () => {
         isClosable: true,
       });
     } finally {
-      setSaving(false); // Finaliza o loading
+      setSaving(false);
     }
   };
-
+  
   return (
-    <>
-      <Flex mb={10} className="indicator-title" justify="space-between" align="center" width="100%">
+    <Flex direction="column" p={4}>
+      <Flex mb={10} justify="space-between" align="center" wrap="wrap" width="100%">
         <Flex align="center">
-          <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />}
-            mr={4} onClick={() => window.history.back()}>
+          <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />} mr={4} onClick={() => window.history.back()}>
             Voltar
           </Button>
           <Breadcrumb>
@@ -103,62 +102,58 @@ export const CreateUser = () => {
             </BreadcrumbItem>
           </Breadcrumb>
         </Flex>
-        <Heading className="heading-title" fontSize="2xl" style={{ fontWeight: 'bold' }}>Cadastrar Usuário</Heading>
+        <Heading className="heading-title" fontSize="2xl" fontWeight="bold">Cadastrar Usuário</Heading>
       </Flex>
-
+      
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
-  <Box>
-    <Text className="indicator-title" mb={2}>Nome</Text>
-    <Input
-      className="button-premium"
-      allowClear
-      placeholder="Digite o nome"
-      value={username}
-      onChange={(e) => setUsername(e.target.value)}
-      style={{
-        height: "40px",
-        width: "100%", // Ocupa todo o espaço disponível
-        backgroundColor: "transparent",
-        color: "white",
-        borderRadius: "0px",
-        borderColor: "#2596be",
-        borderWidth: "1px"
-      }}
-    />
-  </Box>
-  <Box>
-    <Text className="indicator-title" mb={2}>E-mail</Text>
-    <Input
-      className="button-premium"
-      allowClear
-      placeholder="Digite o e-mail"
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-      style={{
-        height: "40px",
-        width: "100%", // Ocupa todo o espaço disponível
-        backgroundColor: "transparent",
-        color: "white",
-        borderRadius: "0px",
-        borderColor: "#2596be",
-        borderWidth: "1px"
-      }}
-    />
-  </Box>
-</Grid>
-
-
+        <Box>
+          <Text className="indicator-title" mb={2}>Nome</Text>
+          <Input
+            className="button-premium"
+            allowClear
+            placeholder="Digite o nome"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{
+              height: "40px",
+              width: "100%",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
+          />
+        </Box>
+        <Box>
+          <Text className="indicator-title" mb={2}>E-mail</Text>
+          <Input
+            className="button-premium"
+            allowClear
+            placeholder="Digite o e-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{
+              height: "40px",
+              width: "100%",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
+          />
+        </Box>
+      </Grid>
+      
       <VStack mt={5} spacing={4} align="stretch">
-
         <Box>
           <Text className="indicator-title" mb={2}>Situação do Usuário</Text>
-          <Select style={{ width: "100px" }} className="button-premium" options={situacaoFilterOptions}
-            placeholder="Selecione a situação"
-            value={situacao} onChange={setSituacao} />
+          <Select style={{ width: "100px" }} className="button-premium" options={situacaoFilterOptions} placeholder="Selecione a situação" value={situacao} onChange={setSituacao} />
         </Box>
       </VStack>
-
-      <VStack mt={5} alignItems={"start"}>
+      
+      <VStack mt={5} alignItems="start">
         <Text className="indicator-title" mb={2}>Perfil de Acesso</Text>
         {loading ? (
           <Spinner size="md" />
@@ -170,12 +165,12 @@ export const CreateUser = () => {
           ))
         )}
       </VStack>
-
-      <VStack alignItems={"end"} mt={5}>
+      
+      <Flex justify="flex-end" mt={5}>
         <Button className="button-premium" colorScheme="green" onClick={handleSave} isLoading={saving} loadingText="Salvando...">
           {saving ? "Salvando..." : "Salvar"}
         </Button>
-      </VStack>
-    </>
+      </Flex>
+    </Flex>
   );
 };
