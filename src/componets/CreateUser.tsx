@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   Button, Flex, Heading, Grid, Box, Text, Checkbox, VStack,
-  Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Spinner, useToast
+  Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Spinner, useToast, useBreakpointValue
 } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
 import { fetchProfiles, registerUser } from "../services/api";
@@ -24,7 +24,9 @@ export const CreateUser = () => {
     { label: 'Inativo', value: 'INATIVO' },
     { label: 'Pendente', value: 'PENDENTE' },
   ];
-  
+
+  const showNav = useBreakpointValue({ base: false, md: true });  // Controla a visibilidade do nav
+
   useEffect(() => {
     const loadProfiles = async () => {
       try {
@@ -36,14 +38,14 @@ export const CreateUser = () => {
         setLoading(false);
       }
     };
-    
+
     loadProfiles();
   }, []);
-  
+
   const handleCheckboxChange = (id: number) => {
     setSelectedProfile(id);
   };
-  
+
   const handleSave = async () => {
     if (!username || !email || !selectedProfile || !situacao) {
       toast({
@@ -55,11 +57,11 @@ export const CreateUser = () => {
       });
       return;
     }
-    
+
     const profileName = profiles.find((p) => p.id === selectedProfile)?.name || "";
-    
+
     setSaving(true);
-    
+
     try {
       await registerUser(username, email, password, profileName, situacao);
       toast({
@@ -82,29 +84,36 @@ export const CreateUser = () => {
       setSaving(false);
     }
   };
-  
+
   return (
     <Flex direction="column" p={4}>
-      <Flex mb={10} justify="space-between" align="center" wrap="wrap" width="100%">
-        <Flex align="center">
-          <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />} mr={4} onClick={() => window.history.back()}>
-            Voltar
-          </Button>
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="#">Usuários</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+      {showNav && (
+        <Flex mb={10} justify="space-between" align="center" wrap="wrap" width="100%">
+          <Flex align="center">
+            <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />} mr={4} onClick={() => window.history.back()}>
+              Voltar
+            </Button>
+            <Breadcrumb>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink href="#">Usuários</BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+          </Flex>
+          <Heading className="heading-title" fontSize="2xl" fontWeight="bold">Cadastrar Usuário</Heading>
         </Flex>
-        <Heading className="heading-title" fontSize="2xl" fontWeight="bold">Cadastrar Usuário</Heading>
-      </Flex>
-      
+      )}
+
+{!showNav && (
+        <Flex mb={10} justify="space-between" align="center" wrap="wrap" width="100%">
+          <Heading pt={5} className="heading-title" fontSize="2xl" fontWeight="bold">Cadastrar Usuário</Heading>
+        </Flex>
+      )}
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box>
           <Text className="indicator-title" mb={2}>Nome</Text>
@@ -145,14 +154,14 @@ export const CreateUser = () => {
           />
         </Box>
       </Grid>
-      
+
       <VStack mt={5} spacing={4} align="stretch">
         <Box>
           <Text className="indicator-title" mb={2}>Situação do Usuário</Text>
           <Select style={{ width: "100px" }} className="button-premium" options={situacaoFilterOptions} placeholder="Selecione a situação" value={situacao} onChange={setSituacao} />
         </Box>
       </VStack>
-      
+
       <VStack mt={5} alignItems="start">
         <Text className="indicator-title" mb={2}>Perfil de Acesso</Text>
         {loading ? (
@@ -165,7 +174,7 @@ export const CreateUser = () => {
           ))
         )}
       </VStack>
-      
+
       <Flex justify="flex-end" mt={5}>
         <Button className="button-premium" colorScheme="green" onClick={handleSave} isLoading={saving} loadingText="Salvando...">
           {saving ? "Salvando..." : "Salvar"}
