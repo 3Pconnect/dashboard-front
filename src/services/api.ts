@@ -835,33 +835,96 @@ export const fetchProducts = async (nome: string, page: number = 1, limit: numbe
     }
   }
 };
-export const fetchSales = async () => {
+export const fetchSales = async (page: number = 1, limit: number = 10, dataInicio?: string, dataFim?: string) => {
   try {
-    const usuarioId = 16;
-    const response = await api.get("/vendas", {
-      params: { usuarioId },
+    const params: { [key: string]: any } = {
+      page,
+      limit,
+    };
+
+    if (dataInicio) params.dataInicio = dataInicio;
+    if (dataFim) params.dataFim = dataFim;
+
+    const response = await api.get('/vendas', {
+      params,
       headers: {
-        Accept: "application/json",
+        Accept: 'application/json',
       },
     });
 
-    if (!response.data) {
-      throw new Error("Resposta inesperada da API.");
+    if (response.status !== 200) {
+      throw new Error(`Erro na API: ${response.status} - ${response.statusText}`);
+    }
+
+    // Não precisamos mais verificar se é um array aqui, pois a verificação será feita no component.
+    return response.data;
+  } catch (error: any) {
+    console.error('Erro ao buscar vendas:', error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || 'Erro ao buscar vendas');
+    } else if (error.request) {
+      throw new Error('Servidor não respondeu. Tente novamente mais tarde.');
+    } else {
+      throw new Error('Erro inesperado ao buscar vendas.');
+    }
+  }
+};
+
+export const fetchInteressadosCompra = async (
+  compraId: number,
+  page: number = 1,
+  limit: number = 10,
+) => {
+  try {
+    const response = await api.get<InteresseResponse>(
+      `/vendas/compra/${compraId}/interessados`,
+      {
+        params: {
+          page,
+          limit,
+        },
+        headers: {
+          Accept: 'application/json',
+        },
+      },
+    );
+
+    if (response.status !== 200) {
+      throw new Error(`Erro na API: ${response.status} - ${response.statusText}`);
     }
 
     return response.data;
   } catch (error: any) {
-    console.error("Erro ao buscar vendas:", error);
+    console.error('Erro ao buscar interessados:', error);
 
     if (error.response) {
-      throw new Error(error.response.data?.message || "Erro ao buscar vendas");
+      throw new Error(error.response.data?.message || 'Erro ao buscar interessados');
     } else if (error.request) {
-      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+      throw new Error('Servidor não respondeu. Tente novamente mais tarde.');
     } else {
-      throw new Error("Erro inesperado ao buscar vendas.");
+      throw new Error('Erro inesperado ao buscar interessados.');
     }
+  }}
+  interface InteresseResponse {
+    data: {
+      id: number;
+      quantidade: number;
+      dataInteresse: string;
+      usuario: {
+        id: number;
+        username: string;
+        email: string;
+        password: string;
+        situacao: string;
+        createdAt: string;
+      };
+    }[];
+    total: number;
+    page: string;
+    limit: string;
   }
-};
+
 
 export const fetchVendasDisponiveis = async (
   page: number = 1,
@@ -949,6 +1012,20 @@ export const deleteUser = async (id: string) => {
     throw error;
   }
 };
+export const deleteVenda = async (id: string) => {
+  try {
+    const response = await api.delete(`/vendas/${id}`, {
+      headers: {
+        Accept: "*/*",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao excluir venda:", error);
+    throw error;
+  }
+};
+
 
 export const deleteProduto = async (id: string) => {
   try {

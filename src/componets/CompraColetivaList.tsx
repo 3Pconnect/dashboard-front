@@ -3,7 +3,7 @@ import { Table, TableColumnsType, TablePaginationConfig, TableProps, DatePicker,
 import { Heading, Flex, Button, useToast, useBreakpointValue } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineFileText, AiOutlineSearch } from 'react-icons/ai';
-import { fetchSales } from '../services/api'; // Certifique-se de que o caminho esteja correto
+import { fetchSales } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
 
 interface VendaType {
@@ -14,8 +14,8 @@ interface VendaType {
   fim: string;
   status: string;
   formularioEnviado: boolean;
-  quantidadeMaximaPorUsuario: number,
-  descricaoProduto: string,
+  quantidadeMaximaPorUsuario: number;
+  descricaoProduto: string;
 }
 
 type OnChange = NonNullable<TableProps<VendaType>['onChange']>;
@@ -32,12 +32,14 @@ const CompraColetivaList: React.FC = () => {
   const toast = useToast();
 
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const datePickerWidth = useBreakpointValue({ base: "100%", md: "300px" });
+  const datePickerWidth = useBreakpointValue({ base: '100%', md: '300px' });
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('pt-BR');
+  };
 
   const handleDelete = async (id: number) => {
     try {
-      // Aqui você chamaria sua API para excluir a venda com o ID fornecido
-      // await deleteSale(id); // Substitua por sua função de exclusão
       toast({
         title: 'Venda excluída',
         description: 'A venda foi excluída com sucesso.',
@@ -57,31 +59,31 @@ const CompraColetivaList: React.FC = () => {
     }
   };
 
-  const fetchData = async (page: number) => {
+  const fetchData = async (page: number, limit: number = 10, dataInicio?: string, dataFim?: string) => {
     setLoading(true);
     try {
-      const response = await fetchSales(); // Chama a função para buscar as vendas
+      const response = await fetchSales(page, limit, dataInicio, dataFim);
 
-      const vendasFormatadas = response.map((venda: any) => ({
+      // Acessa o array 'data' dentro da resposta
+      const vendasFormatadas = response.data.map((venda: any) => ({
         id: venda.id,
         produto: venda.produto.nome,
         preco: parseFloat(venda.produto.preco),
         inicio: venda.dataInicio,
         fim: venda.dataFim,
-        status: venda.quantidadeTotal > 0 ? "DISPONÍVEL" : "INDISPONÍVEL",
+        status: venda.quantidadeTotal > 0 ? 'DISPONÍVEL' : 'INDISPONÍVEL',
         formularioEnviado: venda.formulario_enviado,
         quantidadeMaximaPorUsuario: venda.quantidadeMaximaPorUsuario,
         descricaoProduto: venda.produto.descricao,
-
       }));
 
       setData(vendasFormatadas);
-      setTotal(response.length);
+      setTotal(response.total);
 
       setPagination((prev) => ({
         ...prev,
-        current: page,
-        total: response.length,
+        current: parseInt(response.page),
+        total: response.total,
       }));
     } catch (error) {
       toast({
@@ -91,14 +93,18 @@ const CompraColetivaList: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
+      setData([]);
+      setTotal(0);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData(pagination.current || 1);
-  }, [pagination.current]);
+    const startDate = dateRange ? dayjs(dateRange[0]).format('YYYY-MM-DD') : undefined;
+    const endDate = dateRange ? dayjs(dateRange[1]).format('YYYY-MM-DD') : undefined;
+    fetchData(pagination.current || 1, 10, startDate, endDate);
+  }, [pagination.current, dateRange]);
 
   const handleTableChange: OnChange = (pagination) => {
     setFilteredInfo({});
@@ -106,7 +112,9 @@ const CompraColetivaList: React.FC = () => {
   };
 
   const handleSearch = () => {
-    fetchData(1);
+    const startDate = dateRange ? dayjs(dateRange[0]).format('YYYY-MM-DD') : undefined;
+    const endDate = dateRange ? dayjs(dateRange[1]).format('YYYY-MM-DD') : undefined;
+    fetchData(1, 10, startDate, endDate);
   };
 
   const columns: TableColumnsType<VendaType> = [
@@ -131,40 +139,33 @@ const CompraColetivaList: React.FC = () => {
             dataIndex: 'inicio',
             key: 'periodo',
             render: (_: string, record: VendaType) => {
-              const formatDate = (dateString: string) => {
-                return new Date(dateString).toLocaleDateString('pt-BR');
-              };
               return <span>{`${formatDate(record.inicio)} - ${formatDate(record.fim)}`}</span>;
             },
           },
         ]),
-    {
-      title: 'Formulário Enviado',
-      dataIndex: 'formularioEnviado',
-      key: 'formularioEnviado',
-      render: (enviado) => (
-        <Tag color={enviado ? 'green' : 'red'}>{enviado ? 'Sim' : 'Não'}</Tag>
-      ),
-    },
+    // {
+    //   title: 'Formulário Enviado',
+    //   dataIndex: 'formularioEnviado',
+    //   key: 'formularioEnviado',
+    //   render: (enviado) => <Tag color={enviado ? 'green' : 'red'}>{enviado ? 'Sim' : 'Não'}</Tag>,
+    // },
     {
       title: 'Ações',
       key: 'formularioEnviado',
       dataIndex: 'formularioEnviado',
       render: (enviado, record) => (
         <Button
-        isDisabled={enviado}
+          isDisabled={enviado}
           variant={'ghost'}
-          colorScheme='blue'
+          colorScheme="blue"
           onClick={(e) => {
             e.stopPropagation();
-            //handleDelete(record.id);
-            console.clear()
-            console.log(record)
+            console.clear();
+            console.log(record);
             navigate(`/main/create-interest/${record.id}`, { state: { record } });
-            //navigate("/main/create-interest/"+record.id)
           }}
         >
-          {enviado ? "Preenchido": "Preencher"}
+          {enviado ? 'Preenchido' : 'Preencher'}
         </Button>
       ),
     },
@@ -174,18 +175,11 @@ const CompraColetivaList: React.FC = () => {
     <>
       <Flex mb={6} justify="space-between" align="center" width="100%">
         <Heading fontSize="2xl" fontWeight="bold">
-          Vendas Disponíveis
+          Compra Coletiva
         </Heading>
       </Flex>
 
-      <Flex
-        mb={6}
-        justify={{ base: 'center', md: 'flex-start' }}
-        align="center"
-        gap={4}
-        width="100%"
-        flexWrap="wrap"
-      >
+      <Flex mb={6} justify={{ base: 'center', md: 'flex-start' }} align="center" gap={4} width="100%" flexWrap="wrap">
         <DatePicker.RangePicker
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
           onChange={(dates) => setDateRange(dates)}
@@ -202,12 +196,7 @@ const CompraColetivaList: React.FC = () => {
           inputReadOnly={false}
         />
 
-        <Button
-          colorScheme="blue"
-          onClick={handleSearch}
-          leftIcon={<AiOutlineSearch />}
-          flexGrow={{ base: 1, md: 0 }}
-        >
+        <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} flexGrow={{ base: 1, md: 0 }}>
           Buscar
         </Button>
       </Flex>

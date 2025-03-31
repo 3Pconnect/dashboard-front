@@ -47,6 +47,7 @@ import { EventoCompraPage } from "./pages/EventoCompraPage";
 import { CreateEventoCompraPage } from "./pages/CreateEventoCompraPage";
 import { CompraColetivaPage } from "./pages/CompraColetivaPage";
 import { CreateInterestPage } from "./pages/CreateInterestPage";
+import { UserInterestedPage } from "./pages/UserInterestedPage";
 
 export const App = () => {
   const [permissoes, setPermissoes] = useState(['']);
@@ -104,6 +105,7 @@ export const App = () => {
             <Route path="list-product" element={<ListProductPage />} />
             <Route path="create-product" element={<CreateProductPage />} />
             <Route path="create-interest/:id" element={<CreateInterestPage />} />
+            <Route path="list-interested/:id" element={<UserInterestedPage />} />
             <Route path="list-evento-compras" element={<EventoCompraPage />} />
             <Route path="create-event-compras" element={<CreateEventoCompraPage />} />
             <Route path="list-compra-coletiva" element={<CompraColetivaPage />} />

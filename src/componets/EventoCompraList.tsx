@@ -3,7 +3,7 @@ import { Table, TableColumnsType, TablePaginationConfig, TableProps, DatePicker 
 import { Heading, Flex, Button, useToast, Tag, useBreakpointValue } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
-import { deleteUser, fetchVendasDisponiveis } from '../services/api';
+import { deleteUser, deleteVenda, fetchVendasDisponiveis } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
 
 interface VendaType {
@@ -35,10 +35,10 @@ const VendasDisponiveisList: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteUser(id);
+      await deleteVenda(id);
       toast({
-        title: 'Usuário excluído',
-        description: 'O usuário foi excluído com sucesso.',
+        title: 'Compra Coletiva Excluído',
+        description: 'A Compra Coletiva foi excluído com sucesso.',
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -47,7 +47,7 @@ const VendasDisponiveisList: React.FC = () => {
     } catch (error) {
       toast({
         title: 'Erro',
-        description: 'Não foi possível excluir o usuário.',
+        description: 'Não foi possível excluir a Compra Coletiva.',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -149,7 +149,7 @@ const VendasDisponiveisList: React.FC = () => {
   return (
     <>
       <Flex mb={6} justify="space-between" align="center" width="100%">
-        <Heading fontSize="2xl" fontWeight="bold">Vendas Disponíveis</Heading>
+        <Heading fontSize="2xl" fontWeight="bold">Compras Coletivas</Heading>
       </Flex>
 
       <Flex
@@ -205,7 +205,7 @@ const VendasDisponiveisList: React.FC = () => {
         pagination={{ ...pagination, total }}
         onRow={(record) => ({
           onClick: () => {
-            navigate('/main/create-event-compras/' + record?.id)
+            navigate('/main/list-interested/' + record?.id)
           },
           style: { cursor: 'pointer' }
         })}

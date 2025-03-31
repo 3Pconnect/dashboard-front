@@ -235,7 +235,7 @@ function Out() {
                   onClick={() => navigate('/main/list-evento-compras')}
                 >
                   <FaUsersCog style={{ marginRight: '8px' }} />
-                  Eventos de Compra
+                  Gerenciar Compra Coletiva
                 </Link>
                 <Link
                   href="#"
