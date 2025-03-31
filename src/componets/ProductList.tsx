@@ -174,7 +174,9 @@ const ProductList: React.FC = () => {
         pagination={{ ...pagination, total }}
         scroll={{ x: 'max-content' }}
         onRow={(record) => ({
-          onClick: () => navigate(`/main/update-product/${record?.id}`),
+          onClick: () => {
+            
+          },
           style: { cursor: 'pointer' }
         })}
       />
