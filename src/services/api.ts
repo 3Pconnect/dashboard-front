@@ -741,6 +741,69 @@ export const createProduct = async (product: { nome: string; descricao: string; 
     }
   }
 };
+export const createVenda = async (venda: {
+  quantidade: number;
+  produtoId: number;
+  quantidadeMaximaPorUsuario: number;
+  quantidadeTotal: number;
+  dataInicio: string;
+  dataFim: string;
+}) => {
+  try {
+    const response = await api.post("/vendas", venda, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao criar venda:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao criar venda");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao criar venda.");
+    }
+  }
+};
+
+export const demonstrarInteresse = async (compraId: number, quantidade: number) => {
+  try {
+    const response = await api.post("/vendas/demonstrar-interesse", {
+      compraId,
+      quantidade,
+    }, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API ao demonstrar interesse.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao demonstrar interesse na venda:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao demonstrar interesse na venda.");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu ao demonstrar interesse. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao demonstrar interesse na venda.");
+    }
+  }
+};
 
 export const fetchProducts = async (nome: string, page: number = 1, limit: number = 10) => {
   try {
@@ -772,6 +835,34 @@ export const fetchProducts = async (nome: string, page: number = 1, limit: numbe
     }
   }
 };
+export const fetchSales = async () => {
+  try {
+    const usuarioId = 16;
+    const response = await api.get("/vendas", {
+      params: { usuarioId },
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar vendas:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar vendas");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar vendas.");
+    }
+  }
+};
+
 export const fetchVendasDisponiveis = async (
   page: number = 1,
   limit: number = 10,

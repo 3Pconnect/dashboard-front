@@ -187,7 +187,7 @@ const VendasDisponiveisList: React.FC = () => {
 
       <Button
         className="button-premium"
-        onClick={() => navigate("/main/create-user")}
+        onClick={() => navigate("/main/create-event-compras")}
         colorScheme="green"
         fontSize="16px"
         fontWeight="bold"
