@@ -1,9 +1,10 @@
-import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, HStack } from "@chakra-ui/react";
+import { Button, Flex, Heading, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, HStack } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md"; // Ícone para o botão de voltar
 import { useEffect, useState } from "react";
 import { aprovarMembro, fetchMembroById, registerMembro, reprovarMembro, updateMembro } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { hasPermission } from "../utils/util";
+import { Input } from "antd";
 
 export const UpdateNovoMembros = () => {
   const [name, setName] = useState("");
@@ -182,20 +183,37 @@ export const UpdateNovoMembros = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Nome</Text>
           <Input
-            bg="white" color="black"
+            className='button-premium'
+            allowClear
             placeholder="Digite o nome do membro"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
+
         </Box>
 
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>E-mail</Text>
           <Input
-            bg="white" color="black"
+            className='button-premium'
+            allowClear
             placeholder="Digite o e-mail do membro"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
       </Grid>
@@ -206,21 +224,39 @@ export const UpdateNovoMembros = () => {
       >
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Empresa</Text>
+
           <Input
-            bg="white" color="black"
-            placeholder="Digite o nome da empresa"
+            className='button-premium'
+            allowClear
+            placeholder="Digite o e-mail do membro"
             value={nome_empresa}
             onChange={(e) => setNomeEmpresa(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
 
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Cargo</Text>
+
           <Input
-            bg="white" color="black"
+            className='button-premium'
+            allowClear
             placeholder="Digite o cargo do membro"
             value={cargo}
             onChange={(e) => setCargo(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
       </Grid>

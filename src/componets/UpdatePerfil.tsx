@@ -1,8 +1,9 @@
-import { Button, Flex, Heading, Input, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast, Spinner } from "@chakra-ui/react";
+import { Button, Flex, Heading, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { fetchProfileById, updateProfile } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
+import { Input } from "antd";
 
 export const UpdatePerfil: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Pega o ID da rota
@@ -19,7 +20,7 @@ export const UpdatePerfil: React.FC = () => {
     const loadProfile = async () => {
       try {
         if (!id) throw new Error("ID do perfil não encontrado.");
-        
+
         const profile = await fetchProfileById(Number(id));
         setNomePerfil(profile.name);
         setPermissoes(profile.permissions);
@@ -81,7 +82,7 @@ export const UpdatePerfil: React.FC = () => {
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Flex align="center">
           <Button
-          colorScheme="white"
+            colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
             mr={4}
@@ -111,11 +112,18 @@ export const UpdatePerfil: React.FC = () => {
       <Box mb={6}>
         <Text mb={2}>Nome do Perfil</Text>
         <Input
-        bg={"white"}
-        color={"black"}
+          className='button-premium'
+          allowClear
+          placeholder={`Digite aqui o nome do perfil`}
           value={nomePerfil}
           onChange={(e) => setNomePerfil(e.target.value)}
-          placeholder="Digite o nome do perfil"
+          style={{
+            height: "40px", width: "100%",
+            backgroundColor: "transparent",
+            color: "white",
+            borderRadius: "0px", borderColor: "#2596be",
+            borderWidth: "1px"
+          }}
         />
       </Box>
 
@@ -254,7 +262,7 @@ export const UpdatePerfil: React.FC = () => {
                 isChecked={permissoes.includes("manage.eventos")}
                 onChange={(e) => handleCheckboxChange(e, "manage.eventos")}
               >
-              Criar / Editar / Deletar
+                Criar / Editar / Deletar
               </Checkbox>
               <Checkbox
                 colorScheme="gray"

@@ -1,8 +1,9 @@
-import { Button, Flex, Heading, Input, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast } from "@chakra-ui/react";
+import { Button, Flex, Heading, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { createProfile } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { Input } from "antd";
 
 export const CreatePerfil: React.FC = () => {
   const [permissoes, setPermissoes] = useState<string[]>([]);
@@ -39,7 +40,7 @@ export const CreatePerfil: React.FC = () => {
       });
     } catch (err: any) {
       setError(err.message);
-      
+
       toast({
         title: "Erro",
         description: "Ocorreu um erro ao criar o perfil.",
@@ -57,6 +58,7 @@ export const CreatePerfil: React.FC = () => {
       <Flex mb={10} justify="space-between" align="center" width="100%">
         <Flex align="center">
           <Button
+            colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
             mr={4}
@@ -86,9 +88,18 @@ export const CreatePerfil: React.FC = () => {
       <Box mb={6}>
         <Text mb={2}>Nome do Perfil</Text>
         <Input
+          className='button-premium'
+          allowClear
+          placeholder={`Digite aqui o nome do perfil`}
           value={nomePerfil}
           onChange={(e) => setNomePerfil(e.target.value)}
-          placeholder="Digite o nome do perfil"
+          style={{
+            height: "40px", width: "100%",
+            backgroundColor: "transparent",
+            color: "white",
+            borderRadius: "0px", borderColor: "#2596be",
+            borderWidth: "1px"
+          }}
         />
       </Box>
 
@@ -227,7 +238,7 @@ export const CreatePerfil: React.FC = () => {
                 isChecked={permissoes.includes("manage.eventos")}
                 onChange={(e) => handleCheckboxChange(e, "manage.eventos")}
               >
-              Criar / Editar / Deletar
+                Criar / Editar / Deletar
               </Checkbox>
               <Checkbox
                 colorScheme="gray"

@@ -252,10 +252,15 @@ const NovosApoiadoresTable: React.FC = () => {
       <Flex mb={6} justify="flex-start" align="center" gap={4} width="100%">
         {/* Select para escolher o tipo de filtro */}
         <Select
+          className="button-premium"
           options={filterOptions}
           value={filterType}
           onChange={setFilterType}
-          style={{ width: 180, height: "40px" }}
+          style={{
+            width: 180,
+            height: "40px",
+            color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
+          }}
         />
 
         {/* Input único para busca */}
@@ -268,12 +273,21 @@ const NovosApoiadoresTable: React.FC = () => {
               style={{ width: 180, height: "40px" }}
             />
             :
+
             <Input
+              className='button-premium'
               allowClear
               placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              style={{ height: "40px", width: 240 }}
+              style={{
+                height: "40px",
+                width: "248px",
+                backgroundColor: "transparent",
+                color: "white",
+                borderRadius: "0px", borderColor: "#2596be",
+                borderWidth: "1px"
+              }}
             />
 
         }
@@ -282,10 +296,21 @@ const NovosApoiadoresTable: React.FC = () => {
 
 
         {/* Filtro por data */}
+
+
         <DatePicker.RangePicker
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
           onChange={(dates) => setDateRange(dates)}
-          style={{ width: 300, height: "40px" }}
+          dropdownClassName="custom-dropdown"
+          style={{
+            width: 300, height: "40px",
+            backgroundColor: "transparent",
+            color: "white",
+            borderRadius: "0px", borderColor: "#2596be",
+
+            borderWidth: "1px"
+          }}
+          inputReadOnly={false} // Impede a leitura do placeholder, permitindo estilização
         />
 
         {/* Botão de busca */}

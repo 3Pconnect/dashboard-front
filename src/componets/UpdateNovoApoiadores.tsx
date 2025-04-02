@@ -1,8 +1,9 @@
-import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
+import { Button, Flex, Heading, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md"; // Ícone para o botão de voltar
 import { useEffect, useState } from "react";
 import { fetchMembroById, registerApoiador, registerMembro, updateApoiador } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
+import { Input } from "antd";
 
 export const UpdateNovoApoiadores = () => {
   const [name, setName] = useState("");
@@ -115,23 +116,38 @@ export const UpdateNovoApoiadores = () => {
       >
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Nome</Text>
+
           <Input
-          bg={"white"}
-          color={"black"}
-            placeholder="Digite o nome do membro" 
+            className='button-premium'
+            allowClear
+            placeholder="Digite o nome do membro"
             value={nome_empresa}
             onChange={(e) => setNomeEmpresa(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
 
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>E-mail</Text>
           <Input
-            bg={"white"}
-            color={"black"}
+            className='button-premium'
+            allowClear
             placeholder="Digite o e-mail do membro"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
       </Grid>
@@ -142,34 +158,56 @@ export const UpdateNovoApoiadores = () => {
       >
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Empresa</Text>
+
           <Input
-            bg={"white"}
-            color={"black"}
+            className='button-premium'
+            allowClear
             placeholder="Digite o CNPJ do membro"
             value={cnpj}
             onChange={(e) => setCnpj(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
 
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Cargo</Text>
           <Input
-            bg={"white"}
-            color={"black"}
-         placeholder="Digite o cargo do membro"
+            className='button-premium'
+            allowClear
+            placeholder="Digite o telefone do membro"
             value={cargo}
             onChange={(e) => setCargo(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
 
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Atividade</Text>
-          <Input
-            bg={"white"}
-            color={"black"}
-  placeholder="Digite a atividade do membro"
+                    <Input
+            className='button-premium'
+            allowClear
+               placeholder="Digite a atividade do membro"
             value={atividade}
             onChange={(e) => setAtividade(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
       </Grid>

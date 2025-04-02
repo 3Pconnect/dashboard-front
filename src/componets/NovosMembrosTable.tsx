@@ -27,7 +27,7 @@ interface DataType {
   categoria_empresa: string;
   afiliacao: boolean;
   situacao: string;
-  createdAt: string;  
+  createdAt: string;
 }
 
 
@@ -56,7 +56,7 @@ const NovosMembrosTable: React.FC = () => {
     { label: 'Email', value: 'email' },
     { label: 'Situação', value: 'situacao' },
   ];
-  
+
 
   const situacaoFilterOptions = [
     { label: 'Ativo', value: 'ATIVO' },
@@ -83,25 +83,25 @@ const NovosMembrosTable: React.FC = () => {
         { label: 'Perfil', value: 'profile' },
         { label: 'Situação', value: 'situacao' },
       ];
-      const obj:any = {
+      const obj: any = {
 
       }
 
-      if(filterType === 'name'){
+      if (filterType === 'name') {
         obj.name = searchValue
       }
-      if(filterType === 'email'){
+      if (filterType === 'email') {
         obj.email = searchValue
       }
-      if(filterType === 'profile'){
+      if (filterType === 'profile') {
         obj.profile = searchValue
       }
-      if(filterType === 'situacao'){
+      if (filterType === 'situacao') {
         obj.situacao = situacaoFilterType
       }
       console.log(obj)
       // Passar searchQuery e dateRange dentro de filters
-      const response = await fetchMembros(page, 10, startDate, endDate, {obj});
+      const response = await fetchMembros(page, 10, startDate, endDate, { obj });
       setData(response.membros);
       setTotal(response.total);
       setPagination((prev) => ({
@@ -117,7 +117,7 @@ const NovosMembrosTable: React.FC = () => {
   };
 
 
-  
+
 
   useEffect(() => {
     fetchData(pagination.current || 1);
@@ -156,7 +156,7 @@ const NovosMembrosTable: React.FC = () => {
   };
 
   const columns: TableColumnsType<DataType> = isMobile
-  ? [
+    ? [
       {
         title: 'Nome',
         dataIndex: 'name',
@@ -189,7 +189,7 @@ const NovosMembrosTable: React.FC = () => {
         },
       },
     ]
-  : [
+    : [
       {
         title: 'Nome',
         dataIndex: 'name',
@@ -254,21 +254,21 @@ const NovosMembrosTable: React.FC = () => {
             default:
               color = 'gray';
           }
-          return  <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
+          return <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
         },
       },
-       {
-            title: 'Ações',
-            key: 'actions',
-            render: (_, record) => (
-              <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(record.id)
-              }}>
-                <AiFillDelete />
-              </Button>
-            ),
-          },
+      {
+        title: 'Ações',
+        key: 'actions',
+        render: (_, record) => (
+          <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(record.id)
+          }}>
+            <AiFillDelete />
+          </Button>
+        ),
+      },
     ];
 
 
@@ -287,49 +287,72 @@ const NovosMembrosTable: React.FC = () => {
         </Button>
       </Flex>
       <Flex mb={6} justify="flex-start" align="center" gap={4} width="100%">
-  {/* Select para escolher o tipo de filtro */}
-  <Select
-    options={filterOptions}
-    value={filterType}
-    onChange={setFilterType}
-    style={{ width: 180, height: "40px" }}
-  />
+        {/* Select para escolher o tipo de filtro */}
 
-  {/* Input único para busca */}
-{
-  filterType === 'situacao' ?
-  <Select
-    options={situacaoFilterOptions}
-    value={situacaoFilterType}
-    onChange={setSituacaoFilterType}
-    style={{ width: 180, height: "40px" }}
-  />
-  :
-  <Input
-  allowClear
-    placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
-    value={searchValue}
-    onChange={(e) => setSearchValue(e.target.value)}
-    style={{ height: "40px", width: 240 }}
-  />
+        <Select
+          className="button-premium"
+          options={filterOptions}
+          value={filterType}
+          onChange={setFilterType}
+          style={{
+            width: 180,
+            height: "40px",
+            color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
+          }}
+        />
+        {/* Input único para busca */}
+        {
+          filterType === 'situacao' ?
+            <Select
+              options={situacaoFilterOptions}
+              value={situacaoFilterType}
+              onChange={setSituacaoFilterType}
+              style={{ width: 180, height: "40px" }}
+            />
+            :
 
-}
+            <Input
+              className='button-premium'
+              allowClear
+              placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              style={{
+                height: "40px", width: "240px",
+                backgroundColor: "transparent",
+                color: "white",
+                borderRadius: "0px", borderColor: "#2596be",
+                borderWidth: "1px"
+              }}
+            />
+
+        }
 
 
 
 
-  {/* Filtro por data */}
-  <DatePicker.RangePicker
-    value={dateRange ? [dateRange[0], dateRange[1]] : null}
-    onChange={(dates) => setDateRange(dates)}
-    style={{ width: 300, height: "40px" }}
-  />
+        {/* Filtro por data */}
 
-  {/* Botão de busca */}
-  <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
-    Buscar
-  </Button>
-</Flex>
+        <DatePicker.RangePicker
+          value={dateRange ? [dateRange[0], dateRange[1]] : null}
+          onChange={(dates) => setDateRange(dates)}
+          dropdownClassName="custom-dropdown"
+          style={{
+            width: 300, height: "40px",
+            backgroundColor: "transparent",
+            color: "white",
+            borderRadius: "0px", borderColor: "#2596be",
+
+            borderWidth: "1px"
+          }}
+          inputReadOnly={false} // Impede a leitura do placeholder, permitindo estilização
+        />
+
+        {/* Botão de busca */}
+        <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
+          Buscar
+        </Button>
+      </Flex>
 
       <Table<DataType>
         columns={columns}
@@ -339,8 +362,8 @@ const NovosMembrosTable: React.FC = () => {
         pagination={{ ...pagination, total }}
         scroll={{ x: 'max-content' }}
         onRow={(record) => ({
-          onClick: () =>{
-            navigate('/main/update-membro/'+record?.id)
+          onClick: () => {
+            navigate('/main/update-membro/' + record?.id)
           },
           style: { cursor: 'pointer', minHeight: '70vh' }
         })}

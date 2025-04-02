@@ -1,8 +1,16 @@
-import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
+import { Button, Flex, Heading, Grid, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md"; // Ícone para o botão de voltar
 import { useState } from "react";
 import { registerMembro } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { Input, Select } from "antd";
+
+
+const filterOptions = [
+  { label: 'Ativo', value: 'ativo' },
+  { label: 'Inativo', value: 'inativo' },
+  { label: 'Pendente', value: 'pendente' },
+];
 
 export const CreateNovosMembros = () => {
   const [name, setName] = useState("");
@@ -15,6 +23,7 @@ export const CreateNovosMembros = () => {
   const [situacao, setSituacao] = useState("em_analise");
   const [loading, setLoading] = useState(false); // Estado para controlar o loading
   const toast = useToast(); // Hook para o Toast
+  const [filterType, setFilterType] = useState<string>('inativo');
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
@@ -28,7 +37,7 @@ export const CreateNovosMembros = () => {
         nome_empresa,
         cargo,
         cnpj,
-        situacao
+        filterType
       );
       console.log("Membro registrado com sucesso", response);
       toast({
@@ -59,7 +68,7 @@ export const CreateNovosMembros = () => {
         <Flex align="center">
           {/* Botão de Voltar */}
           <Button
-          colorScheme="white" 
+            colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
             mr={4}
@@ -95,20 +104,37 @@ export const CreateNovosMembros = () => {
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Nome</Text>
           <Input
-          bg="white" color="black"
-            placeholder="Digite o nome do membro"
+            className='button-premium'
+            allowClear
+            placeholder="Digite o nome do membri"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
+
         </Box>
 
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>E-mail</Text>
           <Input
-          bg="white" color="black"
+            className='button-premium'
+            allowClear
             placeholder="Digite o e-mail do membro"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
       </Grid>
@@ -119,21 +145,39 @@ export const CreateNovosMembros = () => {
       >
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Empresa</Text>
+
           <Input
-          bg="white" color="black"
-            placeholder="Digite o nome da empresa"
+            className='button-premium'
+            allowClear
+            placeholder="Digite o e-mail do membro"
             value={nome_empresa}
             onChange={(e) => setNomeEmpresa(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
 
         <Box mb={4}> {/* Adicionado espaçamento inferior */}
           <Text mb={2}>Cargo</Text>
+
           <Input
-          bg="white" color="black"
+            className='button-premium'
+            allowClear
             placeholder="Digite o cargo do membro"
             value={cargo}
             onChange={(e) => setCargo(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
           />
         </Box>
       </Grid>
@@ -141,23 +185,25 @@ export const CreateNovosMembros = () => {
       {/* Campo Situação */}
       <Box mt={5}>
         <Text mb={2}>Situação</Text>
+       
         <Select
-        bg="white" color="black"
-          placeholder="Selecione a situação"
-          value={situacao}
-          onChange={(e) => setSituacao(e.target.value)}
-        >
-          <option value="ativo">Ativo</option>
-          <option value="inativo">Inativo</option>
-          <option value="pendente">Pendente</option>
-        </Select>
+  className="button-premium"
+  options={filterOptions}
+  value={filterType}
+  onChange={setFilterType}
+  style={{
+    width: 180, 
+    height: "40px", 
+    color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
+  }}
+/>
       </Box>
 
       {/* Botão Salvar */}
       <VStack alignItems={"end"} mt={5}>
-        <Button 
-          colorScheme="green" 
-          onClick={handleSubmit} 
+        <Button
+          colorScheme="green"
+          onClick={handleSubmit}
           isLoading={loading} // Adiciona o estado de loading
           loadingText="Cadastrando..." // Texto de carregamento
         >

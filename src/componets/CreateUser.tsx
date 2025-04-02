@@ -109,7 +109,7 @@ export const CreateUser = () => {
         </Flex>
       )}
 
-{!showNav && (
+      {!showNav && (
         <Flex mb={10} justify="space-between" align="center" wrap="wrap" width="100%">
           <Heading pt={5} className="heading-title" fontSize="2xl" fontWeight="bold">Cadastrar Usuário</Heading>
         </Flex>

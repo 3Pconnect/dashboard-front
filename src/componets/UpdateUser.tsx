@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import {
-  Button, Flex, Heading, Input, Grid, Box, Text, Checkbox, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Spinner, useToast
+  Button, Flex, Heading, Grid, Box, Text, Checkbox, VStack, Breadcrumb,
+  BreadcrumbItem, BreadcrumbLink, Icon, Spinner, useToast
 } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
 import { fetchProfiles, fetchUser, registerUser, updateUser } from "../services/api"; // Importando a função correta
 import { useNavigate, useParams } from "react-router-dom";
-
+import { Input, Select } from "antd";
+const situacaoFilterOptions = [
+  { label: 'Ativo', value: 'ATIVO' },
+  { label: 'Inativo', value: 'INATIVO' },
+  { label: 'Pendente', value: 'PENDENTE' },
+];
 export const UpdateUser = () => {
   const [profiles, setProfiles] = useState<{ id: number; name: string }[]>([]);
   const [loading, setLoading] = useState(true);
@@ -13,10 +19,11 @@ export const UpdateUser = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("1111111");
-  const [situacao, setSituacao] = useState("");
+  const [situacao, setSituacao] = useState<string>("");
   const [saving, setSaving] = useState(false); // Variável para controle do loading de salvar
   const toast = useToast(); // Hook para o Toast
   const navigate = useNavigate();
+  
   const { id } = useParams();
 
   useEffect(() => {
@@ -116,24 +123,53 @@ export const UpdateUser = () => {
 
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box>
-          <Text mb={2}>Nome</Text>
-          <Input bg="white" color={"black"} placeholder="Digite seu nome" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <Text className="indicator-title" mb={2}>Nome</Text>
+          <Input
+            className="button-premium"
+            allowClear
+            placeholder="Digite o nome"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{
+              height: "40px",
+              width: "100%",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
+          />
         </Box>
         <Box>
-          <Text mb={2}>E-mail</Text>
-          <Input bg="white" color={"black"} placeholder="Digite seu e-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Text className="indicator-title" mb={2}>E-mail</Text>
+          <Input
+            className="button-premium"
+            allowClear
+            placeholder="Digite o e-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{
+              height: "40px",
+              width: "100%",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
+          />
         </Box>
       </Grid>
 
       <VStack mt={5} spacing={4} align="stretch">
-
         <Box>
-          <Text mb={2}>Situação do Usuário</Text>
-          <Select bg="white" color={"black"} placeholder="Selecione a situação" value={situacao} onChange={(e) => setSituacao(e.target.value)}>
-            <option value="ATIVO">Ativo</option>
-            <option value="INATIVO">Inativo</option>
-            <option value="PENDENTE">Pendente</option>
-          </Select>
+          <Text className="indicator-title" mb={2}>Situação do Usuário</Text>
+          <Select style={{ width: "100px" }}
+          className="button-premium"
+          options={situacaoFilterOptions}
+          placeholder="Selecione a situação"
+          value={situacao} onChange={setSituacao} />
         </Box>
       </VStack>
 

@@ -1,6 +1,5 @@
 import {
   ChakraProvider,
-  Text,
   theme
 } from "@chakra-ui/react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
@@ -13,7 +12,7 @@ import Feed from "./pages/Feed";
 import { FeedProvider } from "./contexts/FeedContext";
 import NewLogin from "./pages/NewLogin";
 import Page from "./pages/AppShell";
-import LayoutApp from "./pages/Layout"; // Importe o LayoutApp
+import LayoutApp from "./pages/Layout";
 import TableUsers from "./componets/Table";
 import { UserList } from "./pages/UsersList";
 import { PerfilsList } from "./pages/PerfilsList";
@@ -35,7 +34,7 @@ import { UpdateUserPage } from "./pages/UpdateUserPage";
 import { UpdateMembroPage } from "./pages/UpdateMembroPage";
 import { UpdateApoiadorPage } from "./pages/UpdateApoiadorPage";
 import Out from "./pages/Out";
-import { useState, useEffect } from "react"; // Importação correta dos hooks
+import { useState, useEffect } from "react";
 import { fetchMe } from "./services/api";
 import NotFound from "./pages/NotFound";
 import { hasPermission, savePermissionsToLocalStorage } from "./utils/util";
@@ -48,18 +47,25 @@ import { CreateEventoCompraPage } from "./pages/CreateEventoCompraPage";
 import { CompraColetivaPage } from "./pages/CompraColetivaPage";
 import { CreateInterestPage } from "./pages/CreateInterestPage";
 import { UserInterestedPage } from "./pages/UserInterestedPage";
+import Loading from "./componets/Loading";
 
 export const App = () => {
   const [permissoes, setPermissoes] = useState(['']);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
 
   useEffect(() => {
     const loadUser = async () => {
+      setCarregando(true);
       try {
         const data = await fetchMe();
         setPermissoes(data.profile.permissions);
-        savePermissionsToLocalStorage(data.profile.permissions)
+        savePermissionsToLocalStorage(data.profile.permissions);
       } catch (error) {
         console.error(error);
+        setErro("Erro ao carregar permissões. Tente novamente mais tarde.");
+      } finally {
+        setCarregando(false);
       }
     };
     loadUser();
@@ -67,15 +73,24 @@ export const App = () => {
 
   useEffect(() => {
     console.log(permissoes);
-
     console.log("permissão:", hasPermission('edit.userdd'));
   }, [permissoes]);
+
+  if (carregando) {
+    return <Loading/>
+  }
+
+  if (erro) {
+    return <div>{erro}</div>;
+  }
+
+
 
   return (
     <ChakraProvider theme={theme}>
       <Router>
         <Routes>
-          <Route path="/main" element={<Out />}> {/* LayoutApp como rota pai */}
+          <Route path="/main" element={<Out />}>
             {permissoes.includes('read.users') &&
               <Route path="users" element={<UserList />} />}
             {permissoes.includes('read.profiles') &&
@@ -92,16 +107,15 @@ export const App = () => {
                 <Route path="create-evento" element={<CreateNovoEvento />} />
               </>}
             {permissoes.includes('eventos.inscricao') &&
-              <><Route path="todos-eventos" element={<TodosEventosPage />} />
-                <Route path="meus-eventos" element={<MeusEventosList />} /></>}
-
+              <>
+                <Route path="todos-eventos" element={<TodosEventosPage />} />
+                <Route path="meus-eventos" element={<MeusEventosList />} />
+              </>}
             {permissoes.includes('create.user') &&
               <>
                 <Route path="create-user" element={<CreateUserPage />} />
                 <Route path="update-user/:id" element={<UpdateUserPage />} />
-              </>
-
-            }
+              </>}
             <Route path="list-product" element={<ListProductPage />} />
             <Route path="create-product" element={<CreateProductPage />} />
             <Route path="create-interest/:id" element={<CreateInterestPage />} />
@@ -119,14 +133,12 @@ export const App = () => {
                 <Route path="update-membro/:id" element={<UpdateMembroPage />} />
                 <Route path="create-membro" element={<CreateNovosMembrosPage />} />
               </>}
-
             {permissoes.includes('create.apoiador') &&
               <>
                 <Route path="update-apoiador/:id" element={<UpdateApoiadorPage />} />
                 <Route path="create-apoiador" element={<CreateNovosApoadoresPage />} />
               </>}
           </Route>
-
           <Route path="/" element={<NewLogin />} />
           <Route path="/seja-membro" element={<SejaMembroPage />} />
           <Route path="/register" element={<Register />} />

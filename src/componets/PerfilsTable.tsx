@@ -122,7 +122,7 @@ const PerfilsTable: React.FC = () => {
 
   return (
     <>
-    <Flex mb={6} justify='space-between' align='center' width='100%'>
+      <Flex mb={6} justify='space-between' align='center' width='100%'>
         <Heading fontSize='2xl' fontWeight='bold'>Perfis</Heading>
         <Button
           onClick={() => navigate('/main/create-perfil')}
@@ -135,18 +135,36 @@ const PerfilsTable: React.FC = () => {
       </Flex>
 
       <Flex mb={6} justify='flex-start' align='center' gap={4} width='100%'>
-        <Input
-          placeholder='Buscar por nome'
-          value={searchQuery}
-          style={{height:40}}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          width={240}
-        />
-        <DatePicker.RangePicker
-          value={dateRange ? [dateRange[0], dateRange[1]] : null}
-          onChange={(dates) => setDateRange(dates)}
-          style={{ width: 300, height: 40 }}
-        />
+  
+          <Input
+          className='button-premium'
+          allowClear
+            placeholder={`Buscar por nome `}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+               height: "40px", width: 240,
+               backgroundColor: "transparent",
+               color: "white",
+               borderRadius: "0px", borderColor: "#2596be",
+               borderWidth: "1px" 
+              }}
+          />
+
+
+          <DatePicker.RangePicker
+            value={dateRange ? [dateRange[0], dateRange[1]] : null}
+            onChange={(dates) => setDateRange(dates)}
+            dropdownClassName="custom-dropdown"
+            style={{
+              width: 300, height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+        
+              borderWidth: "1px" }}
+              inputReadOnly={false} // Impede a leitura do placeholder, permitindo estilização
+          />
         <Button w={200} colorScheme='blue' onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
           Buscar
         </Button>

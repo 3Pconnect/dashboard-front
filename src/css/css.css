@@ -39,6 +39,9 @@ body {
     font-weight: 600 !important;
     letter-spacing: normal !important;
 }
+.button-premium .ant-input-clear-icon {
+  color: white; /* Ou qualquer outra cor que você desejar */
+}
 
 .button-premium {
     font-family: "Bai Jamjuree", sans-serif !important;
@@ -53,7 +56,7 @@ body {
 .ant-input {
     font-family: 'Bai Jamjuree', sans-serif;
     
-    border-radius: 40px !important;
+    border-radius: 0px !important;
     /* Arredondar bordas */
     color: white !important;
     /* Cor do texto */

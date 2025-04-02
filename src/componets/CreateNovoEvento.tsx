@@ -1,7 +1,7 @@
-import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
-import { MdArrowBack } from "react-icons/md"; 
-import { useState, useEffect } from "react"; 
-import { DatePicker } from "antd";
+import { Button, Flex, Heading, Grid, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
+import { MdArrowBack } from "react-icons/md";
+import { useState, useEffect } from "react";
+import { DatePicker, Input, Select } from "antd";
 import { Dayjs } from "dayjs";
 import { registerEvento } from "../services/api";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ interface Cidade {
 }
 
 export const CreateNovoEvento = () => {
-  const toast = useToast(); // Adicionando o hook useToast
+  const toast = useToast();
   const [estados, setEstados] = useState<Estado[]>([]);
   const [cidades, setCidades] = useState<Cidade[]>([]);
   const [estadoSelecionado, setEstadoSelecionado] = useState<string>("");
@@ -26,8 +26,8 @@ export const CreateNovoEvento = () => {
   const [nomeEvento, setNomeEvento] = useState<string>("");
   const [temaEvento, setTemaEvento] = useState<string>("");
   const [situacao, setSituacao] = useState<string>("inativo");
-  const [dataEvento, setDataEvento] = useState<Dayjs | null>(null); // Estado para armazenar a data
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Estado de loading
+  const [dataEvento, setDataEvento] = useState<Dayjs | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const carregarEstados = async () => {
@@ -68,9 +68,9 @@ export const CreateNovoEvento = () => {
         estadoSelecionado,
         temaEvento,
         situacao,
-        dataEvento ? dataEvento.format("YYYY-MM-DD") : "" // Enviando a data no formato adequado
+        dataEvento ? dataEvento.format("YYYY-MM-DD") : ""
       );
-      
+
       toast({
         title: "Evento registrado.",
         description: "O evento foi registrado com sucesso.",
@@ -78,19 +78,25 @@ export const CreateNovoEvento = () => {
         duration: 5000,
         isClosable: true,
       });
-      navigate('/main/agenda-eventos')
+      navigate('/main/agenda-eventos');
     } catch (error) {
       toast({
         title: "Erro ao registrar evento.",
-        description:  "Algo deu errado.",
+        description: "Algo deu errado.",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
     } finally {
-      setIsLoading(false); // Finaliza o carregamento
+      setIsLoading(false);
     }
   };
+
+  const filterOptions = [
+    { label: 'Ativo', value: 'ativo' },
+    { label: 'Inativo', value: 'inativo' },
+    { label: 'Pendente', value: 'pendente' },
+  ];
 
   return (
     <>
@@ -126,16 +132,34 @@ export const CreateNovoEvento = () => {
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box mb={4}>
           <Text mb={2}>Nome do Evento</Text>
-          <Input value={nomeEvento} onChange={(e)=>{setNomeEvento(e.target.value)}} color={"black"} bg={"white"} placeholder="Digite o nome do evento" />
+          <Input
+            className="button-premium"
+            allowClear
+            placeholder="Digite o nome do evento"
+            value={nomeEvento}
+            onChange={(e) => setNomeEvento(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
+          />
         </Box>
         <Box mb={4}>
           <Text mb={2}>Estados</Text>
           <Select
-            color={"black"}
-            bg={"white"}
+        className="button-premium"
+      style={{
+        width: "100%", 
+        height: "40px", 
+        color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
+      }}
             placeholder="Selecione o estado"
             value={estadoSelecionado}
-            onChange={(e) => setEstadoSelecionado(e.target.value)}
+            onChange={(e) => setEstadoSelecionado(e)}
           >
             {estados.map((estado) => (
               <option key={estado.sigla} value={estado.sigla}>
@@ -150,48 +174,85 @@ export const CreateNovoEvento = () => {
         <Box mb={4}>
           <Text mb={2}>Cidade</Text>
           <Select
-            color={"black"}
-            bg={"white"}
             placeholder="Selecione a cidade"
             value={cidadeSelecionada}
-            onChange={(e) => setCidadeSelecionada(e.target.value)}
+            className="button-premium"
+            style={{
+              width: "100%", 
+              height: "40px", 
+              color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
+            }}
+            onChange={(value) => setCidadeSelecionada(value as string)}
           >
             {cidades.map((cidade) => (
-              <option key={cidade.id} value={cidade.nome}>
+              <Select.Option key={cidade.id} value={cidade.nome}>
                 {cidade.nome}
-              </option>
+              </Select.Option>
             ))}
           </Select>
         </Box>
 
         <Box mb={4}>
           <Text mb={2}>Tema</Text>
-          <Input value={temaEvento} onChange={(e)=>{setTemaEvento(e.target.value)}}  color={"black"} bg={"white"} placeholder="Digite o tema do evento" />
+          <Input
+            className="button-premium"
+            allowClear
+            placeholder="Digite o tema do evento"
+            value={temaEvento}
+            onChange={(e) => setTemaEvento(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
+          />
         </Box>
       </Grid>
 
       <Box mt={5}>
-        <Text mb={2}>Data</Text>
-        <DatePicker 
-          style={{ width: "100%", height: "40px" }} 
-          onChange={(date) => setDataEvento(date)} // Atualizando o estado com a data selecionada
-        />
+        <Text mb={2}>Data do Evento</Text>
+        <DatePicker
+    
+  style={{
+    width: "100%",
+    height: "40px",
+    backgroundColor: "transparent",
+    color: "white",
+    borderRadius: "0px",
+    borderColor: "#2596be",
+    borderWidth: "1px",
+    "::placeholder": {
+      color: "white",
+    },
+  } as any} // Forçando o TypeScript a ignorar a verificação de tipos
+  inputReadOnly={false}
+  onChange={(date) => setDataEvento(date)}
+/>
       </Box>
 
       <Box mt={5}>
         <Text mb={2}>Situação</Text>
-        <Select value={situacao} onChange={(e)=>{setSituacao(e.target.value)}} color={"black"} bg={"white"} placeholder="Selecione a situação">
-          <option value="ativo">Ativo</option>
-          <option value="inativo">Inativo</option>
-          <option value="pendente">Pendente</option>
-        </Select>
+        <Select
+                className="button-premium"
+                style={{
+                  width: "100%", 
+                  height: "40px", 
+                  color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
+                }}
+          options={filterOptions}
+          value={situacao}
+          onChange={(value) => setSituacao(value as string)}
+        />
       </Box>
 
       <VStack alignItems={"end"} mt={5}>
         <Button
           colorScheme="green"
-          isLoading={isLoading} // Exibe o estado de carregamento no botão
-          onClick={handleSalvar} // Chama a função de salvar
+          isLoading={isLoading}
+          onClick={handleSalvar}
         >
           Salvar
         </Button>

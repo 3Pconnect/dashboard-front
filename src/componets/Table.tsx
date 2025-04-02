@@ -259,7 +259,6 @@ const TableUsers: React.FC = () => {
        backgroundColor: "transparent",
        color: "white",
        borderRadius: "0px", borderColor: "#2596be",
-      
        borderWidth: "1px" 
       }}
   />

@@ -44,7 +44,7 @@ const NovosAgendamentosList: React.FC = () => {
     { label: 'Nome', value: 'nome_evento' },
     { label: 'Tema', value: 'tema' },
   ];
-  
+
 
   const situacaoFilterOptions = [
     { label: 'Ativo', value: 'ATIVO' },
@@ -71,25 +71,25 @@ const NovosAgendamentosList: React.FC = () => {
         { label: 'Perfil', value: 'profile' },
         { label: 'Situação', value: 'situacao' },
       ];
-      const obj:any = {
+      const obj: any = {
 
       }
 
-      if(filterType === 'nome_evento'){
+      if (filterType === 'nome_evento') {
         obj.nome_evento = searchValue
       }
-      if(filterType === 'tema'){
+      if (filterType === 'tema') {
         obj.tema = searchValue
       }
-      if(filterType === 'profile'){
+      if (filterType === 'profile') {
         obj.profile = searchValue
       }
-      if(filterType === 'situacao'){
+      if (filterType === 'situacao') {
         obj.situacao = situacaoFilterType
       }
       console.log(obj)
       // Passar searchQuery e dateRange dentro de filters
-      const response = await fetchEventos(page, 10, startDate, endDate, {obj});
+      const response = await fetchEventos(page, 10, startDate, endDate, { obj });
       console.log(response)
       setData(response?.eventos);
       setTotal(response?.total);
@@ -105,19 +105,19 @@ const NovosAgendamentosList: React.FC = () => {
     }
   };
 
-  const redirectToGoogleCalendar = (eventDetails:any) => {
+  const redirectToGoogleCalendar = (eventDetails: any) => {
     const { nome, dataInicio, dataFim, descricao, local } = eventDetails;
     const start = dataInicio.toISOString().replace(/[-:]/g, "").split(".")[0];
     const end = dataFim.toISOString().replace(/[-:]/g, "").split(".")[0];
-  
+
     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nome)}&dates=${start}/${end}&details=${encodeURIComponent(descricao)}&location=${encodeURIComponent(local)}`;
-  
+
     setTimeout(() => {
       window.open(googleCalendarUrl, '_blank');
-    }, 3000); 
+    }, 3000);
   };
 
-  
+
 
   useEffect(() => {
     fetchData(pagination.current || 1);
@@ -155,7 +155,7 @@ const NovosAgendamentosList: React.FC = () => {
     }
   };
 
-  const handleIncreverSe = async (id: number, eventDetails:any) => {
+  const handleIncreverSe = async (id: number, eventDetails: any) => {
     try {
       await inscreverse(Number(id));
       toast({
@@ -179,7 +179,7 @@ const NovosAgendamentosList: React.FC = () => {
   };
 
   const columns: TableColumnsType<DataType> = isMobile
-  ? [
+    ? [
       {
         title: 'nome_evento',
         dataIndex: 'nome_evento',
@@ -212,16 +212,16 @@ const NovosAgendamentosList: React.FC = () => {
         },
       },
     ]
-  : [
-    {
-      title: 'Nome',
-      dataIndex: 'nome_evento',
-      key: 'nome_evento',
-      sorter: (a, b) => a.nome_evento.length - b.nome_evento.length,
-      sortOrder: sortedInfo.columnKey === 'nome_evento' ? sortedInfo.order : null,
-      ellipsis: true,
-      render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
-    },
+    : [
+      {
+        title: 'Nome',
+        dataIndex: 'nome_evento',
+        key: 'nome_evento',
+        sorter: (a, b) => a.nome_evento.length - b.nome_evento.length,
+        sortOrder: sortedInfo.columnKey === 'nome_evento' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
+      },
       {
         title: 'Cidade',
         dataIndex: 'cidade',
@@ -277,37 +277,37 @@ const NovosAgendamentosList: React.FC = () => {
             default:
               color = 'gray';
           }
-          return  <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
+          return <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
         },
       },
-       {
-            title: 'Ações',
-            key: 'actions',
-            render: (_, record) => (
-            <HStack justifyContent={"center"}>
-                <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(Number(record.id))
-              }}>
-                <AiFillDelete />
-              </Button>
-              
-              <Button  isDisabled={record?.inscrito} variant={'ghost'} colorScheme='blue' onClick={(e) => {
-                e.stopPropagation();
-                const eventDetails = {
-                  nome: record?.nome_evento,
-                  dataInicio: new Date(record?.createdAt),
-                  dataFim: new Date(record?.createdAt),
-                  descricao: record?.tema,
-                  local: record?.cidade+", "+record?.estado,
-                };
-                handleIncreverSe(Number(record.id), eventDetails)
-              }}>
-                {record?.inscrito ? "Inscrito": "Inscreva-se"}
-              </Button>
-            </HStack>
-            ),
-          },
+      {
+        title: 'Ações',
+        key: 'actions',
+        render: (_, record) => (
+          <HStack justifyContent={"center"}>
+            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(Number(record.id))
+            }}>
+              <AiFillDelete />
+            </Button>
+
+            <Button isDisabled={record?.inscrito} variant={'ghost'} colorScheme='blue' onClick={(e) => {
+              e.stopPropagation();
+              const eventDetails = {
+                nome: record?.nome_evento,
+                dataInicio: new Date(record?.createdAt),
+                dataFim: new Date(record?.createdAt),
+                descricao: record?.tema,
+                local: record?.cidade + ", " + record?.estado,
+              };
+              handleIncreverSe(Number(record.id), eventDetails)
+            }}>
+              {record?.inscrito ? "Inscrito" : "Inscreva-se"}
+            </Button>
+          </HStack>
+        ),
+      },
     ];
 
 
@@ -325,50 +325,74 @@ const NovosAgendamentosList: React.FC = () => {
           Adicionar
         </Button>
       </Flex>
-      <Flex mb={6} justify="flex-start" align="center" gap={4} width="100%">
-  {/* Select para escolher o tipo de filtro */}
-  <Select
-    options={filterOptions}
-    value={filterType}
-    onChange={setFilterType}
-    style={{ width: 180, height: "40px" }}
-  />
-
-  {/* Input único para busca */}
-{
-  filterType === 'situacao' ?
-  <Select
-    options={situacaoFilterOptions}
-    value={situacaoFilterType}
-    onChange={setSituacaoFilterType}
-    style={{ width: 180, height: "40px" }}
-  />
-  :
-  <Input
-  allowClear
-    placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
-    value={searchValue}
-    onChange={(e) => setSearchValue(e.target.value)}
-    style={{ height: "40px", width: 240 }}
-  />
-
-}
-
-
-
-
-  {/* Filtro por data */}
-  <DatePicker.RangePicker
-    value={dateRange ? [dateRange[0], dateRange[1]] : null}
-    onChange={(dates) => setDateRange(dates)}
-    style={{ width: 300, height: "40px" }}
-  />
-
-  {/* Botão de busca */}
-  <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
-    Buscar
-  </Button>
-</Flex>
+         <Flex mb={6} justify="flex-start" align="center" gap={4} width="100%">
+           {/* Select para escolher o tipo de filtro */}
+   
+           <Select
+             className="button-premium"
+             options={filterOptions}
+             value={filterType}
+             onChange={setFilterType}
+             style={{
+               width: 280,
+               height: "40px",
+               color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
+             }}
+           />
+   
+           {/* Input único para busca */}
+           {
+             filterType === 'situacao' ?
+               <Select
+                 options={situacaoFilterOptions}
+                 value={situacaoFilterType}
+                 onChange={setSituacaoFilterType}
+                 style={{ width: 180, height: "40px" }}
+               />
+               :
+               <Input
+                 className='button-premium'
+                 allowClear
+                 placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
+                 value={searchValue}
+                 onChange={(e) => setSearchValue(e.target.value)}
+                 style={{
+                   height: "40px", width: 240,
+                   backgroundColor: "transparent",
+                   color: "white",
+                   borderRadius: "0px", borderColor: "#2596be",
+                   borderWidth: "1px"
+                 }}
+               />
+   
+           }
+   
+   
+   
+   
+           {/* Filtro por data */}
+           <DatePicker.RangePicker
+             value={dateRange ? [dateRange[0], dateRange[1]] : null}
+             onChange={(dates) => setDateRange(dates)}
+             dropdownClassName="custom-dropdown"
+             style={{
+               width: 300, height: "40px",
+               backgroundColor: "transparent",
+               color: "white",
+               borderRadius: "0px", borderColor: "#2596be",
+   
+               borderWidth: "1px"
+             }}
+             inputReadOnly={false} // Impede a leitura do placeholder, permitindo estilização
+           />
+   
+   
+           {/* Botão de busca */}
+           <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
+             Buscar
+           </Button>
+         </Flex>
+  
 
       <Table<DataType>
         columns={columns}
@@ -378,7 +402,7 @@ const NovosAgendamentosList: React.FC = () => {
         pagination={{ ...pagination, total }}
         scroll={{ x: 'max-content' }}
         onRow={(record) => ({
-          onClick: () =>{
+          onClick: () => {
             // navigate('/main/update-membro/'+record?.id)
           },
           style: { cursor: 'pointer', minHeight: '70vh' }

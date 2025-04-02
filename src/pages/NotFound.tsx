@@ -12,7 +12,7 @@ const NotFound = () => {
       bg="#1A202C"  // Cor de fundo #1A202C
       p={4}
     >
-      <VStack spacing={6} textAlign="center" color="white">
+      <VStack className="heading-title" spacing={6} textAlign="center" color="white">
         <Heading as="h1" size="4xl" color="teal.300">  {/* Cor do título */}
           404
         </Heading>
