@@ -321,18 +321,145 @@ function Out() {
                     Cadastros
                   </Link>
                   {activeMenu === 'cadastros' && (
-                    <VStack align="start" spacing={6} pl={6}>
+                    <VStack align="start" spacing={2} pl={6}>
+                      {permissoes.includes('read.users') &&
+                        <Link
+                          pt={3}
+                          href="#"
+                          display="flex"
+                          alignItems="center"
+                          color="black"
+                          _hover={{ color: 'teal.400' }}
+                          onClick={() => navigate('/main/users')}
+                        >
+                          <FaUsersCog style={{ marginRight: '8px' }} />
+                          Usuários
+                        </Link>
+                      }
+                      {permissoes.includes('read.profiles') &&
+                        <Link
+                          href="#"
+                          display="flex"
+                          alignItems="center"
+                          color="black"
+                          _hover={{ color: 'teal.400' }}
+                          onClick={() => navigate('/main/perfis')}
+                        >
+                          <FaUsersCog style={{ marginRight: '8px' }} />
+                          Perfis
+                        </Link>
+                      }
+                      {permissoes.includes('read.membros') &&
+                        <Link
+                          href="#"
+                          display="flex"
+                          alignItems="center"
+                          color="black"
+                          _hover={{ color: 'teal.400' }}
+                          onClick={() => navigate('/main/novos-membros')}
+                        >
+                          <FaUsersCog style={{ marginRight: '8px' }} />
+                          Novos Membros
+                        </Link>
+                      }
+                      {permissoes.includes('read.apoiadores') &&
+                        <Link
+                          href="#"
+                          display="flex"
+                          alignItems="center"
+                          color="black"
+                          _hover={{ color: 'teal.400' }}
+                          onClick={() => navigate('/main/apoiadores')}
+                        >
+                          <FaUsersCog style={{ marginRight: '8px' }} />
+                          Novos Parceiros
+                        </Link>
+                      }
+                    </VStack>
+                  )}
+                </Box>
+                {/* Categoria Eventos (Drawer) */}
+                <Box width="100%">
+                  <Link
+                    href="#"
+                    display="flex"
+                    alignItems="center"
+                    color="black"
+                    _hover={{ color: 'teal.400' }}
+                    onClick={() => toggleSubMenu('eventos')}
+                  >
+                    <FaCalendarAlt style={{ marginRight: '8px' }} />
+                    Eventos
+                  </Link>
+                  {activeMenu === 'eventos' && (
+                    <VStack align="start" spacing={2} pl={6}>
+                      {permissoes.includes('eventos.inscricao') &&
+                        <>
+                          <Link
+                            href="#"
+                            display="flex"
+                            alignItems="center"
+                            color="black"
+                            _hover={{ color: 'teal.400' }}
+                            onClick={() => navigate('/main/todos-eventos')}
+                          >
+                            <FaCalendarAlt style={{ marginRight: '8px' }} />
+                            Eventos
+                          </Link>
+
+                          <Link
+                            href="#"
+                            display="flex"
+                            alignItems="center"
+                            color="black"
+                            _hover={{ color: 'teal.400' }}
+                            onClick={() => navigate('/main/meus-eventos')}
+                          >
+                            <FaCalendarAlt style={{ marginRight: '8px' }} />
+                            Meus Eventos
+                          </Link>
+                        </>
+                      }
+                      {permissoes.includes('manage.eventos') &&
+                        <Link
+                          href="#"
+                          display="flex"
+                          alignItems="center"
+                          color="black"
+                          _hover={{ color: 'teal.400' }}
+                          onClick={() => navigate('/main/agenda-eventos')}
+                        >
+                          <FaCalendarAlt style={{ marginRight: '8px' }} />
+                          Agenda de Eventos
+                        </Link>}
+                    </VStack>
+                  )}
+                </Box>
+                {/* Categoria Compras (Drawer) */}
+                <Box width="100%">
+                  <Link
+                    href="#"
+                    display="flex"
+                    alignItems="center"
+                    color="black"
+                    _hover={{ color: 'teal.400' }}
+                    onClick={() => toggleSubMenu('compras')}
+                  >
+                    <FaUsersCog style={{ marginRight: '8px' }} />
+                    Compras
+                  </Link>
+                  {activeMenu === 'compras' && (
+                    <VStack align="start" spacing={2} pl={6}>
                       <Link
-                        pt={3}
                         href="#"
                         display="flex"
                         alignItems="center"
                         color="black"
                         _hover={{ color: 'teal.400' }}
-                        onClick={() => navigate('/main/users')}
+                        onClick={() => navigate('/main/list-evento-compras')}
                       >
                         <FaUsersCog style={{ marginRight: '8px' }} />
-                        Usuários
+                        Gerenciar Compra Coletiva
                       </Link>
                       <Link
                         href="#"
@@ -340,10 +467,10 @@ function Out() {
                         alignItems="center"
                         color="black"
                         _hover={{ color: 'teal.400' }}
-                        onClick={() => navigate('/main/perfis')}
+                        onClick={() => navigate('/main/list-compra-coletiva')}
                       >
                         <FaUsersCog style={{ marginRight: '8px' }} />
-                        Perfis
+                        Compras Coletivas
                       </Link>
                       <Link
                         href="#"
@@ -351,26 +478,14 @@ function Out() {
                         alignItems="center"
                         color="black"
                         _hover={{ color: 'teal.400' }}
-                        onClick={() => navigate('/main/novos-membros')}
+                        onClick={() => navigate('/main/list-product')}
                       >
                         <FaUsersCog style={{ marginRight: '8px' }} />
-                        Novos Membros
-                      </Link>
-                      <Link
-                        href="#"
-                        display="flex"
-                        alignItems="center"
-                        color="black"
-                        _hover={{ color: 'teal.400' }}
-                        onClick={() => navigate('/main/apoiadores')}
-                      >
-                        <FaUsersCog style={{ marginRight: '8px' }} />
-                        Novos Parceiros
+                        Produtos
                       </Link>
                     </VStack>
                   )}
                 </Box>
-
                 <Link
                   href="#"
                   display="flex"

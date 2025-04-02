@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker, Select } from 'antd';
-import { Heading, Flex, Button, useToast, Tag } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, Tag, useMediaQuery } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchUsers, deleteUser } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
-
 
 interface DataType {
   id: string;
@@ -35,6 +34,7 @@ const TableUsers: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
   const toast = useToast();
+  const [isMobile] = useMediaQuery('(max-width: 768px)');
 
   const filterOptions = [
     { label: 'Nome', value: 'username' },
@@ -53,39 +53,29 @@ const TableUsers: React.FC = () => {
 
   const [searchValue, setSearchValue] = useState<string>('');
 
-
   const fetchData = async (page: number) => {
     setLoading(true);
     try {
       const startDate = dateRange?.[0]?.format('YYYY-MM-DD') || undefined;
       const endDate = dateRange?.[1]?.format('YYYY-MM-DD') || undefined;
-      console.clear()
-      console.log(searchQuery, filterType)
+      console.clear();
+      console.log(searchQuery, filterType);
 
-      const filterOptions = [
-        { label: 'Nome', value: 'username' },
-        { label: 'Email', value: 'email' },
-        { label: 'Perfil', value: 'profile' },
-        { label: 'Situação', value: 'situacao' },
-      ];
-      const obj:any = {
+      const obj: any = {};
 
+      if (filterType === 'username') {
+        obj.name = searchValue;
       }
-
-      if(filterType === 'username'){
-        obj.name = searchValue
+      if (filterType === 'email') {
+        obj.email = searchValue;
       }
-      if(filterType === 'email'){
-        obj.email = searchValue
+      if (filterType === 'profile') {
+        obj.profile = searchValue;
       }
-      if(filterType === 'profile'){
-        obj.profile = searchValue
+      if (filterType === 'situacao') {
+        obj.situacao = situacaoFilterType;
       }
-      if(filterType === 'situacao'){
-        obj.situacao = situacaoFilterType
-      }
-      console.log(obj)
-      // Passar searchQuery e dateRange dentro de filters
+      console.log(obj);
       const response = await fetchUsers(page, pagination?.pageSize || 10, { obj, startDate, endDate });
       setData(response.users);
       setTotal(response.total);
@@ -100,7 +90,6 @@ const TableUsers: React.FC = () => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchData(pagination.current || 1);
@@ -138,84 +127,121 @@ const TableUsers: React.FC = () => {
     }
   };
 
-  const columns: TableColumnsType<DataType> = [
-    {
-      title: 'Nome',
-      dataIndex: 'username',
-      key: 'username',
-      sorter: (a, b) => a.username.length - b.username.length,
-      sortOrder: sortedInfo.columnKey === 'username' ? sortedInfo.order : null,
-      ellipsis: true,
-      render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-      sorter: (a, b) => a.email.length - b.email.length,
-      sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
-      ellipsis: true,
-      render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-    },
-    {
-      title: 'Cadastrado em',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
-      ellipsis: true,
-      render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
-    },
-    {
-      title: 'Situação',
-      dataIndex: 'situacao',
-      key: 'situacao',
-      render: (status: string) => {
-        let color = 'gray';
-        if (status === 'ATIVO') {
-          color = 'green';
-        } else if (status === 'INATIVO') {
-          color = 'red';
-        } else if (status === 'PENDENTE') {
-          color = 'orange';
-        }
-        return <Tag colorScheme={color}>{status.toLocaleLowerCase()}</Tag>
-      },
-      filters: [
-        { text: 'Ativo', value: 'ATIVO' },
-        { text: 'Inactive', value: 'Inactive' },
-        { text: 'Pending', value: 'Pending' },
-      ],
-      filteredValue: filteredInfo.status || null,
-      onFilter: (value, record) => record.situacao.includes(value as string),
-    },
-    {
-      title: 'Perfil',
-      dataIndex: 'profile',
-      key: 'profile',
-      render: (profile: { name: string }) => <span>{profile?.name}</span>, // Acessando o nome do perfil
-    },
-    {
-      title: 'Ações',
-      key: 'actions',
-      render: (_, record) => (
-        <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-          e.stopPropagation();
-          handleDelete(record.id)
-        }}>
-          <AiFillDelete />
-        </Button>
-      ),
-    },
-  ];
-
+  const columns: TableColumnsType<DataType> = isMobile
+    ? [
+        {
+          title: 'Email',
+          dataIndex: 'email',
+          key: 'email',
+          ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+        },
+        {
+          title: 'Situação',
+          dataIndex: 'situacao',
+          key: 'situacao',
+          render: (status: string) => {
+            let color = 'gray';
+            if (status === 'ATIVO') {
+              color = 'green';
+            } else if (status === 'INATIVO') {
+              color = 'red';
+            } else if (status === 'PENDENTE') {
+              color = 'orange';
+            }
+            return <Tag colorScheme={color}>{status.toLocaleLowerCase()}</Tag>;
+          },
+        },
+        {
+          title: 'Ações',
+          key: 'actions',
+          render: (_, record) => (
+            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(record.id);
+            }}>
+              <AiFillDelete />
+            </Button>
+          ),
+        },
+      ]
+    : [
+        {
+          title: 'Nome',
+          dataIndex: 'username',
+          key: 'username',
+          sorter: (a, b) => a.username.length - b.username.length,
+          sortOrder: sortedInfo.columnKey === 'username' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
+        },
+        {
+          title: 'Email',
+          dataIndex: 'email',
+          key: 'email',
+          sorter: (a, b) => a.email.length - b.email.length,
+          sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+        },
+        {
+          title: 'Cadastrado em',
+          dataIndex: 'createdAt',
+          key: 'createdAt',
+          sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+        },
+        {
+          title: 'Situação',
+          dataIndex: 'situacao',
+          key: 'situacao',
+          render: (status: string) => {
+            let color = 'gray';
+            if (status === 'ATIVO') {
+              color = 'green';
+            } else if (status === 'INATIVO') {
+              color = 'red';
+            } else if (status === 'PENDENTE') {
+              color = 'orange';
+            }
+            return <Tag colorScheme={color}>{status.toLocaleLowerCase()}</Tag>;
+          },
+          filters: [
+            { text: 'Ativo', value: 'ATIVO' },
+            { text: 'Inactive', value: 'Inactive' },
+            { text: 'Pending', value: 'Pending' },
+          ],
+          filteredValue: filteredInfo.status || null,
+          onFilter: (value, record) => record.situacao.includes(value as string),
+        },
+        {
+          title: 'Perfil',
+          dataIndex: 'profile',
+          key: 'profile',
+          render: (profile: { name: string }) => <span>{profile?.name}</span>,
+        },
+        {
+          title: 'Ações',
+          key: 'actions',
+          render: (_, record) => (
+            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(record.id);
+            }}>
+              <AiFillDelete />
+            </Button>
+          ),
+        },
+      ];
 
   return (
     <>
       <Flex mb={6} justify='space-between' align='center' width='100%'>
         <Heading className='heading-title' fontSize='2xl' fontWeight='bold'>Usuários</Heading>
         <Button
-        className='button-premium'
+          className='button-premium'
           onClick={() => navigate('/main/create-user')}
           colorScheme='green'
           fontSize='16px'
@@ -224,70 +250,43 @@ const TableUsers: React.FC = () => {
           Adicionar
         </Button>
       </Flex>
-      <Flex mb={6} justify="flex-start" align="center" gap={4} width="100%">
-  {/* Select para escolher o tipo de filtro */}
-  <Select
-  className="button-premium"
-  options={filterOptions}
-  value={filterType}
-  onChange={setFilterType}
-  style={{
-    width: 180, 
-    height: "40px", 
-    color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
-  }}
-/>
-  {/* Input único para busca */}
-{
-  filterType === 'situacao' ?
-  <Select
-  className='button-premium'
-    options={situacaoFilterOptions}
-    value={situacaoFilterType}
-    onChange={setSituacaoFilterType}
-    style={{ width: 180, height: "40px" }}
-  />
-  :
-  <Input
-  className='button-premium'
-  allowClear
-    placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
-    value={searchValue}
-    onChange={(e) => setSearchValue(e.target.value)}
-    style={{
-       height: "40px", width: 240,
-       backgroundColor: "transparent",
-       color: "white",
-       borderRadius: "0px", borderColor: "#2596be",
-       borderWidth: "1px" 
-      }}
-  />
-
-}
-
-
-
-
-  {/* Filtro por data */}
-  <DatePicker.RangePicker
-    value={dateRange ? [dateRange[0], dateRange[1]] : null}
-    onChange={(dates) => setDateRange(dates)}
-    dropdownClassName="custom-dropdown"
-    style={{
-      width: 300, height: "40px",
-      backgroundColor: "transparent",
-      color: "white",
-      borderRadius: "0px", borderColor: "#2596be",
-
-      borderWidth: "1px" }}
-      inputReadOnly={false} // Impede a leitura do placeholder, permitindo estilização
-  />
-
-  {/* Botão de busca */}
-  <Button className='button-premium' colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
-    Buscar
-  </Button>
-</Flex>
+      <Flex mb={6} justify="flex-start" align="center" gap={isMobile ? 2 : 4} width="100%" flexWrap="wrap">
+        <Select
+          className="button-premium"
+          options={filterOptions}
+          value={filterType}
+          onChange={setFilterType}
+          style={{ width: isMobile ? "100%" : 180, height: "40px", color: "white" }}
+        />
+        {filterType === 'situacao' ? (
+          <Select
+            className='button-premium'
+            options={situacaoFilterOptions}
+            value={situacaoFilterType}
+            onChange={setSituacaoFilterType}
+            style={{ width: isMobile ? "100%" : 180, height: "40px" }}
+          />
+        ) : (
+          <Input
+            className='button-premium'
+            allowClear
+            placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            style={{ height: "40px", width: isMobile ? "100%" : 240, backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          />
+        )}
+        <DatePicker.RangePicker
+          value={dateRange ? [dateRange[0], dateRange[1]] : null}
+          onChange={(dates) => setDateRange(dates)}
+          dropdownClassName="custom-dropdown"
+          style={{ width: isMobile ? "100%" : 300, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          inputReadOnly={false}
+        />
+        <Button className='button-premium' colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'}>
+          Buscar
+        </Button>
+      </Flex>
 
       <Table<DataType>
         columns={columns}
@@ -297,10 +296,10 @@ const TableUsers: React.FC = () => {
         pagination={{ ...pagination, total }}
         scroll={{ x: 'max-content' }}
         onRow={(record) => ({
-          onClick: () =>{
-            navigate('/main/update-user/'+record?.id)
+          onClick: () => {
+            navigate('/main/update-user/' + record?.id);
           },
-          style: { cursor: 'pointer' }
+          style: { cursor: 'pointer' },
         })}
       />
     </>

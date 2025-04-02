@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker, Select } from 'antd';
-import { Heading, Flex, Button, useToast, Tag, useMediaQuery } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, useMediaQuery } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchUsers, deleteUser, fetchMembros, deleteMembro, fetchApoiadores } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
-
-
 
 interface DataType {
   id: number;
@@ -20,7 +18,6 @@ interface DataType {
   categoria_empresa: string;
   createdAt: string;
 }
-
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type Filters = Parameters<OnChange>[1];
@@ -48,7 +45,6 @@ const NovosApoiadoresTable: React.FC = () => {
     { label: 'CNPJ', value: 'cnpj' },
   ];
 
-
   const situacaoFilterOptions = [
     { label: 'Ativo', value: 'ATIVO' },
     { label: 'Inativo', value: 'INATIVO' },
@@ -59,39 +55,26 @@ const NovosApoiadoresTable: React.FC = () => {
 
   const [searchValue, setSearchValue] = useState<string>('');
 
-
   const fetchData = async (page: number) => {
     setLoading(true);
     try {
       const startDate = dateRange?.[0]?.format('YYYY-MM-DD') || undefined;
       const endDate = dateRange?.[1]?.format('YYYY-MM-DD') || undefined;
-      console.clear()
-      console.log(searchQuery, filterType)
+      console.clear();
+      console.log(searchQuery, filterType);
 
-      const filterOptions = [
-        { label: 'Nome', value: 'username' },
-        { label: 'Email', value: 'email' },
-        { label: 'Perfil', value: 'profile' },
-        { label: 'Situação', value: 'situacao' },
-      ];
-      const obj: any = {
-
-      }
+      const obj: any = {};
 
       if (filterType === 'name') {
-        obj.name = searchValue
+        obj.name = searchValue;
       }
       if (filterType === 'email') {
-        obj.email = searchValue
-      }
-      if (filterType === 'profile') {
-        obj.profile = searchValue
+        obj.email = searchValue;
       }
       if (filterType === 'cnpj') {
-        obj.cnpj = searchValue
+        obj.cnpj = searchValue;
       }
-      console.log(obj)
-      // Passar searchQuery e dateRange dentro de filters
+      console.log(obj);
       const response = await fetchApoiadores(page, 10, startDate, endDate, { obj });
       setData(response.membros);
       setTotal(response.total);
@@ -106,7 +89,6 @@ const NovosApoiadoresTable: React.FC = () => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchData(pagination.current || 1);
@@ -146,95 +128,101 @@ const NovosApoiadoresTable: React.FC = () => {
 
   const columns: TableColumnsType<DataType> = isMobile
     ? [
-      {
-        title: 'Nome',
-        dataIndex: 'nome_empresa',
-        key: 'nome_empresa',
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'nome_empresa' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
-      },
-      {
-        title: 'Atividade',
-        dataIndex: 'activity',
-        key: 'activity',
-        sorter: (a, b) => a.area_atuacao.length - b.area_atuacao.length,
-        sortOrder: sortedInfo.columnKey === 'activity' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-      },
-    ]
+        {
+          title: 'Nome',
+          dataIndex: 'nome_empresa',
+          key: 'nome_empresa',
+          ellipsis: true,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
+        },
+        {
+          title: 'E-mail',
+          dataIndex: 'email',
+          key: 'email',
+          ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+        },
+        {
+          title: 'Ações',
+          key: 'actions',
+          render: (_, record) => (
+            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(record.id);
+            }}>
+              <AiFillDelete />
+            </Button>
+          ),
+        },
+      ]
     : [
-      {
-        title: 'Nome',
-        dataIndex: 'nome_empresa',
-        key: 'nome_empresa',
-        sorter: (a, b) => a.nome_empresa.length - b.nome_empresa.length,
-        sortOrder: sortedInfo.columnKey === 'nome_empresa' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>, // Aumentando o tamanho e negrito
-      },
-      {
-        title: 'CNPJ',
-        dataIndex: 'cnpj',
-        key: 'cnpj',
-        sorter: (a, b) => a.cnpj.localeCompare(b.cnpj),
-        sortOrder: sortedInfo.columnKey === 'cnpj' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>, // Melhorando o estilo da célula
-      },
-      {
-        title: 'Cadastrado em',
-        dataIndex: 'createdAt',
-        key: 'createdAt',
-        sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
-      },
-      {
-        title: 'E-mail',
-        dataIndex: 'email',
-        key: 'email',
-        sorter: (a, b) => a.email.length - b.email.length,
-        sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>, // Melhorando o estilo da célula
-      },
-      {
-        title: 'Telefone',
-        dataIndex: 'telefone',
-        key: 'telefone',
-        sorter: (a, b) => a.telefone.localeCompare(b.telefone),
-        sortOrder: sortedInfo.columnKey === 'telefone' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>, // Melhorando o estilo da célula
-      },
-      {
-        title: 'Atividade',
-        dataIndex: 'area_atuacao',
-        key: 'area_atuacao',
-        sorter: (a, b) => a.area_atuacao.length - b.area_atuacao.length,
-        sortOrder: sortedInfo.columnKey === 'area_atuacao' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>, // Melhorando o estilo da célula
-      },
-      {
-        title: 'Ações',
-        key: 'actions',
-        render: (_, record) => (
-          <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-            e.stopPropagation();
-            handleDelete(record.id)
-          }}>
-            <AiFillDelete />
-          </Button>
-        ),
-      },
-    ];
-
-
+        {
+          title: 'Nome',
+          dataIndex: 'nome_empresa',
+          key: 'nome_empresa',
+          sorter: (a, b) => a.nome_empresa.length - b.nome_empresa.length,
+          sortOrder: sortedInfo.columnKey === 'nome_empresa' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
+        },
+        {
+          title: 'CNPJ',
+          dataIndex: 'cnpj',
+          key: 'cnpj',
+          sorter: (a, b) => a.cnpj.localeCompare(b.cnpj),
+          sortOrder: sortedInfo.columnKey === 'cnpj' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+        },
+        {
+          title: 'Cadastrado em',
+          dataIndex: 'createdAt',
+          key: 'createdAt',
+          sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+        },
+        {
+          title: 'E-mail',
+          dataIndex: 'email',
+          key: 'email',
+          sorter: (a, b) => a.email.length - b.email.length,
+          sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+        },
+        {
+          title: 'Telefone',
+          dataIndex: 'telefone',
+          key: 'telefone',
+          sorter: (a, b) => a.telefone.localeCompare(b.telefone),
+          sortOrder: sortedInfo.columnKey === 'telefone' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+        },
+        {
+          title: 'Atividade',
+          dataIndex: 'area_atuacao',
+          key: 'area_atuacao',
+          sorter: (a, b) => a.area_atuacao.length - b.area_atuacao.length,
+          sortOrder: sortedInfo.columnKey === 'area_atuacao' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+        },
+        {
+          title: 'Ações',
+          key: 'actions',
+          render: (_, record) => (
+            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(record.id);
+            }}>
+              <AiFillDelete />
+            </Button>
+          ),
+        },
+      ];
 
   return (
     <>
@@ -249,72 +237,39 @@ const NovosApoiadoresTable: React.FC = () => {
           Adicionar
         </Button>
       </Flex>
-      <Flex mb={6} justify="flex-start" align="center" gap={4} width="100%">
-        {/* Select para escolher o tipo de filtro */}
+      <Flex mb={6} justify="flex-start" align="center" gap={isMobile ? 2 : 4} width="100%" flexWrap="wrap">
         <Select
           className="button-premium"
           options={filterOptions}
           value={filterType}
           onChange={setFilterType}
-          style={{
-            width: 180,
-            height: "40px",
-            color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
-          }}
+          style={{ width: isMobile ? "100%" : 180, height: "40px", color: "white" }}
         />
-
-        {/* Input único para busca */}
-        {
-          filterType === 'situacao' ?
-            <Select
-              options={situacaoFilterOptions}
-              value={situacaoFilterType}
-              onChange={setSituacaoFilterType}
-              style={{ width: 180, height: "40px" }}
-            />
-            :
-
-            <Input
-              className='button-premium'
-              allowClear
-              placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              style={{
-                height: "40px",
-                width: "248px",
-                backgroundColor: "transparent",
-                color: "white",
-                borderRadius: "0px", borderColor: "#2596be",
-                borderWidth: "1px"
-              }}
-            />
-
-        }
-
-
-
-
-        {/* Filtro por data */}
-
-
+        {filterType === 'situacao' ? (
+          <Select
+            options={situacaoFilterOptions}
+            value={situacaoFilterType}
+            onChange={setSituacaoFilterType}
+            style={{ width: isMobile ? "100%" : 180, height: "40px" }}
+          />
+        ) : (
+          <Input
+            className='button-premium'
+            allowClear
+            placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            style={{ height: "40px", width: isMobile ? "100%" : 248, backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          />
+        )}
         <DatePicker.RangePicker
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
           onChange={(dates) => setDateRange(dates)}
           dropdownClassName="custom-dropdown"
-          style={{
-            width: 300, height: "40px",
-            backgroundColor: "transparent",
-            color: "white",
-            borderRadius: "0px", borderColor: "#2596be",
-
-            borderWidth: "1px"
-          }}
-          inputReadOnly={false} // Impede a leitura do placeholder, permitindo estilização
+          style={{ width: isMobile ? "100%" : 300, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          inputReadOnly={false}
         />
-
-        {/* Botão de busca */}
-        <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
+        <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'}>
           Buscar
         </Button>
       </Flex>
@@ -328,7 +283,7 @@ const NovosApoiadoresTable: React.FC = () => {
         scroll={{ x: 'max-content' }}
         onRow={(record) => ({
           onClick: () => {
-            navigate('/main/update-apoiador/' + record?.id)
+            navigate('/main/update-apoiador/' + record?.id);
           },
           style: { cursor: 'pointer' }
         })}

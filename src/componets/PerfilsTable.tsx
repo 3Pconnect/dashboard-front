@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker } from 'antd';
-import { Heading, Flex, Button, useToast } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, useMediaQuery } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchProfiles, deleteProfile } from '../services/api';
@@ -31,6 +31,7 @@ const PerfilsTable: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
   const toast = useToast();
+  const [isMobile] = useMediaQuery('(max-width: 768px)');
 
   const fetchData = async (page: number) => {
     setLoading(true);
@@ -134,38 +135,24 @@ const PerfilsTable: React.FC = () => {
         </Button>
       </Flex>
 
-      <Flex mb={6} justify='flex-start' align='center' gap={4} width='100%'>
-  
-          <Input
+      <Flex mb={6} justify='flex-start' align='center' gap={isMobile ? 2 : 4} width='100%' flexWrap="wrap">
+        <Input
           className='button-premium'
           allowClear
-            placeholder={`Buscar por nome `}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-               height: "40px", width: 240,
-               backgroundColor: "transparent",
-               color: "white",
-               borderRadius: "0px", borderColor: "#2596be",
-               borderWidth: "1px" 
-              }}
-          />
+          placeholder={`Buscar por nome`}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ height: "40px", width: isMobile ? "100%" : 240, backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+        />
 
-
-          <DatePicker.RangePicker
-            value={dateRange ? [dateRange[0], dateRange[1]] : null}
-            onChange={(dates) => setDateRange(dates)}
-            dropdownClassName="custom-dropdown"
-            style={{
-              width: 300, height: "40px",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px", borderColor: "#2596be",
-        
-              borderWidth: "1px" }}
-              inputReadOnly={false} // Impede a leitura do placeholder, permitindo estilização
-          />
-        <Button w={200} colorScheme='blue' onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
+        <DatePicker.RangePicker
+          value={dateRange ? [dateRange[0], dateRange[1]] : null}
+          onChange={(dates) => setDateRange(dates)}
+          dropdownClassName="custom-dropdown"
+          style={{ width: isMobile ? "100%" : 300, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          inputReadOnly={false}
+        />
+        <Button w={isMobile ? '100%' : 200} colorScheme='blue' onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
           Buscar
         </Button>
       </Flex>
