@@ -8,7 +8,6 @@ import dayjs, { Dayjs } from 'dayjs';
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-
 interface DataType {
   id: string;
   nome_evento: string;
@@ -21,7 +20,6 @@ interface DataType {
   dataEvento: string;
   urlImage: string;
 }
-
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
 type Filters = Parameters<OnChange>[1];
@@ -47,7 +45,6 @@ const TodosEventosList: React.FC = () => {
     { label: 'Nome', value: 'nome_evento' },
     { label: 'Tema', value: 'tema' },
   ];
-  
 
   const situacaoFilterOptions = [
     { label: 'Ativo', value: 'ATIVO' },
@@ -59,41 +56,28 @@ const TodosEventosList: React.FC = () => {
 
   const [searchValue, setSearchValue] = useState<string>('');
 
-
   const fetchData = async (page: number) => {
     setLoading(true);
     try {
       const startDate = dateRange?.[0]?.format('YYYY-MM-DD') || undefined;
       const endDate = dateRange?.[1]?.format('YYYY-MM-DD') || undefined;
-      console.clear()
-      console.log(searchQuery, filterType)
+      console.clear();
+      console.log(searchQuery, filterType);
 
-      const filterOptions = [
-        { label: 'Nome', value: 'username' },
-        { label: 'Email', value: 'email' },
-        { label: 'Perfil', value: 'profile' },
-        { label: 'Situação', value: 'situacao' },
-      ];
-      const obj:any = {
+      const obj: any = {};
 
+      if (filterType === 'nome_evento') {
+        obj.nome_evento = searchValue;
       }
-
-      if(filterType === 'nome_evento'){
-        obj.nome_evento = searchValue
+      if (filterType === 'tema') {
+        obj.tema = searchValue;
       }
-      if(filterType === 'tema'){
-        obj.tema = searchValue
+      if (filterType === 'situacao') {
+        obj.situacao = situacaoFilterType;
       }
-      if(filterType === 'profile'){
-        obj.profile = searchValue
-      }
-      if(filterType === 'situacao'){
-        obj.situacao = situacaoFilterType
-      }
-      console.log(obj)
-      // Passar searchQuery e dateRange dentro de filters
-      const response = await fetchEventos(page, 10, startDate, endDate, {obj});
-      console.log(response)
+      console.log(obj);
+      const response = await fetchEventos(page, 10, startDate, endDate, { obj });
+      console.log(response);
       setData(response?.eventos);
       setTotal(response?.total);
       setPagination((prev) => ({
@@ -108,19 +92,17 @@ const TodosEventosList: React.FC = () => {
     }
   };
 
-  const redirectToGoogleCalendar = (eventDetails:any) => {
+  const redirectToGoogleCalendar = (eventDetails: any) => {
     const { nome, dataInicio, dataFim, descricao, local } = eventDetails;
     const start = dataInicio.toISOString().replace(/[-:]/g, "").split(".")[0];
     const end = dataFim.toISOString().replace(/[-:]/g, "").split(".")[0];
-  
+
     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nome)}&dates=${start}/${end}&details=${encodeURIComponent(descricao)}&location=${encodeURIComponent(local)}`;
-  
+
     setTimeout(() => {
       window.open(googleCalendarUrl, '_blank');
-    }, 3000); 
+    }, 3000);
   };
-
-  
 
   useEffect(() => {
     fetchData(pagination.current || 1);
@@ -158,7 +140,7 @@ const TodosEventosList: React.FC = () => {
     }
   };
 
-  const handleIncreverSe = async (id: number, eventDetails:any) => {
+  const handleIncreverSe = async (id: number, eventDetails: any) => {
     try {
       await inscreverse(Number(id));
       toast({
@@ -168,7 +150,7 @@ const TodosEventosList: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
-      redirectToGoogleCalendar(eventDetails)
+      redirectToGoogleCalendar(eventDetails);
       fetchData(pagination.current || 1);
     } catch (error) {
       toast({
@@ -180,140 +162,6 @@ const TodosEventosList: React.FC = () => {
       });
     }
   };
-
-  const columns: TableColumnsType<DataType> = isMobile
-  ? [
-      {
-        title: 'nome_evento',
-        dataIndex: 'nome_evento',
-        key: 'nome_evento',
-        sorter: (a, b) => a.nome_evento.length - b.nome_evento.length,
-        sortOrder: sortedInfo.columnKey === 'nome_evento' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
-      },
-      {
-        title: 'Situação',
-        dataIndex: 'status',
-        key: 'status',
-        render: (status: string) => {
-          let color = '';
-          switch (status) {
-            case 'ativo':
-              color = 'green';
-              break;
-            case 'inativo':
-              color = 'red';
-              break;
-            case 'pendente':
-              color = 'orange';
-              break;
-            default:
-              color = 'gray';
-          }
-          return <Tag color={color}>{status}</Tag>;
-        },
-      },
-    ]
-  : [
-    {
-      title: 'Nome',
-      dataIndex: 'nome_evento',
-      key: 'nome_evento',
-      sorter: (a, b) => a.nome_evento.length - b.nome_evento.length,
-      sortOrder: sortedInfo.columnKey === 'nome_evento' ? sortedInfo.order : null,
-      ellipsis: true,
-      render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
-    },
-      {
-        title: 'Cidade',
-        dataIndex: 'cidade',
-        key: 'cidade',
-        sorter: (a, b) => a.cidade.length - b.cidade.length,
-        sortOrder: sortedInfo.columnKey === 'cidade' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
-      },
-      {
-        title: 'Estado',
-        dataIndex: 'estado',
-        key: 'estado',
-        sorter: (a, b) => a.estado.length - b.estado.length,
-        sortOrder: sortedInfo.columnKey === 'estado' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-      },
-      {
-        title: 'Tema',
-        dataIndex: 'tema',
-        key: 'tema',
-        sorter: (a, b) => a.tema.length - b.tema.length,
-        sortOrder: sortedInfo.columnKey === 'tema' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-      },
-      {
-        title: 'Cadastrado em',
-        dataIndex: 'createdAt',
-        key: 'createdAt',
-        sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
-      },
-      {
-        title: 'Situação',
-        dataIndex: 'situacao',
-        key: 'situacao',
-        render: (status: string) => {
-          let color = '';
-          switch (status) {
-            case 'ativo':
-              color = 'green';
-              break;
-            case 'inativo':
-              color = 'red';
-              break;
-            case 'pendente':
-              color = 'orange';
-              break;
-            default:
-              color = 'gray';
-          }
-          return  <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
-        },
-      },
-       {
-            title: 'Ações',
-            key: 'actions',
-            render: (_, record) => (
-            <HStack justifyContent={"center"}>
-                <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(Number(record.id))
-              }}>
-                <AiFillDelete />
-              </Button>
-              
-              <Button  isDisabled={record?.inscrito} variant={'ghost'} colorScheme='blue' onClick={(e) => {
-                e.stopPropagation();
-                const eventDetails = {
-                  nome: record?.nome_evento,
-                  dataInicio: new Date(record?.createdAt),
-                  dataFim: new Date(record?.createdAt),
-                  descricao: record?.tema,
-                  local: record?.cidade+", "+record?.estado,
-                };
-                handleIncreverSe(Number(record.id), eventDetails)
-              }}>
-                {record?.inscrito ? "Inscrito": "Inscreva-se"}
-              </Button>
-            </HStack>
-            ),
-          },
-    ];
-
-
 
   return (
     <>
@@ -328,133 +176,89 @@ const TodosEventosList: React.FC = () => {
           Adicionar
         </Button>
       </Flex>
-      <Flex mb={6} justify="flex-start" align="center" gap={4} width="100%">
-  {/* Select para escolher o tipo de filtro */}
+      <Flex mb={6} justify="flex-start" align="center" gap={isMobile ? 2 : 4} width="100%" flexWrap="wrap">
+        <Select
+          className="button-premium"
+          options={filterOptions}
+          value={filterType}
+          onChange={setFilterType}
+          style={{ width: isMobile ? "100%" : 280, height: "40px", color: "white" }}
+        />
+        {filterType === 'situacao' ? (
+          <Select
+            options={situacaoFilterOptions}
+            value={situacaoFilterType}
+            onChange={setSituacaoFilterType}
+            style={{ width: isMobile ? "100%" : 180, height: "40px" }}
+          />
+        ) : (
+          <Input
+            className='button-premium'
+            allowClear
+            placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            style={{ width: isMobile ? "100%" : 240, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          />
+        )}
+        <DatePicker.RangePicker
+          value={dateRange ? [dateRange[0], dateRange[1]] : null}
+          onChange={(dates) => setDateRange(dates)}
+          dropdownClassName="custom-dropdown"
+          style={{ width: isMobile ? "100%" : 300, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          inputReadOnly={false}
+        />
+        <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'} >
+          Buscar
+        </Button>
+      </Flex>
 
-   <Select
-    className="button-premium"
-    options={filterOptions}
-    value={filterType}
-    onChange={setFilterType}
-    style={{
-      width: 280, 
-      height: "40px", 
-      color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
-    }}
-  />
-
-  {/* Input único para busca */}
-{
-  filterType === 'situacao' ?
-  <Select
-    options={situacaoFilterOptions}
-    value={situacaoFilterType}
-    onChange={setSituacaoFilterType}
-    style={{ width: 180, height: "40px" }}
-  />
-  :
-    <Input
-    className='button-premium'
-    allowClear
-      placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
-      value={searchValue}
-      onChange={(e) => setSearchValue(e.target.value)}
-      style={{
-         height: "40px", width: 240,
-         backgroundColor: "transparent",
-         color: "white",
-         borderRadius: "0px", borderColor: "#2596be",
-         borderWidth: "1px" 
-        }}
-    />
-
-}
-
-
-
-
-  {/* Filtro por data */}
-    <DatePicker.RangePicker
-      value={dateRange ? [dateRange[0], dateRange[1]] : null}
-      onChange={(dates) => setDateRange(dates)}
-      dropdownClassName="custom-dropdown"
-      style={{
-        width: 300, height: "40px",
-        backgroundColor: "transparent",
-        color: "white",
-        borderRadius: "0px", borderColor: "#2596be",
-  
-        borderWidth: "1px" }}
-        inputReadOnly={false} // Impede a leitura do placeholder, permitindo estilização
-    />
-  
-
-  {/* Botão de busca */}
-  <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
-    Buscar
-  </Button>
-</Flex>
-
-      {/* <Table<DataType>
-        columns={columns}
-        dataSource={data}
-        loading={loading}
-        onChange={handleTableChange}
-        pagination={{ ...pagination, total }}
-        scroll={{ x: 'max-content' }}
-        onRow={(record) => ({
-          onClick: () =>{
-            // navigate('/main/update-membro/'+record?.id)
-          },
-          style: { cursor: 'pointer', minHeight: '70vh' }
-        })}
-      /> */}
-
-<SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-  {data.map(record => (
-    <Box
-      key={record.id}
-      bg="#2D3748"
-      color="white"
-      borderRadius="lg"
-      boxShadow="lg"
-      p={4}
-      width={{ base: "100%", md: "500px" }}
-    >
-      <Image
-        src={"https://i.ibb.co/8n8Gb6F0/Design-sem-nome.png"}
-        borderRadius="md"
-        mb={3}
-      />
-      <VStack align="start" spacing={2}>
-        <Text fontSize="lg" fontWeight="bold">
-          {record.nome_evento}
-        </Text>
-        <Text fontSize="sm" color="gray.300">
-          {record.cidade}, {record.estado}, {record?.dataEvento
-  ? format(new Date(record.dataEvento), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
-  : "Data indisponível"	}
-        </Text>
-        <HStack mt={3} width="100%" justifyContent="space-between">
-          <Button  isDisabled={record.inscrito ? true : false} w={"full"}
-          colorScheme="blue" size="sm" onClick={() => {
-            const eventDetails = {
-              nome: record?.nome_evento,
-              dataInicio: new Date(record?.createdAt),
-              dataFim: new Date(record?.createdAt),
-              descricao: record?.tema,
-              local: record?.cidade+", "+record?.estado,
-            };
-            handleIncreverSe(Number(record.id), eventDetails)
-          }}>
-            {record.inscrito ? "Inscrito" : "Inscreva-se"}
-          </Button>
-        </HStack>
-      </VStack>
-    </Box>
-  ))}
-</SimpleGrid>
-
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+        {data.map(record => (
+          <Box
+            key={record.id}
+            bg="#2D3748"
+            color="white"
+            borderRadius="lg"
+            boxShadow="lg"
+            p={4}
+            width="100%"
+          >
+            <Image
+              src={"https://i.ibb.co/8n8Gb6F0/Design-sem-nome.png"}
+              borderRadius="md"
+              mb={3}
+              width={'100%'}
+              objectFit={"cover"}
+            />
+            <VStack align="start" spacing={2}>
+              <Text fontSize="lg" fontWeight="bold">
+                {record.nome_evento}
+              </Text>
+              <Text fontSize="sm" color="gray.300">
+                {record.cidade}, {record.estado}, {record?.dataEvento
+                  ? format(new Date(record.dataEvento), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
+                  : "Data indisponível"}
+              </Text>
+              <HStack mt={3} width="100%" justifyContent="space-between">
+                <Button isDisabled={record.inscrito ? true : false} w={"full"}
+                  colorScheme="blue" size="sm" onClick={() => {
+                    const eventDetails = {
+                      nome: record?.nome_evento,
+                      dataInicio: new Date(record?.createdAt),
+                      dataFim: new Date(record?.createdAt),
+                      descricao: record?.tema,
+                      local: record?.cidade + ", " + record?.estado,
+                    };
+                    handleIncreverSe(Number(record.id), eventDetails)
+                  }}>
+                  {record.inscrito ? "Inscrito" : "Inscreva-se"}
+                </Button>
+              </HStack>
+            </VStack>
+          </Box>
+        ))}
+      </SimpleGrid>
     </>
   );
 };
