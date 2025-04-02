@@ -80,9 +80,9 @@ export const App = () => {
     return <Loading/>
   }
 
-  if (erro) {
-    return <div>{erro}</div>;
-  }
+  // if (erro) {
+  //   return <div>{erro}</div>;
+  // }
 
 
 
