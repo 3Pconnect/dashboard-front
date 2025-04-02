@@ -25,7 +25,7 @@ export const CreateUser = () => {
     { label: 'Pendente', value: 'PENDENTE' },
   ];
 
-  const showNav = useBreakpointValue({ base: false, md: true });  // Controla a visibilidade do nav
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   useEffect(() => {
     const loadProfiles = async () => {
@@ -87,13 +87,20 @@ export const CreateUser = () => {
 
   return (
     <Flex direction="column" p={4}>
-      {showNav && (
-        <Flex mb={10} justify="space-between" align="center" wrap="wrap" width="100%">
-          <Flex align="center">
-            <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />} mr={4} onClick={() => window.history.back()}>
-              Voltar
-            </Button>
-            <Breadcrumb>
+      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
+        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
+          <Button
+            colorScheme="white"
+            variant="ghost"
+            leftIcon={<Icon as={MdArrowBack} />}
+            mr={{ base: 0, md: 4 }}
+            mb={{ base: 2, md: 0 }}
+            onClick={() => window.history.back()}
+          >
+            Voltar
+          </Button>
+          {!isMobile && (
+            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
               <BreadcrumbItem>
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
@@ -104,16 +111,13 @@ export const CreateUser = () => {
                 <BreadcrumbLink href="#">Usuários</BreadcrumbLink>
               </BreadcrumbItem>
             </Breadcrumb>
-          </Flex>
-          <Heading className="heading-title" fontSize="2xl" fontWeight="bold">Cadastrar Usuário</Heading>
+          )}
         </Flex>
-      )}
+        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign={{ base: 'left', md: 'right' }}>
+          Cadastrar Usuário
+        </Heading>
+      </Flex>
 
-      {!showNav && (
-        <Flex mb={10} justify="space-between" align="center" wrap="wrap" width="100%">
-          <Heading pt={5} className="heading-title" fontSize="2xl" fontWeight="bold">Cadastrar Usuário</Heading>
-        </Flex>
-      )}
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box>
           <Text className="indicator-title" mb={2}>Nome</Text>

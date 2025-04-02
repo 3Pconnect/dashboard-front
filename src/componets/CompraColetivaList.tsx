@@ -33,7 +33,6 @@ const CompraColetivaList: React.FC = () => {
 
   const isMobile = useBreakpointValue({ base: true, md: false });
   const datePickerWidth = useBreakpointValue({ base: '100%', md: '300px' });
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
@@ -124,13 +123,18 @@ const CompraColetivaList: React.FC = () => {
       key: 'produto',
       sorter: (a, b) => a.produto.localeCompare(b.produto),
     },
-    {
-      title: 'Preço',
-      dataIndex: 'preco',
-      key: 'preco',
-      sorter: (a, b) => a.preco - b.preco,
-      render: (preco) => `R$ ${preco.toFixed(2)}`,
-    },
+    ...(isMobile
+      ? []
+      : [
+        {
+          title: 'Preço',
+          dataIndex: 'preco',
+          key: 'preco',
+          sorter: (a:any, b:any) => a.preco - b.preco,
+          render: (preco:any) => `R$ ${preco.toFixed(2)}`,
+        },
+        ]),
+
     ...(isMobile
       ? []
       : [

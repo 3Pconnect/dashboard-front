@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchEventos, deleteEvento, inscreverse, fetchMeusEventos } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
+import { truncateString } from '../utils/util';
 
 interface DataType {
   id: string;
@@ -166,15 +167,15 @@ const MeusEventosTable: React.FC = () => {
           dataIndex: 'nome_evento',
           key: 'nome_evento',
           ellipsis: true,
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{truncateString(text, 10)}</span>,
         },
-        {
-          title: 'Estado',
-          dataIndex: 'estado',
-          key: 'estado',
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
+        // {
+        //   title: 'Estado',
+        //   dataIndex: 'estado',
+        //   key: 'estado',
+        //   ellipsis: true,
+        //   render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+        // },
         {
           title: 'Ações',
           key: 'actions',
@@ -292,14 +293,14 @@ const MeusEventosTable: React.FC = () => {
     <>
       <Flex mb={6} justify='space-between' align='center' width='100%'>
         <Heading fontSize='2xl' fontWeight='bold'>Meus Eventos</Heading>
-        <Button
+        {/* <Button
           onClick={() => navigate('/main/create-evento')}
           colorScheme='green'
           fontSize='16px'
           fontWeight='bold'
         >
           Adicionar
-        </Button>
+        </Button> */}
       </Flex>
       <Flex mb={6} justify="flex-start" align="center" gap={isMobile ? 2 : 4} width="100%" flexWrap="wrap">
         <Select

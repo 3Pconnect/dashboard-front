@@ -135,13 +135,13 @@ const NovosApoiadoresTable: React.FC = () => {
           ellipsis: true,
           render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
         },
-        {
-          title: 'E-mail',
-          dataIndex: 'email',
-          key: 'email',
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
+        // {
+        //   title: 'E-mail',
+        //   dataIndex: 'email',
+        //   key: 'email',
+        //   ellipsis: true,
+        //   render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+        // },
         {
           title: 'Ações',
           key: 'actions',

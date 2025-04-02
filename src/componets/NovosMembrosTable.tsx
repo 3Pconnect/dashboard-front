@@ -144,28 +144,28 @@ const NovosMembrosTable: React.FC = () => {
           ellipsis: true,
           render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
         },
-        {
-          title: 'Situação',
-          dataIndex: 'situacao',
-          key: 'situacao',
-          render: (status: string) => {
-            let color = '';
-            switch (status) {
-              case 'ativo':
-                color = 'green';
-                break;
-              case 'inativo':
-                color = 'red';
-                break;
-              case 'pendente':
-                color = 'orange';
-                break;
-              default:
-                color = 'gray';
-            }
-            return <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
-          },
-        },
+        // {
+        //   title: 'Situação',
+        //   dataIndex: 'situacao',
+        //   key: 'situacao',
+        //   render: (status: string) => {
+        //     let color = '';
+        //     switch (status) {
+        //       case 'ativo':
+        //         color = 'green';
+        //         break;
+        //       case 'inativo':
+        //         color = 'red';
+        //         break;
+        //       case 'pendente':
+        //         color = 'orange';
+        //         break;
+        //       default:
+        //         color = 'gray';
+        //     }
+        //     return <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
+        //   },
+        // },
         {
           title: 'Ações',
           key: 'actions',

@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Grid, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
+import { Button, Flex, Heading, Grid, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, useBreakpointValue } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { DatePicker, Input, Select } from "antd";
@@ -6,7 +6,6 @@ import { Dayjs } from "dayjs";
 import { registerEvento } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
-// Tipos para os dados das respostas da API
 interface Estado {
   sigla: string;
   nome: string;
@@ -29,6 +28,7 @@ export const CreateNovoEvento = () => {
   const [dataEvento, setDataEvento] = useState<Dayjs | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   const carregarEstados = async () => {
     try {
@@ -100,31 +100,33 @@ export const CreateNovoEvento = () => {
 
   return (
     <>
-      <Flex mb={10} justify="space-between" align="center" width="100%">
-        <Flex align="center">
+      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
+        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
           <Button
             colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
-            mr={4}
+            mr={{ base: 0, md: 4 }}
+            mb={{ base: 2, md: 0 }}
             onClick={() => window.history.back()}
           >
             Voltar
           </Button>
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/agenda">Agenda</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="#">Eventos</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+          {!isMobile && (
+            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/agenda">Agenda</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink href="#">Eventos</BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+          )}
         </Flex>
-
-        <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>
+        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign={{ base: 'left', md: 'right' }}>
           Agendar Evento
         </Heading>
       </Flex>
@@ -151,12 +153,12 @@ export const CreateNovoEvento = () => {
         <Box mb={4}>
           <Text mb={2}>Estados</Text>
           <Select
-        className="button-premium"
-      style={{
-        width: "100%", 
-        height: "40px", 
-        color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
-      }}
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
             placeholder="Selecione o estado"
             value={estadoSelecionado}
             onChange={(e) => setEstadoSelecionado(e)}
@@ -178,9 +180,9 @@ export const CreateNovoEvento = () => {
             value={cidadeSelecionada}
             className="button-premium"
             style={{
-              width: "100%", 
-              height: "40px", 
-              color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
+              width: "100%",
+              height: "40px",
+              color: "white",
             }}
             onChange={(value) => setCidadeSelecionada(value as string)}
           >
@@ -215,33 +217,32 @@ export const CreateNovoEvento = () => {
       <Box mt={5}>
         <Text mb={2}>Data do Evento</Text>
         <DatePicker
-    
-  style={{
-    width: "100%",
-    height: "40px",
-    backgroundColor: "transparent",
-    color: "white",
-    borderRadius: "0px",
-    borderColor: "#2596be",
-    borderWidth: "1px",
-    "::placeholder": {
-      color: "white",
-    },
-  } as any} // Forçando o TypeScript a ignorar a verificação de tipos
-  inputReadOnly={false}
-  onChange={(date) => setDataEvento(date)}
-/>
+          style={{
+            width: "100%",
+            height: "40px",
+            backgroundColor: "transparent",
+            color: "white",
+            borderRadius: "0px",
+            borderColor: "#2596be",
+            borderWidth: "1px",
+            "::placeholder": {
+              color: "white",
+            },
+          } as any}
+          inputReadOnly={false}
+          onChange={(date) => setDataEvento(date)}
+        />
       </Box>
 
       <Box mt={5}>
         <Text mb={2}>Situação</Text>
         <Select
-                className="button-premium"
-                style={{
-                  width: "100%", 
-                  height: "40px", 
-                  color: "white",  // Cor do texto (opcional, para contrastar com o fundo)
-                }}
+          className="button-premium"
+          style={{
+            width: "100%",
+            height: "40px",
+            color: "white",
+          }}
           options={filterOptions}
           value={situacao}
           onChange={(value) => setSituacao(value as string)}

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchEventos, deleteEvento, inscreverse } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
+import { truncateString } from '../utils/util';
 
 interface DataType {
   id: string;
@@ -166,14 +167,29 @@ const NovosAgendamentosList: React.FC = () => {
           dataIndex: 'nome_evento',
           key: 'nome_evento',
           ellipsis: true,
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{truncateString(text, 10)}</span>,
         },
         {
-          title: 'Estado',
-          dataIndex: 'estado',
-          key: 'estado',
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+          title: 'Situação',
+          dataIndex: 'situacao',
+          key: 'situacao',
+          render: (status: string) => {
+            let color = '';
+            switch (status) {
+              case 'ativo':
+                color = 'green';
+                break;
+              case 'inativo':
+                color = 'red';
+                break;
+              case 'pendente':
+                color = 'orange';
+                break;
+              default:
+                color = 'gray';
+            }
+            return <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
+          },
         },
         {
           title: 'Ações',
@@ -185,19 +201,6 @@ const NovosAgendamentosList: React.FC = () => {
                 handleDelete(Number(record.id));
               }}>
                 <AiFillDelete />
-              </Button>
-              <Button isDisabled={record?.inscrito} variant={'ghost'} colorScheme='blue' onClick={(e) => {
-                e.stopPropagation();
-                const eventDetails = {
-                  nome: record?.nome_evento,
-                  dataInicio: new Date(record?.createdAt),
-                  dataFim: new Date(record?.createdAt),
-                  descricao: record?.tema,
-                  local: record?.cidade + ", " + record?.estado,
-                };
-                handleIncreverSe(Number(record.id), eventDetails);
-              }}>
-                {record?.inscrito ? "Inscrito" : "Inscreva-se"}
               </Button>
             </HStack>
           ),

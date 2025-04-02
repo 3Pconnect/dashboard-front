@@ -167,14 +167,14 @@ const TodosEventosList: React.FC = () => {
     <>
       <Flex mb={6} justify='space-between' align='center' width='100%'>
         <Heading fontSize='2xl' fontWeight='bold'>Eventos</Heading>
-        <Button
+        {/* <Button
           onClick={() => navigate('/main/create-evento')}
           colorScheme='green'
           fontSize='16px'
           fontWeight='bold'
         >
           Adicionar
-        </Button>
+        </Button> */}
       </Flex>
       <Flex mb={6} justify="flex-start" align="center" gap={isMobile ? 2 : 4} width="100%" flexWrap="wrap">
         <Select

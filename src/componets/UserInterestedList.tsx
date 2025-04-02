@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps } from 'antd';
-import { Heading, Flex, Button, useToast, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useBreakpointValue } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MdArrowBack } from 'react-icons/md';
-import { fetchInteressadosCompra } from '../services/api'; // Importe a função de API correta
+import { fetchInteressadosCompra } from '../services/api';
 
 interface DataType {
   username: string;
@@ -22,10 +22,12 @@ const UserInterestedList: React.FC = () => {
   const [total, setTotal] = useState(0);
   const toast = useToast();
   const { id } = useParams();
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   const fetchData = async (page: number) => {
     setLoading(true);
     try {
-      const response = await fetchInteressadosCompra(Number(id), page, pagination?.pageSize || 10); // Substitua '5' pelo ID da compra desejada
+      const response = await fetchInteressadosCompra(Number(id), page, pagination?.pageSize || 10);
 
       const formattedData: DataType[] = response.data.map((item: any) => ({
         username: item.usuario.username,
@@ -50,13 +52,13 @@ const UserInterestedList: React.FC = () => {
 
   useEffect(() => {
     fetchData(pagination.current || 1);
-  }, [pagination.current]);
+  }, [pagination.current, id]);
 
   const handleTableChange: OnChange = (pagination) => {
     setPagination({ ...pagination, current: pagination.current || 1 });
   };
 
-  const columns: TableColumnsType<DataType> = [
+  const desktopColumns: TableColumnsType<DataType> = [
     {
       title: 'Nome',
       dataIndex: 'username',
@@ -80,6 +82,19 @@ const UserInterestedList: React.FC = () => {
     },
   ];
 
+    const mobileColumns: TableColumnsType<DataType> = [
+    {
+      title: 'Nome',
+      dataIndex: 'username',
+      key: 'username',
+    },
+    {
+      title: 'Quantidade',
+      dataIndex: 'quantidade',
+      key: 'quantidade',
+    },
+  ];
+
   return (
     <>
       <Flex mb={6} justify="space-between" align="center" width="100%">
@@ -87,27 +102,29 @@ const UserInterestedList: React.FC = () => {
           Interessados
         </Heading>
       </Flex>
-      <Flex mb={10} justify="space-between" align="center" wrap="wrap" width="100%">
-        <Flex align="center">
-          <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />} mr={4} onClick={() => window.history.back()}>
+      <Flex direction={{ base: 'column', md: 'row' }} mb={10} justify="space-between" align="center" width="100%">
+        <Flex align="center" mb={{ base: 2, md: 0 }}>
+          <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />} mr={{ base: 0, md: 4 }} onClick={() => window.history.back()}>
             Voltar
           </Button>
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/cadastro">Compras Coletivas</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="#">Interessados</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+          {!isMobile && (
+            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/cadastro">Compras Coletivas</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink href="#">Interessados</BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+          )}
         </Flex>
       </Flex>
 
       <Table<DataType>
-        columns={columns}
+        columns={isMobile ? mobileColumns : desktopColumns}
         dataSource={data}
         loading={loading}
         onChange={handleTableChange}

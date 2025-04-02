@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast } from "@chakra-ui/react";
+import { Button, Flex, Heading, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast, useBreakpointValue } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { createProfile } from "../services/api";
@@ -11,9 +11,9 @@ export const CreatePerfil: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const toast = useToast(); // Hook para o Toast
+  const toast = useToast();
   const navigate = useNavigate();
-
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, permissao: string) => {
     setPermissoes((prev) =>
@@ -30,7 +30,7 @@ export const CreatePerfil: React.FC = () => {
     try {
       const newProfile = await createProfile(nomePerfil, permissoes);
       console.log("Perfil criado com sucesso:", newProfile);
-      navigate('/main/perfis')
+      navigate('/main/perfis');
       toast({
         title: "Perfil Criado",
         description: "O perfil foi criado com sucesso.",
@@ -40,7 +40,6 @@ export const CreatePerfil: React.FC = () => {
       });
     } catch (err: any) {
       setError(err.message);
-
       toast({
         title: "Erro",
         description: "Ocorreu um erro ao criar o perfil.",
@@ -55,32 +54,33 @@ export const CreatePerfil: React.FC = () => {
 
   return (
     <>
-      <Flex mb={10} justify="space-between" align="center" width="100%">
-        <Flex align="center">
+      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
+        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
           <Button
             colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
-            mr={4}
+            mr={{ base: 0, md: 4 }}
+            mb={{ base: 2, md: 0 }}
             onClick={() => window.history.back()}
           >
             Voltar
           </Button>
-
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="#">Perfil</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+          {!isMobile && (
+            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink href="#">Perfil</BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+          )}
         </Flex>
-
-        <Heading fontSize="2xl" fontWeight="semibold">
+        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="semibold" textAlign={{ base: 'left', md: 'right' }}>
           Cadastrar Perfil
         </Heading>
       </Flex>
@@ -94,11 +94,13 @@ export const CreatePerfil: React.FC = () => {
           value={nomePerfil}
           onChange={(e) => setNomePerfil(e.target.value)}
           style={{
-            height: "40px", width: "100%",
+            height: "40px",
+            width: "100%",
             backgroundColor: "transparent",
             color: "white",
-            borderRadius: "0px", borderColor: "#2596be",
-            borderWidth: "1px"
+            borderRadius: "0px",
+            borderColor: "#2596be",
+            borderWidth: "1px",
           }}
         />
       </Box>

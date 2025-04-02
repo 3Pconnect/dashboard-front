@@ -8,6 +8,7 @@ import { createVenda, fetchProducts, fetchProfiles } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { DatePicker, Input, Table, TableColumnsType, TablePaginationConfig, TableProps } from "antd";
 import { Dayjs } from "dayjs";
+import { truncateString } from "../utils/util";
 
 interface DataType {
   id: string;
@@ -42,7 +43,7 @@ export const CreateEventoCompra = () => {
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
   const [filteredInfo, setFilteredInfo] = useState<Filters>({});
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
-  const datePickerWidth = useBreakpointValue({ base: "100%", md: "300px" });
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   useEffect(() => {
     const loadProfiles = async () => {
@@ -139,14 +140,15 @@ export const CreateEventoCompra = () => {
       key: 'nome',
       sorter: (a, b) => a.nome.localeCompare(b.nome),
       sortOrder: sortedInfo.columnKey === 'nome' ? sortedInfo.order : null,
+      render: (nome) => `R$ ${truncateString(nome, 10)}`,
       ellipsis: true,
     },
-    {
+    ...(isMobile ? [] : [{
       title: 'Descrição',
       dataIndex: 'descricao',
       key: 'descricao',
       ellipsis: true,
-    },
+    }]),
     {
       title: 'Preço',
       dataIndex: 'preco',
@@ -163,26 +165,28 @@ export const CreateEventoCompra = () => {
 
   return (
     <>
-      <Flex mb={10} className="indicator-title" justify="space-between" align="center" width="100%">
-        <Flex align="center">
+      <Flex direction={{ base: 'column', md: 'row' }} mb={10} justify="space-between" align="center" width="100%">
+        <Flex align="center" mb={{ base: 2, md: 0 }}>
           <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />}
-            mr={4} onClick={() => window.history.back()}>
+            mr={{ base: 0, md: 4 }} onClick={() => window.history.back()}>
             Voltar
           </Button>
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="#">Compra Coletiva</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+          {!isMobile && (
+            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink href="#">Compra Coletiva</BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+          )}
         </Flex>
         <Heading className="heading-title"
-          fontSize="2xl" style={{ fontWeight: 'bold' }}>Compra Coletiva</Heading>
+          fontSize={{ base: 'xl', md: '2xl' }} style={{ fontWeight: 'bold' }}>Compra Coletiva</Heading>
       </Flex>
 
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
@@ -271,7 +275,7 @@ export const CreateEventoCompra = () => {
         ) : (
           <Table<DataType>
             columns={columns}
-            style={{width: "100%"}}
+            style={{ width: "100%" }}
             dataSource={data}
             loading={loading}
             onChange={handleTableChange}

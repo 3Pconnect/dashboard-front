@@ -137,22 +137,6 @@ const TableUsers: React.FC = () => {
           render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
         },
         {
-          title: 'Situação',
-          dataIndex: 'situacao',
-          key: 'situacao',
-          render: (status: string) => {
-            let color = 'gray';
-            if (status === 'ATIVO') {
-              color = 'green';
-            } else if (status === 'INATIVO') {
-              color = 'red';
-            } else if (status === 'PENDENTE') {
-              color = 'orange';
-            }
-            return <Tag colorScheme={color}>{status.toLocaleLowerCase()}</Tag>;
-          },
-        },
-        {
           title: 'Ações',
           key: 'actions',
           render: (_, record) => (

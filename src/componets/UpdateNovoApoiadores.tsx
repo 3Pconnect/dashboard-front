@@ -1,7 +1,7 @@
-import { Button, Flex, Heading, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast } from "@chakra-ui/react";
-import { MdArrowBack } from "react-icons/md"; // Ícone para o botão de voltar
+import { Button, Flex, Heading, Grid, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, useBreakpointValue } from "@chakra-ui/react";
+import { MdArrowBack } from "react-icons/md";
 import { useEffect, useState } from "react";
-import { fetchMembroById, registerApoiador, registerMembro, updateApoiador } from "../services/api";
+import { fetchMembroById, updateApoiador } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { Input } from "antd";
 
@@ -15,13 +15,14 @@ export const UpdateNovoApoiadores = () => {
   const [cnpj, setCnpj] = useState("");
   const [atividade, setAtividade] = useState("");
   const [situacao, setSituacao] = useState("em_analise");
-  const [loading, setLoading] = useState(false); // Estado para controlar o loading
-  const toast = useToast(); // Hook para o Toast
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   const handleSubmit = async () => {
-    setLoading(true); // Inicia o loading ao clicar no botão
+    setLoading(true);
     try {
       const response = await updateApoiador(
         Number(id),
@@ -40,7 +41,7 @@ export const UpdateNovoApoiadores = () => {
         duration: 5000,
         isClosable: true,
       });
-      navigate('/main/apoiadores'); // Redireciona após o cadastro
+      navigate('/main/apoiadores');
     } catch (error) {
       toast({
         title: "Erro",
@@ -51,72 +52,64 @@ export const UpdateNovoApoiadores = () => {
       });
       console.error("Erro ao registrar membro", error);
     } finally {
-      setLoading(false); // Desativa o loading quando a requisição terminar
+      setLoading(false);
     }
   };
 
-
-    useEffect(() => {
-  
-      const loadMembro = async () => {
-        try {
-          const data = await fetchMembroById(Number(id));
-          setCnpj(data?.cnpj)
-          setEmail(data?.email)
-          setNomeEmpresa(data?.nome_empresa)
-          setCargo(data?.cargo)
-          setAtividade(data?.area_atuacao	)
-        } catch (error) {
-          console.error(error);
-        } finally {
-          //setLoading(false);
-        }
-      };
-      loadMembro();
-    }, []);
+  useEffect(() => {
+    const loadMembro = async () => {
+      try {
+        const data = await fetchMembroById(Number(id));
+        setCnpj(data?.cnpj);
+        setEmail(data?.email);
+        setNomeEmpresa(data?.nome_empresa);
+        setCargo(data?.cargo);
+        setAtividade(data?.area_atuacao);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        //setLoading(false);
+      }
+    };
+    loadMembro();
+  }, [id]);
 
   return (
     <>
-      <Flex mb={10} justify="space-between" align="center" width="100%">
-        <Flex align="center">
-          {/* Botão de Voltar */}
+      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
+        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
           <Button
-          colorScheme="white"
+            colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
-            mr={4}
-            onClick={() => window.history.back()} // Vai para a página anterior
+            mr={{ base: 0, md: 4 }}
+            mb={{ base: 2, md: 0 }}
+            onClick={() => window.history.back()}
           >
             Voltar
           </Button>
-
-          {/* Breadcrumb */}
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="#">Novos Membros</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+          {!isMobile && (
+            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink href="#">Novos Membros</BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+          )}
         </Flex>
-
-        <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>
+        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign={{ base: 'left', md: 'right' }}>
           Atualizar Apoiador
         </Heading>
       </Flex>
 
-      {/* Grid para os campos de Nome, E-mail, Empresa e Cargo */}
-      <Grid
-        templateColumns={{ base: "1fr", md: "1fr 1fr" }} // Responsivo: 1 coluna em mobile e 2 em dispositivos maiores
-        gap={4}
-      >
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
+      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+        <Box mb={4}>
           <Text mb={2}>Nome</Text>
-
           <Input
             className='button-premium'
             allowClear
@@ -133,7 +126,7 @@ export const UpdateNovoApoiadores = () => {
           />
         </Box>
 
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
+        <Box mb={4}>
           <Text mb={2}>E-mail</Text>
           <Input
             className='button-premium'
@@ -152,13 +145,9 @@ export const UpdateNovoApoiadores = () => {
         </Box>
       </Grid>
 
-      <Grid
-        templateColumns={{ base: "1fr", md: "1fr 1fr" }} // Responsivo
-        gap={4}
-      >
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
+      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+        <Box mb={4}>
           <Text mb={2}>Empresa</Text>
-
           <Input
             className='button-premium'
             allowClear
@@ -175,7 +164,7 @@ export const UpdateNovoApoiadores = () => {
           />
         </Box>
 
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
+        <Box mb={4}>
           <Text mb={2}>Cargo</Text>
           <Input
             className='button-premium'
@@ -193,12 +182,12 @@ export const UpdateNovoApoiadores = () => {
           />
         </Box>
 
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
+        <Box mb={4}>
           <Text mb={2}>Atividade</Text>
-                    <Input
+          <Input
             className='button-premium'
             allowClear
-               placeholder="Digite a atividade do membro"
+            placeholder="Digite a atividade do membro"
             value={atividade}
             onChange={(e) => setAtividade(e.target.value)}
             style={{
@@ -212,15 +201,12 @@ export const UpdateNovoApoiadores = () => {
         </Box>
       </Grid>
 
-      {/* Campo Situação */}
-
-      {/* Botão Salvar */}
       <VStack alignItems={"end"} mt={5}>
-        <Button 
-          colorScheme="green" 
-          onClick={handleSubmit} 
-          isLoading={loading} // Adiciona o estado de loading
-          loadingText="Cadastrando..." // Texto de carregamento
+        <Button
+          colorScheme="green"
+          onClick={handleSubmit}
+          isLoading={loading}
+          loadingText="Cadastrando..."
         >
           Salvar
         </Button>

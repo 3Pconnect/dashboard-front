@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast, Spinner } from "@chakra-ui/react";
+import { Button, Flex, Heading, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast, Spinner, useBreakpointValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { fetchProfileById, updateProfile } from "../services/api";
@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Input } from "antd";
 
 export const UpdatePerfil: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Pega o ID da rota
+  const { id } = useParams<{ id: string }>();
   const [permissoes, setPermissoes] = useState<string[]>([]);
   const [nomePerfil, setNomePerfil] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -15,12 +15,12 @@ export const UpdatePerfil: React.FC = () => {
 
   const toast = useToast();
   const navigate = useNavigate();
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   useEffect(() => {
     const loadProfile = async () => {
       try {
         if (!id) throw new Error("ID do perfil não encontrado.");
-
         const profile = await fetchProfileById(Number(id));
         setNomePerfil(profile.name);
         setPermissoes(profile.permissions);
@@ -30,7 +30,6 @@ export const UpdatePerfil: React.FC = () => {
         setLoading(false);
       }
     };
-
     loadProfile();
   }, [id]);
 
@@ -45,10 +44,8 @@ export const UpdatePerfil: React.FC = () => {
   const handleSave = async () => {
     setSaving(true);
     setError(null);
-
     try {
       if (!id) throw new Error("ID do perfil não encontrado.");
-
       const updatedProfile = await updateProfile(Number(id), nomePerfil, permissoes);
       toast({
         title: "Perfil Atualizado",
@@ -57,7 +54,6 @@ export const UpdatePerfil: React.FC = () => {
         duration: 5000,
         isClosable: true,
       });
-
       navigate('/main/perfis');
     } catch (err: any) {
       setError(err.message);
@@ -79,32 +75,33 @@ export const UpdatePerfil: React.FC = () => {
 
   return (
     <>
-      <Flex mb={10} justify="space-between" align="center" width="100%">
-        <Flex align="center">
+      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
+        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
           <Button
             colorScheme="white"
             variant="ghost"
             leftIcon={<Icon as={MdArrowBack} />}
-            mr={4}
+            mr={{ base: 0, md: 4 }}
+            mb={{ base: 2, md: 0 }}
             onClick={() => window.history.back()}
           >
             Voltar
           </Button>
-
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="#">Perfil</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+          {!isMobile && (
+            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink href="#">Perfil</BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+          )}
         </Flex>
-
-        <Heading fontSize="2xl" fontWeight="semibold">
+        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="semibold" textAlign={{ base: 'left', md: 'right' }}>
           Editar Perfil
         </Heading>
       </Flex>
