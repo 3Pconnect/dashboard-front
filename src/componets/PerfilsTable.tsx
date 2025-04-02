@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchProfiles, deleteProfile } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
+import { truncateString } from '../utils/util';
 
 interface DataType {
   id: number;
@@ -89,37 +90,57 @@ const PerfilsTable: React.FC = () => {
     }
   };
 
-  const columns: TableColumnsType<DataType> = [
-    {
-      title: 'Nome',
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
-      ellipsis: true,
-      render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
-    },
-    {
-      title: 'Cadastrado em',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
-      ellipsis: true,
-      render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
-    },
-    {
-      title: 'Ações',
-      key: 'actions',
-      render: (_, record) => (
-        <Flex onClick={() => navigate(`/main/update-perfil/${record.id}`)} style={{ cursor: 'pointer' }}>
-          <Button variant={'ghost'} colorScheme='red' onClick={(e) => { e.stopPropagation(); handleDelete(record.id); }}>
-            <AiFillDelete />
-          </Button>
-        </Flex>
-      ),
-    },
-  ];
+  const columns: TableColumnsType<DataType> = isMobile
+    ? [
+        {
+          title: 'Nome',
+          dataIndex: 'name',
+          key: 'name',
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{truncateString(text, 10)}</span>,
+        },
+        {
+          title: 'Ações',
+          key: 'actions',
+          render: (_, record) => (
+            <Flex onClick={() => navigate(`/main/update-perfil/${record.id}`)} style={{ cursor: 'pointer' }}>
+              <Button variant={'ghost'} colorScheme='red' onClick={(e) => { e.stopPropagation(); handleDelete(record.id); }}>
+                <AiFillDelete />
+              </Button>
+            </Flex>
+          ),
+        },
+      ]
+    : [
+        {
+          title: 'Nome',
+          dataIndex: 'name',
+          key: 'name',
+          sorter: (a, b) => a.name.length - b.name.length,
+          sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{truncateString(text, 10)}</span>,
+        },
+        {
+          title: 'Cadastrado em',
+          dataIndex: 'createdAt',
+          key: 'createdAt',
+          sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+        },
+        {
+          title: 'Ações',
+          key: 'actions',
+          render: (_, record) => (
+            <Flex onClick={() => navigate(`/main/update-perfil/${record.id}`)} style={{ cursor: 'pointer' }}>
+              <Button variant={'ghost'} colorScheme='red' onClick={(e) => { e.stopPropagation(); handleDelete(record.id); }}>
+                <AiFillDelete />
+              </Button>
+            </Flex>
+          ),
+        },
+      ];
 
   return (
     <>
