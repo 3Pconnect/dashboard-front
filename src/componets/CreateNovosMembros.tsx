@@ -8,7 +8,8 @@ import { Input, Select } from "antd";
 const filterOptions = [
   { label: 'Ativo', value: 'ativo' },
   { label: 'Inativo', value: 'inativo' },
-  { label: 'Pendente', value: 'pendente' },
+  { label: 'Em analise', value: 'em_analise' },
+  { label: 'Pagamento Pendente', value: 'pagamento_pendente' },
 ];
 
 export const CreateNovosMembros = () => {
@@ -114,6 +115,7 @@ export const CreateNovosMembros = () => {
           />
         </Box>
 
+
         <Box mb={4}>
           <Text mb={2}>E-mail</Text>
           <Input
@@ -169,22 +171,42 @@ export const CreateNovosMembros = () => {
             }}
           />
         </Box>
+
+        <Box mb={4}>
+          <Text mb={2}>CNPJ</Text>
+          <Input
+            className='button-premium'
+            allowClear
+            placeholder="Digite o cnpj aqui"
+            value={cnpj}
+            onChange={(e) => setCnpj(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
+          />
+        </Box>
+        <Box>
+          <Text mb={2}>Situação</Text>
+          <Select
+            className="button-premium"
+            options={filterOptions}
+            value={filterType}
+            onChange={setFilterType}
+            style={{
+              width: 180,
+              height: "40px",
+              color: "white",
+            }}
+          />
+        </Box>
       </Grid>
 
-      <Box mt={5}>
-        <Text mb={2}>Situação</Text>
-        <Select
-          className="button-premium"
-          options={filterOptions}
-          value={filterType}
-          onChange={setFilterType}
-          style={{
-            width: 180,
-            height: "40px",
-            color: "white",
-          }}
-        />
-      </Box>
+
+
 
       <VStack alignItems={"end"} mt={5}>
         <Button

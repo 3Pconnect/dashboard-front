@@ -1,10 +1,17 @@
-import { Button, Flex, Heading, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, HStack, useBreakpointValue } from "@chakra-ui/react";
+import { Button, Flex, Heading, Grid, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, HStack, useBreakpointValue } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { aprovarMembro, fetchMembroById, updateMembro, reprovarMembro } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { hasPermission } from "../utils/util";
-import { Input } from "antd";
+import { Input, Select } from "antd";
+
+const filterOptions = [
+  { label: 'Ativo', value: 'ativo' },
+  { label: 'Inativo', value: 'inativo' },
+  { label: 'Em analise', value: 'em_analise' },
+  { label: 'Pagamento Pendente', value: 'pagamento_pendente' },
+];
 
 export const UpdateNovoMembros = () => {
   const [name, setName] = useState("");
@@ -22,11 +29,15 @@ export const UpdateNovoMembros = () => {
   const [em_dia_com_obrigacoes, setEmDiaComObrigacoes] = useState(false);
   const [afiliacao, setAfiliacao] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [gerouCobranca, setGerouCobranca] = useState(false);
+
   const toast = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
   const [loadingAprovarReprovar, setLoadingAprovarReprovar] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
+
+  const [filterType, setFilterType] = useState<string>('inativo');
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -80,10 +91,9 @@ export const UpdateNovoMembros = () => {
         setAtendimentoCarrosPremium(data?.atendimento_carros_premium);
         setEmDiaComObrigacoes(data?.em_dia_com_obrigacoes);
         setAfiliacao(data?.afiliacao);
+        setGerouCobranca(data?.gerouCobranca);
       } catch (error) {
         console.error(error);
-      } finally {
-        //setLoading(false);
       }
     };
     loadMembro();
@@ -92,16 +102,21 @@ export const UpdateNovoMembros = () => {
   const handleAprovar = async () => {
     setLoadingAprovarReprovar(true);
     try {
+      // Aprova o membro
       await aprovarMembro(Number(id));
+
+      // Atualiza o estado de gerouCobranca para true (indicando que a cobrança foi gerada)
+      setGerouCobranca(true);
+
       toast({
         title: 'Usuário aprovado',
-        description: 'O usuário foi aprovado com sucesso.',
+        description: 'O usuário foi aprovado e a cobrança foi gerada com sucesso.',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
+
       navigate('/main/novos-membros');
-      setLoadingAprovarReprovar(false);
     } catch (error) {
       toast({
         title: 'Erro',
@@ -110,6 +125,7 @@ export const UpdateNovoMembros = () => {
         duration: 3000,
         isClosable: true,
       });
+    } finally {
       setLoadingAprovarReprovar(false);
     }
   };
@@ -246,9 +262,23 @@ export const UpdateNovoMembros = () => {
             }}
           />
         </Box>
+        <Box>
+          <Text mb={2}>Situação</Text>
+          <Select
+            className="button-premium"
+            options={filterOptions}
+            value={situacao}
+            onChange={setSituacao}
+            style={{
+              width: 180,
+              height: "40px",
+              color: "white",
+            }}
+          />
+        </Box>
       </Grid>
 
-      <Box mt={5} bg={"gray.700"} borderRadius={3} p={3}>
+      <Box className='button-premium' mt={5} bg={"gray.700"} borderRadius={3} p={3}>
         <Heading fontSize="lg" mb={4}>Checklist</Heading>
         <VStack align="start" spacing={2}>
           <Text><strong>É Bosch Car Service:</strong> {bosch_car_service ? 'Sim' : 'Não'}</Text>
@@ -259,27 +289,37 @@ export const UpdateNovoMembros = () => {
           <Text><strong>Categoria da Empresa:</strong> {nome_empresa || 'Não informado'}</Text>
           <Text><strong>Afiliado a Entidades, Sindicato ou Associação:</strong> {afiliacao ? 'Sim' : 'Não'}</Text>
         </VStack>
+
+        {/* Exibe a mensagem de que a cobrança foi gerada se o estado gerouCobranca for true */}
+        {gerouCobranca && (
+          <Text color="orange.400" mt={4}>
+            As cobranças foram geradas e enviado para o email. O usuário será ativado após a confirmação do pagamento.
+          </Text>
+        )}
       </Box>
 
-      <VStack alignItems={"end"} mt={5}>
+      <VStack className='button-premium' alignItems={"end"} mt={5}>
         <HStack>
           {hasPermission('aprovar_reprovar.membro') && (
             <>
+              {!gerouCobranca && (
+                <Button
+                  colorScheme="red"
+                  loadingText="Recusando..."
+                  onClick={handleReprovar}
+                  isLoading={loadingAprovarReprovar}
+                >
+                  Recusar
+                </Button>
+              )}
               <Button
-                colorScheme="red"
-                loadingText="Recusando..."
-                onClick={handleReprovar}
-                isLoading={loadingAprovarReprovar}
-              >
-                Recusar
-              </Button>
-              <Button
+                isDisabled={gerouCobranca} // Desabilita o botão se a cobrança foi gerada
                 colorScheme="green"
                 onClick={handleAprovar}
                 isLoading={loadingAprovarReprovar}
                 loadingText="Aprovando..."
               >
-                Aprovar
+                {gerouCobranca ? "Aprovado e Fatura Gerada" : "Aprovar e Enviar Cobrança"}
               </Button>
             </>
           )}
