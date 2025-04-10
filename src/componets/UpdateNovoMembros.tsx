@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { aprovarMembro, fetchMembroById, updateMembro, reprovarMembro } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { hasPermission } from "../utils/util";
-import { Input, Select } from "antd";
+import { DatePicker, Input, Select } from "antd";
+import dayjs, { Dayjs } from "dayjs";
 
 const filterOptions = [
   { label: 'Ativo', value: 'ativo' },
@@ -36,8 +37,10 @@ export const UpdateNovoMembros = () => {
   const { id } = useParams();
   const [loadingAprovarReprovar, setLoadingAprovarReprovar] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
-
+  const [dataEvento, setDataEvento] = useState<Dayjs | null>(dayjs());
   const [filterType, setFilterType] = useState<string>('inativo');
+
+  
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -49,7 +52,8 @@ export const UpdateNovoMembros = () => {
           email,
           nome_empresa,
           cargo,
-          situacao
+          situacao,
+          vencimento: dataEvento
         }
       );
       console.log("Membro registrado com sucesso", response);
@@ -263,6 +267,26 @@ export const UpdateNovoMembros = () => {
           />
         </Box>
         <Box>
+          <Text mb={2}>Próximo Vencimento</Text>
+          <DatePicker
+          value={dataEvento}
+            style={{
+              width: "100%",
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px",
+              "::placeholder": {
+                color: "white",
+              },
+            } as any}
+            inputReadOnly={false}
+            onChange={(date) => setDataEvento(date)}
+          />
+        </Box>
+        <Box>
           <Text mb={2}>Situação</Text>
           <Select
             className="button-premium"
@@ -276,6 +300,7 @@ export const UpdateNovoMembros = () => {
             }}
           />
         </Box>
+
       </Grid>
 
       <Box className='button-premium' mt={5} bg={"gray.700"} borderRadius={3} p={3}>

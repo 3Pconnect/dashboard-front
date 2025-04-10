@@ -1,8 +1,10 @@
 import axios from 'axios';
+import dayjs from 'dayjs';
 const url = process.env.REACT_APP_API_URL;
 console.log("URL:", url)
 const api = axios.create({
-  baseURL: 'https://api.seminariomecanicospremium.com.br',
+  //baseURL: 'https://api.seminariomecanicospremium.com.br',
+  baseURL: 'http://localhost:3001',
 });
 
 api.interceptors.request.use(
@@ -519,7 +521,8 @@ export const registerMembro = async (
   nome_empresa: string,
   cargo: string,
   cnpj: string,
-  situacao: string = "em_analise"
+  situacao: string = "em_analise",
+  vencimento?: dayjs.Dayjs | null | string
 ) => {
   try {
     const response = await api.post("/membros", {
@@ -531,6 +534,7 @@ export const registerMembro = async (
       cargo,
       cnpj,
       situacao,
+      vencimento
     }, {
       headers: {
         'Accept': 'application/json',

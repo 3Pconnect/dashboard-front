@@ -3,7 +3,8 @@ import { MdArrowBack } from "react-icons/md";
 import { useState } from "react";
 import { registerMembro } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import { Input, Select } from "antd";
+import { DatePicker, Input, Select } from "antd";
+import dayjs, { Dayjs } from "dayjs";
 
 const filterOptions = [
   { label: 'Ativo', value: 'ativo' },
@@ -27,6 +28,8 @@ export const CreateNovosMembros = () => {
   const navigate = useNavigate();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
+    const [dataEvento, setDataEvento] = useState<Dayjs | null>(dayjs());
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -38,7 +41,9 @@ export const CreateNovosMembros = () => {
         nome_empresa,
         cargo,
         cnpj,
-        filterType
+        filterType,
+        dataEvento
+
       );
       console.log("Membro registrado com sucesso", response);
       toast({
@@ -189,6 +194,26 @@ export const CreateNovosMembros = () => {
             }}
           />
         </Box>
+            <Box>
+                  <Text mb={2}>Próximo Vencimento</Text>
+                  <DatePicker
+                  value={dataEvento}
+                    style={{
+                      width: "100%",
+                      height: "40px",
+                      backgroundColor: "transparent",
+                      color: "white",
+                      borderRadius: "0px",
+                      borderColor: "#2596be",
+                      borderWidth: "1px",
+                      "::placeholder": {
+                        color: "white",
+                      },
+                    } as any}
+                    inputReadOnly={false}
+                    onChange={(date) => setDataEvento(date)}
+                  />
+                </Box>
         <Box>
           <Text mb={2}>Situação</Text>
           <Select

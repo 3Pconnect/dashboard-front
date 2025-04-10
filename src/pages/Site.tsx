@@ -54,7 +54,7 @@ const HeaderComponent = () => {
           backgroundClip="text"
           color="transparent"
         >
-          ASSOCIAÇÃO DOS MECÂNICOS PREMIUM BRASIL
+          ASSOCIAÇÃO DOS MECÂNICOS PddddddREMIUM BRASsssIL
         </Heading>
         <Text fontFamily={"Roboto, sans-serif"} color={"rgb(129, 175, 221)"} fontSize={{ base: "sm", md: "md" }} mb={8} maxWidth="600px" mx="auto">
           Bem-vindo à Associação dos Mecânicos Premium Brasil! Somos uma comunidade exclusiva de profissionais altamente qualificados e dedicados a fornecer serviços automotivos de alta qualidade.
