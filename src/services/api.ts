@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 const url = process.env.REACT_APP_API_URL;
 console.log("URL:", url)
 const api = axios.create({
-  baseURL: 'https://api.seminariomecanicospremium.com.br',
-//  baseURL: 'http://localhost:3001',
+  //baseURL: 'https://api.seminariomecanicospremium.com.br',
+  baseURL: 'http://localhost:3001',
 });
 
 api.interceptors.request.use(

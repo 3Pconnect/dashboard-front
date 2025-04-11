@@ -85,7 +85,14 @@ export const CreateInterest = () => {
 
     try {
       if (record && record.id) {
-        await demonstrarInteresse(record.id, parseInt(quantidadeDesejada, 10));
+        await demonstrarInteresse(record.id, parseInt(quantidadeDesejada, 10)).then((result=>{
+          console.log(result)
+          if(result?.url){
+            window.open(result?.url, '_blank');
+          }
+        }))
+
+       
 
         toast({
           title: "Interesse Demonstrado",
@@ -95,7 +102,7 @@ export const CreateInterest = () => {
           isClosable: true,
         });
 
-        navigate('/main/list-product'); // Redireciona para a lista de produtos após o sucesso
+        navigate('/main/list-compra-coletiva'); // Redireciona para a lista de produtos após o sucesso
       } else {
         toast({
           title: "Erro",
