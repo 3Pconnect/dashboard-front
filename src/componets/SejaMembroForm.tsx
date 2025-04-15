@@ -1,10 +1,14 @@
-import { Button, Flex, Heading, Input, Grid, Box, Text, VStack, Select, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, Image, Stack, Checkbox } from "@chakra-ui/react";
-import { MdArrowBack } from "react-icons/md"; // Ícone para o botão de voltar
+import {
+  Button, Flex, Heading, Grid, Box, Text, VStack,
+  Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, Image, Stack, Checkbox
+} from "@chakra-ui/react";
+import { MdArrowBack } from "react-icons/md";
 import { useState } from "react";
 import { registerMembro } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { Input, Select } from "antd";
 
-export const SejaMembroForm = () => {
+export const SejaMembroForm: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [tipo_usuario, setTipoUsuario] = useState("");
@@ -15,13 +19,124 @@ export const SejaMembroForm = () => {
   const [endereco, setEndereco] = useState("");
   const [site, setSite] = useState("");
   const [instagram, setInstagram] = useState("");
-  const [atendimentoCarrosPremium, setAtendimentoCarrosPremium] = useState(" ");
-  const [loading, setLoading] = useState(false); // Estado para controlar o loading
-  const toast = useToast(); // Hook para o Toast
+  const [atendimentoCarrosPremium, setAtendimentoCarrosPremium] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [submissionSuccess, setSubmissionSuccess] = useState(false);
+  const toast = useToast();
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    setLoading(true); // Inicia o loading ao clicar no botão
+    // Validações
+    if (!name) {
+      toast({
+        title: "Campo Obrigatório",
+        description: "Por favor, digite seu nome.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!email) {
+      toast({
+        title: "Campo Obrigatório",
+        description: "Por favor, digite seu e-mail.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast({
+        title: "E-mail Inválido",
+        description: "Por favor, digite um e-mail válido.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+
+    if (!telefone) {
+      toast({
+        title: "Campo Obrigatório",
+        description: "Por favor, digite seu telefone.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!nome_empresa) {
+      toast({
+        title: "Campo Obrigatório",
+        description: "Por favor, digite o nome da empresa.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!cargo) {
+      toast({
+        title: "Campo Obrigatório",
+        description: "Por favor, digite seu cargo.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!cnpj) {
+      toast({
+        title: "Campo Obrigatório",
+        description: "Por favor, digite o CNPJ da empresa.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    } else if (!/^\d{14}$/.test(cnpj)) {
+      toast({
+        title: "CNPJ Inválido",
+        description: "Por favor, digite um CNPJ válido (14 dígitos).",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+    
+
+    if (!atendimentoCarrosPremium) {
+      toast({
+        title: "Campo Obrigatório",
+        description: "Por favor, selecione a porcentagem de atendimento de carros premium.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!categoria) {
+      toast({
+        title: "Campo Obrigatório",
+        description: "Por favor, selecione a categoria da empresa.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await registerMembro(
         name,
@@ -35,14 +150,28 @@ export const SejaMembroForm = () => {
       );
       console.log("Membro registrado com sucesso", response);
       toast({
-        title: "Usuário Cadastrado",
-        description: "Usuário cadastrado com sucesso!",
+        title: "Cadastro Enviado",
+        description: "Seu cadastro foi enviado com sucesso!",
         status: "success",
         duration: 5000,
         isClosable: true,
       });
-     // navigate('/main/novos-membros'); // Redireciona após o cadastro
-    } catch (error) {
+      setSubmissionSuccess(true);
+      // Optionally reset the form after successful submission
+      setName("");
+      setEmail("");
+      setTipoUsuario("");
+      setTelefone("");
+      setNomeEmpresa("");
+      setCargo("");
+      setCnpj("");
+      setEndereco("");
+      setSite("");
+      setInstagram("");
+      setAtendimentoCarrosPremium("");
+      setCategoria("");
+      // navigate('/main/novos-membros');
+    } catch (error: any) {
       toast({
         title: "Erro",
         description: "Ocorreu um erro ao cadastrar o usuário.",
@@ -52,183 +181,282 @@ export const SejaMembroForm = () => {
       });
       console.error("Erro ao registrar membro", error);
     } finally {
-      setLoading(false); // Desativa o loading quando a requisição terminar
+      setLoading(false);
     }
   };
 
+  if (submissionSuccess) {
+    return (
+      <Box bg={"#07104a"} color={"white"} h={"100vh"} py={20} px={{ base: 4, md: 20 }} w={"full"} display="flex" justifyContent="center" alignItems="center">
+        <Box borderRadius={"5px"} p={10} bg={"#060c32"} maxWidth={{ base: "95%", md: "container.md", lg: "70%" }} width="100%" textAlign="center">
+          <VStack className="indicator-title" spacing={4} align="center">
+            <Image src="https://mecanicospremium.com.br/build/assets/logo-e787336c.png" alt="Logo Mecânicos Premium" boxSize="80px" />
+            <Heading fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" mt={4}>
+              Cadastro Enviado com Sucesso!
+            </Heading>
+            <Text fontSize="md">
+              Agradecemos o seu interesse em se tornar membro da Mecânicos Premium.
+              Seu cadastro foi enviado e está em análise. Em breve entraremos em contato.
+            </Text>
+            <Button colorScheme="blue" onClick={() => navigate("/")}>
+              Voltar para a Página Inicial
+            </Button>
+          </VStack>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
-    <>
-<Box bg={"#182433"} h={"auto"} pb={10} px={20} w={"full"}>
-    <VStack py={10}>
-    <Image src="https://mecanicospremium.com.br/build/assets/logo-e787336c.png" alt="Logo Mecânicos Premium" boxSize="50px" />
-        
-    </VStack>
-<Box borderRadius={"5px"}  p={5} bg={"white"}>
-<Flex mb={10} justify="space-between" align="center" width="full">
+    <Box className="indicator-title" bg={"#07104a"} color={"white"} h={"auto"} pb={10} px={{ base: 4, md: 20 }} w={"full"} display="flex" justifyContent="center" alignItems="center">
+      <Box borderRadius={"5px"} p={5} bg={"#060c32"} maxWidth={{ base: "95%", md: "container.md", lg: "70%" }} width="100%">
+        <VStack py={8} align="center">
+          <Image src="https://mecanicospremium.com.br/build/assets/logo-e787336c.png" alt="Logo Mecânicos Premium" boxSize="50px" />
+          <Heading className="heading-title" fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" mt={4}>
+            Seja Membro
+          </Heading>
+        </VStack>
 
-        <Heading fontSize="2xl" style={{ fontWeight: 'bold' }}>
-          Seja Membro
-        </Heading>
-      </Flex>
-
-      {/* Grid para os campos de Nome, E-mail, Empresa e Cargo */}
-      <Grid
-        templateColumns={{ base: "1fr", md: "1fr 1fr" }} // Responsivo: 1 coluna em mobile e 2 em dispositivos maiores
-        gap={4}
-      >
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
-          <Text mb={2}>Nome</Text>
-          <Input
-          bg="white" color="black"
-            placeholder="Digite o nome do membro"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </Box>
-
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
-          <Text mb={2}>E-mail</Text>
-          <Input
-          bg="white" color="black"
-            placeholder="Digite o e-mail do membro"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Box>
-      </Grid>
-
-      <Grid
-        templateColumns={{ base: "1fr", md: "1fr 1fr" }} // Responsivo
-        gap={4}
-      >
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
-          <Text mb={2}>Empresa</Text>
-          <Input
-          bg="white" color="black"
-            placeholder="Digite o nome da empresa"
-            value={nome_empresa}
-            onChange={(e) => setNomeEmpresa(e.target.value)}
-          />
-        </Box>
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
-          <Text mb={2}>Telefone</Text>
-          <Input
-          bg="white" color="black"
-            placeholder="Digite o telefone"
-            value={telefone}
-            onChange={(e) => setTelefone(e.target.value)}
-          />
-        </Box>
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
-          <Text mb={2}>Cargo</Text>
-          <Input
-          bg="white" color="black"
-            placeholder="Digite o cargo do membro"
-            value={cargo}
-            onChange={(e) => setCargo(e.target.value)}
-          />
-        </Box>
-
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
-          <Text mb={2}>Site</Text>
-          <Input
-          bg="white" color="black"
-            placeholder="Digite a url do site"
-            value={site}
-            onChange={(e) => setSite(e.target.value)}
-          />
-        </Box>
-
-        <Box mb={4}> {/* Adicionado espaçamento inferior */}
-          <Text mb={2}>Instagram</Text>
-          <Input
-          bg="white" color="black"
-            placeholder="Digite o @ "
-            value={instagram}
-            onChange={(e) => setInstagram(e.target.value)}
-          />
-        </Box>
-      </Grid>
-
-      {/* Campo Situação */}
-      <Box mt={5}>
-        <Text mb={2}>Situação</Text>
-        <Select
-        bg="white" color="black"
-          placeholder=" "
-          value={atendimentoCarrosPremium}
-          onChange={(e) => setAtendimentoCarrosPremium(e.target.value)}
+        <Grid
+          templateColumns={{ base: "1fr", md: "1fr 1fr" }}
+          gap={4}
+          mb={6}
         >
-          <option value="0a20">De 0 a 20%</option>
-          <option value="20a40">De 20 a 40%</option>
-          <option value="40a60">De 40 a 50%</option>
-          <option value="acima80">Acima de 80%</option>
-        </Select>
-      </Box>
-
-      <Box mt={5}>
-        <Text mb={2}>Categoria da Empresa</Text>
-        <Select
-        bg="white" color="black"
-          placeholder=" "
-          value={atendimentoCarrosPremium}
-          onChange={(e) => setAtendimentoCarrosPremium(e.target.value)}
-        >
-          <option value="simples_nacional">Simples Nacional</option>
-          <option value="lucro_presumido">Lucro Presumido</option>
-          <option value="lucro_real">De 40 a 50%</option>
-        </Select>
-      </Box>
-
-      <Box>
-            <Text my={5} fontWeight="semibold">Avaliação de Requisitos para novo Associado</Text>
-            <Stack pl={4}>
-              <Checkbox
-                colorScheme="gray"
-                onChange={(e) => ()=>{}}
-              >
-                É Bosch Car Service
-              </Checkbox>
-              <Checkbox
-                colorScheme="gray"
-                onChange={(e) => ()=>{}}
-              >
-                Módulo de Diagnóstico Bosch
-              </Checkbox>
-              <Checkbox
-                colorScheme="gray"
-                onChange={(e) => ()=>{}}
-              >
-                Possui Equipamento Bosch
-              </Checkbox>
-              <Checkbox
-                colorScheme="gray"
-                onChange={(e) => ()=>{}}
-              >
-                Em Dia com Obrigações Federais, Estaduais e Municipais
-              </Checkbox>
-              <Checkbox
-                colorScheme="gray"
-                onChange={(e) => ()=>{}}
-              >
-                Afiliado a Entidades, Sindicato ou Associação
-              </Checkbox>
-            </Stack>
+          <Box>
+            <Text mb={2}>Nome</Text>
+            <Input
+              className='button-premium'
+              allowClear
+              placeholder="Digite o nome do membro"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{
+                height: "40px",
+                width: "100%",
+                backgroundColor: "transparent",
+                color: "white",
+                borderRadius: "0px",
+                borderColor: "#2596be",
+                borderWidth: "1px",
+              }}
+            />
           </Box>
 
-      {/* Botão Salvar */}
-      <VStack alignItems={"end"} mt={5}>
-        <Button 
-          colorScheme="green" 
-          onClick={handleSubmit} 
-          isLoading={loading} // Adiciona o estado de loading
-          loadingText="Cadastrando..." // Texto de carregamento
+          <Box>
+            <Text mb={2}>E-mail</Text>
+            <Input
+              className='button-premium'
+              allowClear
+              placeholder="Digite o email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{
+                height: "40px",
+                width: "100%",
+                backgroundColor: "transparent",
+                color: "white",
+                borderRadius: "0px",
+                borderColor: "#2596be",
+                borderWidth: "1px",
+              }}
+            />
+          </Box>
+        </Grid>
+
+        <Grid
+          templateColumns={{ base: "1fr", md: "1fr 1fr" }}
+          gap={4}
+          mb={6}
         >
-          Enviar
-        </Button>
-      </VStack>
-</Box>
-</Box>
-    </>
+          <Box>
+            <Text mb={2}>Empresa</Text>
+            <Input
+              className='button-premium'
+              allowClear
+              placeholder="Digite o nome da empresa"
+              value={nome_empresa}
+              onChange={(e) => setNomeEmpresa(e.target.value)}
+              style={{
+                height: "40px",
+                width: "100%",
+                backgroundColor: "transparent",
+                color: "white",
+                borderRadius: "0px",
+                borderColor: "#2596be",
+                borderWidth: "1px",
+              }}
+            />
+          </Box>
+          <Box>
+            <Text mb={2}>Telefone</Text>
+            <Input
+              className='button-premium'
+              allowClear
+              placeholder="Digite o telefone"
+              value={telefone}
+              onChange={(e) => setTelefone(e.target.value)}
+              style={{
+                height: "40px",
+                width: "100%",
+                backgroundColor: "transparent",
+                color: "white",
+                borderRadius: "0px",
+                borderColor: "#2596be",
+                borderWidth: "1px",
+              }}
+            />
+          </Box>
+          <Box>
+            <Text mb={2}>Cargo</Text>
+            <Input
+              className='button-premium'
+              allowClear
+              placeholder="Digite o cargo do membro"
+              value={cargo}
+              onChange={(e) => setCargo(e.target.value)}
+              style={{
+                height: "40px",
+                width: "100%",
+                backgroundColor: "transparent",
+                color: "white",
+                borderRadius: "0px",
+                borderColor: "#2596be",
+                borderWidth: "1px",
+              }}
+            />
+          </Box>
+
+          <Box>
+            <Text mb={2}>Site</Text>
+            <Input
+              className='button-premium'
+              allowClear
+              placeholder="Digite a url do site"
+              value={site}
+              onChange={(e) => setSite(e.target.value)}
+              style={{
+                height: "40px",
+                width: "100%",
+                backgroundColor: "transparent",
+                color: "white",
+                borderRadius: "0px",
+                borderColor: "#2596be",
+                borderWidth: "1px",
+              }}
+            />
+          </Box>
+
+          <Box>
+            <Text mb={2}>Instagram</Text>
+            <Input
+              className='button-premium'
+              allowClear
+              placeholder="Digite o @"
+              value={instagram}
+              onChange={(e) => setInstagram(e.target.value)}
+              style={{
+                height: "40px",
+                width: "100%",
+                backgroundColor: "transparent",
+                color: "white",
+                borderRadius: "0px",
+                borderColor: "#2596be",
+                borderWidth: "1px",
+              }}
+            />
+          </Box>
+          
+          <Box>
+            <Text mb={2}>cnpj</Text>
+            <Input
+              className='button-premium'
+              allowClear
+              placeholder="Digite o CNPJ"
+              value={cnpj}
+              onChange={(e) => setCnpj(e.target.value)}
+              style={{
+                height: "40px",
+                width: "100%",
+                backgroundColor: "transparent",
+                color: "white",
+                borderRadius: "0px",
+                borderColor: "#2596be",
+                borderWidth: "1px",
+              }}
+            />
+          </Box>
+        </Grid>
+
+        <Box mb={5}>
+          <Text mb={2}>Atendimento Premium</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            value={atendimentoCarrosPremium}
+            onChange={(value) => setAtendimentoCarrosPremium(value as string)}
+          >
+            <option value="0a20">De 0 a 20%</option>
+            <option value="20a40">De 20 a 40%</option>
+            <option value="40a60">De 40 a 60%</option>
+            <option value="acima80">Acima de 80%</option>
+          </Select>
+        </Box>
+
+        <Box mb={5}>
+          <Text mb={2}>Categoria da Empresa</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            value={categoria}
+            onChange={(value) => setCategoria(value as string)}
+          >
+            <option value="simples_nacional">Simples Nacional</option>
+            <option value="lucro_presumido">Lucro Presumido</option>
+            <option value="lucro_real">Lucro Real</option>
+          </Select>
+        </Box>
+
+        <Box mb={6}>
+          <Text fontWeight="semibold" mb={3}>Avaliação de Requisitos para novo Associado</Text>
+          <Stack pl={4} spacing={3}>
+            <Checkbox colorScheme="gray" onChange={() => { }}>
+              É Bosch Car Service
+            </Checkbox>
+            <Checkbox colorScheme="gray" onChange={() => { }}>
+              Módulo de Diagnóstico Bosch
+            </Checkbox>
+            <Checkbox colorScheme="gray" onChange={() => { }}>
+              Possui Equipamento Bosch
+            </Checkbox>
+            <Checkbox colorScheme="gray" onChange={() => { }}>
+              Em Dia com Obrigações Federais, Estaduais e Municipais
+            </Checkbox>
+            <Checkbox colorScheme="gray" onChange={() => { }}>
+              Afiliado a Entidades, Sindicato ou Associação
+            </Checkbox>
+          </Stack>
+        </Box>
+
+        <VStack alignItems={"end"} mt={5}>
+          <Button
+            colorScheme="green"
+            onClick={handleSubmit}
+            isLoading={loading}
+            loadingText="Cadastrando..."
+            width={{ base: "full", md: "auto" }}
+          >
+            Enviar
+          </Button>
+        </VStack>
+      </Box>
+    </Box>
   );
 };

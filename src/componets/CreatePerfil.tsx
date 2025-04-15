@@ -251,6 +251,25 @@ export const CreatePerfil: React.FC = () => {
               </Checkbox>
             </Stack>
           </Box>
+          <Box>
+            <Text fontWeight="semibold">Gerenciar Compras Coletiva</Text>
+            <Stack pl={4}>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("manage.compras")}
+                onChange={(e) => handleCheckboxChange(e, "manage.compras")}
+              >
+                Criar / Editar / Deletar
+              </Checkbox>
+              <Checkbox
+                colorScheme="gray"
+                isChecked={permissoes.includes("compras.inscricao")}
+                onChange={(e) => handleCheckboxChange(e, "compras.inscricao")}
+              >
+                Realizar Inscrição
+              </Checkbox>
+            </Stack>
+          </Box>
         </Stack>
       </Box>
 

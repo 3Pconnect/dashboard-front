@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableColumnsType, TablePaginationConfig, TableProps, DatePicker, Tag } from 'antd';
-import { Heading, Flex, Button, useToast, useBreakpointValue } from '@chakra-ui/react';
+import { Table, TableColumnsType, TablePaginationConfig, TableProps, DatePicker } from 'antd';
+import { Heading, Flex, Button, useToast, useBreakpointValue, Tag } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineFileText, AiOutlineSearch } from 'react-icons/ai';
 import { fetchSales } from '../services/api';
@@ -63,18 +63,24 @@ const CompraColetivaList: React.FC = () => {
     try {
       const response = await fetchSales(page, limit, dataInicio, dataFim);
 
-      // Acessa o array 'data' dentro da resposta
-      const vendasFormatadas = response.data.map((venda: any) => ({
-        id: venda.id,
-        produto: venda.produto.nome,
-        preco: parseFloat(venda.produto.preco),
-        inicio: venda.dataInicio,
-        fim: venda.dataFim,
-        status: venda.quantidadeTotal > 0 ? 'DISPONÍVEL' : 'INDISPONÍVEL',
-        formularioEnviado: venda.formulario_enviado,
-        quantidadeMaximaPorUsuario: venda.quantidadeMaximaPorUsuario,
-        descricaoProduto: venda.produto.descricao,
-      }));
+      const vendasFormatadas = response.data.map((venda: any) => {
+        const interesseDoUsuario = venda.interesses?.find(
+          (interesse: any) => interesse.usuario.id === venda?.usuario?.id
+        );
+      
+        return {
+          id: venda.id,
+          produto: venda.produto.nome,
+          preco: parseFloat(venda.produto.preco),
+          inicio: venda.dataInicio,
+          fim: venda.dataFim,
+          status: venda.quantidadeTotal > 0 ? 'DISPONÍVEL' : 'INDISPONÍVEL',
+          formularioEnviado: venda.formulario_enviado,
+          quantidadeMaximaPorUsuario: venda.quantidadeMaximaPorUsuario,
+          descricaoProduto: venda.produto.descricao,
+          pago: interesseDoUsuario?.pago ?? null // ou 'Teste' como fallback
+        };
+      });
 
       setData(vendasFormatadas);
       setTotal(response.total);
@@ -134,6 +140,25 @@ const CompraColetivaList: React.FC = () => {
           render: (preco:any) => `R$ ${preco.toFixed(2)}`,
         },
         ]),
+
+        ...(isMobile
+          ? []
+          : [
+            {
+              title: 'Situação',
+              dataIndex: 'pago',
+              key: 'pago',
+              sorter: (a:any, b:any) => a.pago - b.pago,
+              render: (pago: string) => {
+                let color = 'gray';
+                if (pago) {
+                  color = 'green';
+                } else if (!pago) {
+                  color = 'red';
+                }
+                return <Tag colorScheme={color}>{pago ? "pago": "pagamento_pendente"}</Tag>;
+              },}
+            ]),
 
     ...(isMobile
       ? []

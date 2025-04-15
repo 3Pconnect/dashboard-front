@@ -211,8 +211,9 @@ function Out() {
             )}
           </Box>
 
-           {/* Categoria Compras */}
+          {/* Categoria Compras */}
           <Box width="100%">
+
             <Link
               href="#"
               display="flex"
@@ -225,41 +226,49 @@ function Out() {
               Compras
             </Link>
             {activeMenu === 'compras' && (
-              <VStack align="start" spacing={2} pl={6}>
-                <Link
-                  href="#"
-                  display="flex"
-                  alignItems="center"
-                  color="white"
-                  className='button-menu-nav'
-                  onClick={() => navigate('/main/list-evento-compras')}
-                >
-                  <FaUsersCog style={{ marginRight: '8px' }} />
-                  Gerenciar Compra Coletiva
-                </Link>
-                <Link
-                  href="#"
-                  display="flex"
-                  alignItems="center"
-                  color="white"
-                  className='button-menu-nav'
-                  onClick={() => navigate('/main/list-compra-coletiva')}
-                >
-                  <FaUsersCog style={{ marginRight: '8px' }} />
-                  Compras Coletivas
-                </Link>
-                <Link
-                  href="#"
-                  display="flex"
-                  alignItems="center"
-                  color="white"
-                  className='button-menu-nav'
-                  onClick={() => navigate('/main/list-product')}
-                >
-                  <FaUsersCog style={{ marginRight: '8px' }} />
-                  Produtos
-                </Link>
-              </VStack>
+              <>
+
+                <VStack align="start" spacing={2} pl={6}>
+                  {permissoes.includes('manage.compras') &&
+                    <Link
+                      href="#"
+                      display="flex"
+                      alignItems="center"
+                      color="white"
+                      className='button-menu-nav'
+                      onClick={() => navigate('/main/list-evento-compras')}
+                    >
+                      <FaUsersCog style={{ marginRight: '8px' }} />
+                      Gerenciar Compra Coletiva
+                    </Link>
+                  }
+                  <Link
+                    href="#"
+                    display="flex"
+                    alignItems="center"
+                    color="white"
+                    className='button-menu-nav'
+                    onClick={() => navigate('/main/list-compra-coletiva')}
+                  >
+                    <FaUsersCog style={{ marginRight: '8px' }} />
+                    Compras
+                  </Link>
+                  {permissoes.includes('manage.compras') &&
+                    <Link
+                      href="#"
+                      display="flex"
+                      alignItems="center"
+                      color="white"
+                      className='button-menu-nav'
+                      onClick={() => navigate('/main/list-product')}
+                    >
+                      <FaUsersCog style={{ marginRight: '8px' }} />
+                      Produtos
+                    </Link>
+                  }
+                </VStack>
+
+              </>
             )}
           </Box>
 
@@ -437,6 +446,7 @@ function Out() {
                 </Box>
                 {/* Categoria Compras (Drawer) */}
                 <Box width="100%">
+
                   <Link
                     href="#"
                     display="flex"
@@ -450,6 +460,7 @@ function Out() {
                   </Link>
                   {activeMenu === 'compras' && (
                     <VStack align="start" spacing={2} pl={6}>
+                        {permissoes.includes('manage.compras') &&
                       <Link
                         href="#"
                         display="flex"
@@ -461,28 +472,35 @@ function Out() {
                         <FaUsersCog style={{ marginRight: '8px' }} />
                         Gerenciar Compra Coletiva
                       </Link>
-                      <Link
-                        href="#"
-                        display="flex"
-                        alignItems="center"
-                        color="black"
-                        _hover={{ color: 'teal.400' }}
-                        onClick={() => navigate('/main/list-compra-coletiva')}
-                      >
-                        <FaUsersCog style={{ marginRight: '8px' }} />
-                        Compras Coletivas
-                      </Link>
-                      <Link
-                        href="#"
-                        display="flex"
-                        alignItems="center"
-                        color="black"
-                        _hover={{ color: 'teal.400' }}
-                        onClick={() => navigate('/main/list-product')}
-                      >
-                        <FaUsersCog style={{ marginRight: '8px' }} />
-                        Produtos
-                      </Link>
+}
+                   
+                        <>
+                          <Link
+                            href="#"
+                            display="flex"
+                            alignItems="center"
+                            color="black"
+                            _hover={{ color: 'teal.400' }}
+                            onClick={() => navigate('/main/list-compra-coletiva')}
+                          >
+                            <FaUsersCog style={{ marginRight: '8px' }} />
+                            Compras
+                          </Link>
+                          {permissoes.includes('manage.compras') &&
+                          <Link
+                            href="#"
+                            display="flex"
+                            alignItems="center"
+                            color="black"
+                            _hover={{ color: 'teal.400' }}
+                            onClick={() => navigate('/main/list-product')}
+                          >
+                            <FaUsersCog style={{ marginRight: '8px' }} />
+                            Produtos
+                          </Link>
+}
+                        </>
+                      
                     </VStack>
                   )}
                 </Box>
@@ -504,7 +522,7 @@ function Out() {
       </Box>
 
       {/* Conteúdo Principal */}
-      <Box  pl={padding} pt={10} pr={10} pb={10} w={"full"}>
+      <Box pl={padding} pt={10} pr={10} pb={10} w={"full"}>
         <Outlet />
       </Box>
     </Flex>

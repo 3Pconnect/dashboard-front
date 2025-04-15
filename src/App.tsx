@@ -77,7 +77,7 @@ export const App = () => {
   }, [permissoes]);
 
   if (carregando) {
-    return <Loading/>
+    return <Loading />
   }
 
   // if (erro) {
@@ -116,12 +116,20 @@ export const App = () => {
                 <Route path="create-user" element={<CreateUserPage />} />
                 <Route path="update-user/:id" element={<UpdateUserPage />} />
               </>}
-            <Route path="list-product" element={<ListProductPage />} />
-            <Route path="create-product" element={<CreateProductPage />} />
+            {permissoes.includes('manage.compras') &&
+              <>
+                <Route path="list-product" element={<ListProductPage />} />
+                <Route path="create-product" element={<CreateProductPage />} />
+                <Route path="list-evento-compras" element={<EventoCompraPage />} />
+                <Route path="create-event-compras" element={<CreateEventoCompraPage />} />
+                <Route path="list-interested/:id" element={<UserInterestedPage />} />
+
+              </>
+            }
+
+
+
             <Route path="create-interest/:id" element={<CreateInterestPage />} />
-            <Route path="list-interested/:id" element={<UserInterestedPage />} />
-            <Route path="list-evento-compras" element={<EventoCompraPage />} />
-            <Route path="create-event-compras" element={<CreateEventoCompraPage />} />
             <Route path="list-compra-coletiva" element={<CompraColetivaPage />} />
             {permissoes.includes('create.profile') &&
               <>

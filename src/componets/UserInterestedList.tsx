@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps } from 'antd';
-import { Heading, Flex, Button, useToast, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useBreakpointValue } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useBreakpointValue, Tag } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MdArrowBack } from 'react-icons/md';
 import { fetchInteressadosCompra } from '../services/api';
@@ -10,6 +10,7 @@ interface DataType {
   email: string;
   dataInteresse: string;
   quantidade: number;
+  pago: boolean
 }
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
@@ -34,6 +35,7 @@ const UserInterestedList: React.FC = () => {
         email: item.usuario.email,
         dataInteresse: item.dataInteresse,
         quantidade: item.quantidade,
+        pago: item?.pago
       }));
 
       setData(formattedData);
@@ -64,11 +66,26 @@ const UserInterestedList: React.FC = () => {
       dataIndex: 'username',
       key: 'username',
     },
+    
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
     },
+    {
+      title: 'Situação',
+      dataIndex: 'pago',
+      key: 'pago',
+      sorter: (a:any, b:any) => a.pago - b.pago,
+      render: (pago: string) => {
+        let color = 'gray';
+        if (pago) {
+          color = 'green';
+        } else if (!pago) {
+          color = 'red';
+        }
+        return <Tag colorScheme={color}>{pago ? "pago": "pagamento_pendente"}</Tag>;
+      },},
     {
       title: 'Data Interesse',
       dataIndex: 'dataInteresse',
