@@ -61,10 +61,10 @@ export default function NewLogin() {
 
   const navigate = useNavigate();
   return (
-    <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
+    <Stack className="indicator-title" minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={4} w={'full'} maxW={'md'}>
-          <Heading fontSize={'2xl'}>Entre na sua conta</Heading>
+          <Heading className="indicator-title" fontSize={'2xl'}>Entre na sua conta</Heading>
           <FormControl id="email">
             <FormLabel>Email</FormLabel>
             <Input value={email}
@@ -83,7 +83,7 @@ export default function NewLogin() {
               <Checkbox>Lembrar senha</Checkbox>
               <Text color={'blue.500'}>Esqueceu a senha?</Text>
             </Stack>
-            <Button isLoading={isLoading} onClick={handleLogin} colorScheme={'blue'} variant={'solid'}>
+            <Button className='button-premium' isLoading={isLoading} onClick={handleLogin} colorScheme={'blue'} variant={'solid'}>
               {isLoading ? "Carregando..." : "Acessar"}
             </Button>
             {isFailure && (

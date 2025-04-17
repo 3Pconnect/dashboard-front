@@ -34,15 +34,17 @@ export const CreateNovosMembros = () => {
     setLoading(true);
     try {
       const response = await registerMembro(
-        name,
-        email,
-        tipo_usuario,
-        telefone,
-        nome_empresa,
-        cargo,
-        cnpj,
-        filterType,
-        dataEvento
+       {
+         name,
+         email,
+         tipo_usuario,
+         telefone,
+         nome_empresa,
+         cargo,
+         cnpj,
+         dataEvento,
+         atendimento_carros_premium: ""
+       }
 
       );
       console.log("Membro registrado com sucesso", response);

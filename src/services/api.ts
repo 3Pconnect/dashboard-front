@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 const url = process.env.REACT_APP_API_URL;
 console.log("URL:", url)
 const api = axios.create({
-  baseURL: 'https://api.seminariomecanicospremium.com.br',
- // baseURL: 'http://localhost:3001',
+ baseURL: 'https://api.seminariomecanicospremium.com.br',
+ //baseURL: 'http://localhost:3001',
 });
 
 api.interceptors.request.use(
@@ -512,29 +512,28 @@ export const fetchTaxaRenovacao = async () => {
     }
   }
 };
-
-export const registerMembro = async (
-  name: string,
-  email: string,
-  tipo_usuario: string,
-  telefone: string,
-  nome_empresa: string,
-  cargo: string,
-  cnpj: string,
-  situacao: string = "em_analise",
-  vencimento?: dayjs.Dayjs | null | string
-) => {
+interface RegisterMembroProps {
+  name: string;
+  email: string;
+  tipo_usuario: string;
+  telefone: string;
+  nome_empresa: string;
+  cargo: string;
+  cnpj: string;
+  atendimento_carros_premium: string;
+  vencimento?: dayjs.Dayjs | null | string;
+  bosch_car_service?: boolean;
+  modulo_diagnostico_bosch?: boolean;
+  equipamento_bosch?: boolean;
+  em_dia_com_obrigacoes?: boolean;
+  afiliacao?: boolean;
+  dataEvento?:dayjs.Dayjs | null
+}
+export const registerMembro = async (data: RegisterMembroProps) => {
   try {
     const response = await api.post("/membros", {
-      name,
-      email,
-      tipo_usuario,
-      telefone,
-      nome_empresa,
-      cargo,
-      cnpj,
-      situacao,
-      vencimento
+      ...data, situacao: 'em_analise'
+
     }, {
       headers: {
         'Accept': 'application/json',

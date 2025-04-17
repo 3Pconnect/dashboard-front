@@ -137,22 +137,16 @@ export const CreateInterest = () => {
   return (
     <>
       <Flex mb={10} className="indicator-title" justify="space-between" align="center" width="100%">
-        <Flex align="center">
-          <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />}
-            mr={4} onClick={() => window.history.back()}>
-            Voltar
-          </Button>
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="#">Produtos</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+        <Flex  align="center">
+        <Button
+  onClick={() => window.history.back()}
+  variant="ghost"
+  colorScheme="blue"
+  p={2}
+>
+  <Icon as={MdArrowBack} w={6} h={6} />
+</Button>
+
         </Flex>
         <Heading className="heading-title" fontSize="2xl" style={{ fontWeight: 'bold' }}>Preencher Compra</Heading>
       </Flex>

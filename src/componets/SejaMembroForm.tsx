@@ -7,6 +7,7 @@ import { useState } from "react";
 import { registerMembro } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { Input, Select } from "antd";
+import dayjs from "dayjs";
 
 export const SejaMembroForm: React.FC = () => {
   const [name, setName] = useState("");
@@ -23,6 +24,14 @@ export const SejaMembroForm: React.FC = () => {
   const [categoria, setCategoria] = useState("");
   const [loading, setLoading] = useState(false);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
+
+  const [bosch_car_service, setBoschCarService] = useState(false);
+  const [modulo_diagnostico_bosch, setModuloDiagnosticoBosch] = useState(false);
+  const [equipamento_bosch, setEquipamentoBosch] = useState(false);
+  const [em_dia_com_obrigacoes, setEmDiaComObrigacoes] = useState(false);
+  const [afiliacao, setAfiliadoEntidade] = useState(false);
+  const [vencimento, setVencimento] = useState<dayjs.Dayjs | null>(null);
+
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -112,7 +121,7 @@ export const SejaMembroForm: React.FC = () => {
       });
       return;
     }
-    
+
 
     if (!atendimentoCarrosPremium) {
       toast({
@@ -139,14 +148,22 @@ export const SejaMembroForm: React.FC = () => {
     setLoading(true);
     try {
       const response = await registerMembro(
-        name,
-        email,
-        tipo_usuario,
-        telefone,
-        nome_empresa,
-        cargo,
-        cnpj,
-        atendimentoCarrosPremium
+        {
+          name,
+          email,
+          tipo_usuario,
+          telefone,
+          nome_empresa,
+          cargo,
+          cnpj,
+          atendimento_carros_premium: atendimentoCarrosPremium,
+          vencimento,
+          bosch_car_service,
+          modulo_diagnostico_bosch,
+          equipamento_bosch,
+          em_dia_com_obrigacoes,
+          afiliacao
+        }
       );
       console.log("Membro registrado com sucesso", response);
       toast({
@@ -365,7 +382,7 @@ export const SejaMembroForm: React.FC = () => {
               }}
             />
           </Box>
-          
+
           <Box>
             <Text mb={2}>cnpj</Text>
             <Input
@@ -427,24 +444,47 @@ export const SejaMembroForm: React.FC = () => {
         <Box mb={6}>
           <Text fontWeight="semibold" mb={3}>Avaliação de Requisitos para novo Associado</Text>
           <Stack pl={4} spacing={3}>
-            <Checkbox colorScheme="gray" onChange={() => { }}>
+            <Checkbox
+              colorScheme="gray"
+              isChecked={bosch_car_service}
+              onChange={(e) => setBoschCarService(e.target.checked)}
+            >
               É Bosch Car Service
             </Checkbox>
-            <Checkbox colorScheme="gray" onChange={() => { }}>
+
+            <Checkbox
+              colorScheme="gray"
+              isChecked={modulo_diagnostico_bosch}
+              onChange={(e) => setModuloDiagnosticoBosch(e.target.checked)}
+            >
               Módulo de Diagnóstico Bosch
             </Checkbox>
-            <Checkbox colorScheme="gray" onChange={() => { }}>
+
+            <Checkbox
+              colorScheme="gray"
+              isChecked={equipamento_bosch}
+              onChange={(e) => setEquipamentoBosch(e.target.checked)}
+            >
               Possui Equipamento Bosch
             </Checkbox>
-            <Checkbox colorScheme="gray" onChange={() => { }}>
+
+            <Checkbox
+              colorScheme="gray"
+              isChecked={em_dia_com_obrigacoes}
+              onChange={(e) => setEmDiaComObrigacoes(e.target.checked)}
+            >
               Em Dia com Obrigações Federais, Estaduais e Municipais
             </Checkbox>
-            <Checkbox colorScheme="gray" onChange={() => { }}>
+
+            <Checkbox
+              colorScheme="gray"
+              isChecked={afiliacao}
+              onChange={(e) => setAfiliadoEntidade(e.target.checked)}
+            >
               Afiliado a Entidades, Sindicato ou Associação
             </Checkbox>
           </Stack>
         </Box>
-
         <VStack alignItems={"end"} mt={5}>
           <Button
             colorScheme="green"
