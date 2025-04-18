@@ -225,7 +225,7 @@ const TodosEventosList: React.FC = () => {
             width="100%"
           >
             <Image
-              src={"https://i.ibb.co/8n8Gb6F0/Design-sem-nome.png"}
+              src={"https://i.ibb.co/1fVkC8x0/20241227-Capa-Card-Event3-2-1.jpg"}
               borderRadius="md"
               mb={3}
               width={'100%'}

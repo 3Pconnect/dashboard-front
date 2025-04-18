@@ -48,6 +48,7 @@ import { CompraColetivaPage } from "./pages/CompraColetivaPage";
 import { CreateInterestPage } from "./pages/CreateInterestPage";
 import { UserInterestedPage } from "./pages/UserInterestedPage";
 import Loading from "./componets/Loading";
+import { CreateNewPassWordPage } from "./pages/CreateNewPassword";
 
 export const App = () => {
   const [permissoes, setPermissoes] = useState(['']);
@@ -148,6 +149,7 @@ export const App = () => {
               </>}
           </Route>
           <Route path="/" element={<NewLogin />} />
+          <Route path="/create-password/:id" element={<CreateNewPassWordPage />} />
           <Route path="/seja-membro" element={<SejaMembroPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
