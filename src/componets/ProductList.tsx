@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, Tag } from 'antd';
-import { Heading, Flex, useToast, Button } from '@chakra-ui/react';
+import { Heading, Flex, useToast, Button, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { deleteProduto, fetchProducts } from '../services/api';
@@ -116,55 +116,81 @@ const ProductList: React.FC = () => {
     //     </Button>
     //   ),
     // },
-      {
-          title: 'Ações',
-          key: 'actions',
-          render: (_, record) => (
-            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(record.id)
-            }}>
-              <AiFillDelete />
-            </Button>
-          ),
-        },
+    {
+      title: 'Ações',
+      key: 'actions',
+      render: (_, record) => (
+        <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+          e.stopPropagation();
+          handleDelete(record.id)
+        }}>
+          <AiFillDelete />
+        </Button>
+      ),
+    },
   ];
 
   return (
-    <>
-      <Flex mb={6} justify='space-between' align='center' width='100%'>
-        <Heading className='heading-title' fontSize='2xl' fontWeight='bold'>Produtos</Heading>
-        <Button
-          className='button-premium'
-          onClick={() => navigate('/main/create-product')}
-          colorScheme='green'
-          fontSize='16px'
-          fontWeight='bold'
-        >
-          Adicionar
-        </Button>
-      </Flex>
-      <Flex mb={6} justify="flex-start" align="center" gap={4} width="100%">
-        {/* Input único para busca */}
-        <Input
-          className='button-premium'
-          allowClear
-          placeholder="Buscar por nome"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          style={{
-            height: "40px", width: 240,
-            backgroundColor: "transparent",
-            color: "white",
-            borderRadius: "0px", borderColor: "#2596be",
-            borderWidth: "1px"
-          }}
-        />
-        {/* Botão de busca */}
-        <Button className='button-premium' colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
-          Buscar
-        </Button>
-      </Flex>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
+<>
+  {/* Título Responsivo */}
+  <Flex
+    mb={6}
+    direction={{ base: "column", md: "row" }}
+    justify={{ base: "flex-start", md: "space-between" }}
+    align={{ base: "flex-start", md: "center" }}
+    width="100%"
+    gap={2}
+  >
+    <Heading
+      className="heading-title"
+      fontSize={{ base: "xl", md: "2xl" }}
+    >
+      Produtos
+    </Heading>
+  </Flex>
+
+  {/* Barra de busca e botões responsivos */}
+  <Flex
+    mb={6}
+    direction={{ base: "column", md: "row" }}
+    justify={{ base: "flex-start", md: "flex-start" }}
+    align={{ base: "stretch", md: "center" }}
+    gap={4}
+    width="100%"
+    flexWrap="wrap"
+  >
+    <Input
+      className="mecanicos-input"
+      placeholder="Buscar por nome"
+      value={searchValue}
+      onChange={(e) => setSearchValue(e.target.value)}
+      height="40px"
+    />
+
+    <Button
+      className="button-premium"
+      colorScheme="blue"
+      onClick={handleSearch}
+      leftIcon={<AiOutlineSearch />}
+      width={{ base: "100%", sm: "auto" }}
+    >
+      Buscar
+    </Button>
+
+    <Button
+      className="button-premium"
+      onClick={() => navigate('/main/create-product')}
+      colorScheme="green"
+      fontSize="16px"
+      fontWeight="bold"
+      width={{ base: "100%", sm: "auto" }}
+    >
+      Adicionar
+    </Button>
+  </Flex>
+</>
+
 
       <Table<DataType>
         columns={columns}
@@ -175,12 +201,12 @@ const ProductList: React.FC = () => {
         scroll={{ x: 'max-content' }}
         onRow={(record) => ({
           onClick: () => {
-            
+
           },
           style: { cursor: 'pointer' }
         })}
       />
-    </>
+    </Box>
   );
 };
 

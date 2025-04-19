@@ -19,15 +19,17 @@ const TaxaRenovacaoAssociadoChart: React.FC<TaxaRenovacaoChartProps> = ({ taxaRe
         background: "transparent",
         type: "donut", // Tipo do gráfico
         height: 350,
-        fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada
+        fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
+        
       },
       title: {
         text: "Taxa de Renovação",
         align: "left",
         style: {
-          color: "#FFFFFF", // Cor do título
+          color: "#2D3748", // Cor escura para o tema claro
           fontSize: "18px",
-          fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada no título
+          fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
+          fontWeight: 400,
         },
       },
       labels: ["Renovação", "Não Renovação"], // Labels para as duas partes
@@ -41,9 +43,10 @@ const TaxaRenovacaoAssociadoChart: React.FC<TaxaRenovacaoChartProps> = ({ taxaRe
       dataLabels: {
         enabled: true,
         style: {
+          fontWeight: 400,
           fontSize: "14px",
-          colors: ["#FFFFFF"], // Cor dos dados
-          fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada nos labels de dados
+          colors: ["#2D3748"], // Cor escura para o tema claro
+          fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
         },
         formatter: (val: number) => `${val.toFixed(1)}%`, // Mostra a porcentagem com 1 casa decimal
       },
@@ -52,7 +55,7 @@ const TaxaRenovacaoAssociadoChart: React.FC<TaxaRenovacaoChartProps> = ({ taxaRe
           formatter: (val: number) => `${val.toFixed(1)}%`, // Mostra a porcentagem na tooltip
         },
       },
-      colors: ["#54AD37", "#d63939"], // Definindo as cores da renovação e não renovação
+      colors: ["#48BB78", "#E53E3E"], // Cores para o tema claro (verde e vermelho)
     },
   });
 
@@ -66,13 +69,14 @@ const TaxaRenovacaoAssociadoChart: React.FC<TaxaRenovacaoChartProps> = ({ taxaRe
 
   return (
     <SimpleGrid columns={{ base: 1, md: 1 }} spacing={4}>
-      <VStack spacing={4} p={4} w="full" bg="#0B244D" justifyContent="center" borderRadius="10px">
+      <VStack spacing={4} p={4} w="full" bg="white"         border="1px solid #E2E8F0"
+        boxShadow="sm" justifyContent="center" borderRadius="10px">
         <ReactApexChart
           style={{ borderRadius: "10px", width: "100%" }}
           options={{
             ...state.options,
             theme: {
-              mode: "dark", // Definindo o modo para "dark"
+              mode: "light", // Modo claro
             },
           }}
           series={state.series}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker, Select } from 'antd';
-import { Heading, Flex, Button, useToast, Tag, useMediaQuery, HStack} from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, Tag, useMediaQuery, HStack, Box} from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchEventos, deleteEvento, inscreverse, fetchMeusEventos } from '../services/api';
@@ -167,7 +167,7 @@ const MeusEventosTable: React.FC = () => {
           dataIndex: 'nome_evento',
           key: 'nome_evento',
           ellipsis: true,
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{truncateString(text, 10)}</span>,
+          render: (text) => <span>{truncateString(text, 10)}</span>,
         },
         // {
         //   title: 'Estado',
@@ -206,7 +206,7 @@ const MeusEventosTable: React.FC = () => {
           sorter: (a, b) => a.nome_evento.length - b.nome_evento.length,
           sortOrder: sortedInfo.columnKey === 'nome_evento' ? sortedInfo.order : null,
           ellipsis: true,
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
+          render: (text) => <span >{text}</span>,
         },
         {
           title: 'Cidade',
@@ -215,7 +215,7 @@ const MeusEventosTable: React.FC = () => {
           sorter: (a, b) => a.cidade.length - b.cidade.length,
           sortOrder: sortedInfo.columnKey === 'cidade' ? sortedInfo.order : null,
           ellipsis: true,
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
+          render: (text) => <span >{text}</span>,
         },
         {
           title: 'Estado',
@@ -224,7 +224,7 @@ const MeusEventosTable: React.FC = () => {
           sorter: (a, b) => a.estado.length - b.estado.length,
           sortOrder: sortedInfo.columnKey === 'estado' ? sortedInfo.order : null,
           ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+          render: (text) => <span>{text}</span>,
         },
         {
           title: 'Tema',
@@ -233,7 +233,7 @@ const MeusEventosTable: React.FC = () => {
           sorter: (a, b) => a.tema.length - b.tema.length,
           sortOrder: sortedInfo.columnKey === 'tema' ? sortedInfo.order : null,
           ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+          render: (text) => <span>{text}</span>,
         },
         {
           title: 'Cadastrado em',
@@ -263,7 +263,7 @@ const MeusEventosTable: React.FC = () => {
               default:
                 color = 'gray';
             }
-            return <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
+            return <Tag colorScheme={color}>{status}</Tag>;
           },
         },
         {
@@ -290,18 +290,11 @@ const MeusEventosTable: React.FC = () => {
       ];
 
   return (
-    <>
+    <Box  className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
       <Flex mb={6} justify='space-between' align='center' width='100%'>
-        <Heading fontSize='2xl' fontWeight='bold'>Meus Eventos</Heading>
-        {/* <Button
-          onClick={() => navigate('/main/create-evento')}
-          colorScheme='green'
-          fontSize='16px'
-          fontWeight='bold'
-        >
-          Adicionar
-        </Button> */}
+        <Heading className='heading-title' fontSize='2xl' >Meus eventos</Heading>
       </Flex>
+
       <Flex mb={6} justify="flex-start" align="center" gap={isMobile ? 2 : 4} width="100%" flexWrap="wrap">
         <Select
           className="button-premium"
@@ -319,7 +312,7 @@ const MeusEventosTable: React.FC = () => {
           />
         ) : (
           <Input
-            className='button-premium'
+          className="mecanicos-input"
             allowClear
             placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
             value={searchValue}
@@ -329,12 +322,13 @@ const MeusEventosTable: React.FC = () => {
         )}
         <DatePicker.RangePicker
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
+           className="mecanicos-input"
           onChange={(dates) => setDateRange(dates)}
           dropdownClassName="custom-dropdown"
           style={{ width: isMobile ? "100%" : 300, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
           inputReadOnly={false}
         />
-        <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'}>
+        <Button  className="button-premium" colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'}>
           Buscar
         </Button>
       </Flex>
@@ -353,7 +347,7 @@ const MeusEventosTable: React.FC = () => {
           style: { cursor: 'pointer', minHeight: '70vh' }
         })}
       />
-    </>
+    </Box>
   );
 };
 

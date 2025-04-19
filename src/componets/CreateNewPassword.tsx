@@ -66,7 +66,7 @@ export const CriarNovaSenhaForm: React.FC = () => {
       <Box bg={"#060c32"} borderRadius="md" p={8} maxW="400px" w="full">
         <VStack spacing={6}>
           <Image src="https://mecanicospremium.com.br/build/assets/logo-e787336c.png" alt="Logo" boxSize="60px" />
-          <Heading className="heading-title" fontSize="xl" textAlign="center">Criar Nova Senha</Heading>
+          <Heading className="heading-title " fontSize="xl" textAlign="center">Criar Nova Senha</Heading>
 
           <Box w="full">
             <Text mb={2}>Nova Senha</Text>

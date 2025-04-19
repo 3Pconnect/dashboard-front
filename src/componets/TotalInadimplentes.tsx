@@ -19,15 +19,16 @@ const TotalInadimplentes: React.FC<TotalInadimplentesChartProps> = ({ totalInadi
         background: "transparent",
         type: "donut",
         height: 350,
-        fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada
+        fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
       },
       title: {
         text: "Total de Inadimplentes",
         align: "left",
         style: {
-          color: "#FFFFFF", // Cor do título
+          color: "#2D3748", // Cor escura para o tema claro
           fontSize: "18px",
-          fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada no título
+          fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
+          fontWeight: 400,
         },
       },
       labels: ["Inadimplentes", "Adimplentes"], // Labels para as duas partes
@@ -42,8 +43,9 @@ const TotalInadimplentes: React.FC<TotalInadimplentesChartProps> = ({ totalInadi
         enabled: true,
         style: {
           fontSize: "14px",
-          colors: ["#FFFFFF"], // Cor dos dados
-          fontFamily: "Bai Jamjuree, sans-serif", // Fonte personalizada nos labels de dados
+          fontWeight: 400,
+          colors: ["#2D3748"], // Cor escura para o tema claro
+          fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
         },
         formatter: (val: number) => `${val.toFixed(1)}%`, // Mostra a porcentagem com 1 casa decimal
       },
@@ -52,7 +54,7 @@ const TotalInadimplentes: React.FC<TotalInadimplentesChartProps> = ({ totalInadi
           formatter: (val: number) => `${val.toFixed(1)}%`, // Mostra a porcentagem na tooltip
         },
       },
-      colors: ["#D32F2F", "#2E7D32"], // Definindo as cores dos inadimplentes e adimplentes
+      colors: ["#D32F2F", "#2E7D32"], // Definindo as cores para inadimplentes e adimplentes (vermelho e verde)
     },
   });
 
@@ -66,12 +68,13 @@ const TotalInadimplentes: React.FC<TotalInadimplentesChartProps> = ({ totalInadi
 
   return (
     <SimpleGrid columns={{ base: 1, md: 1 }} spacing={4}>
-      <VStack spacing={4} p={4} w="full" bg="#0B244D" justifyContent="center" borderRadius="10px">
+      <VStack          border="1px solid #E2E8F0"
+        boxShadow="sm" spacing={4} p={4} w="full" bg="white" justifyContent="center" borderRadius="10px">
         <ReactApexChart
           options={{
             ...state.options,
             theme: {
-              mode: "dark", // Definindo o modo para "dark"
+              mode: "light", // Modo claro
             },
           }}
           style={{ borderRadius: "10px", width: "100%" }}

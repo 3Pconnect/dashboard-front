@@ -164,18 +164,13 @@ const TodosEventosList: React.FC = () => {
   };
 
   return (
-    <>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4} >
       <Flex mb={6} justify='space-between' align='center' width='100%'>
-        <Heading fontSize='2xl' fontWeight='bold'>Eventos</Heading>
-        {/* <Button
-          onClick={() => navigate('/main/create-evento')}
-          colorScheme='green'
-          fontSize='16px'
-          fontWeight='bold'
-        >
-          Adicionar
-        </Button> */}
+        <Heading className='heading-title' fontSize='2xl' >Cadastrar Usuário</Heading>
+
+
       </Flex>
+
       <Flex mb={6} justify="flex-start" align="center" gap={isMobile ? 2 : 4} width="100%" flexWrap="wrap">
         <Select
           className="button-premium"
@@ -186,6 +181,7 @@ const TodosEventosList: React.FC = () => {
         />
         {filterType === 'situacao' ? (
           <Select
+            className="button-premium"
             options={situacaoFilterOptions}
             value={situacaoFilterType}
             onChange={setSituacaoFilterType}
@@ -193,7 +189,7 @@ const TodosEventosList: React.FC = () => {
           />
         ) : (
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
             value={searchValue}
@@ -205,44 +201,51 @@ const TodosEventosList: React.FC = () => {
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
           onChange={(dates) => setDateRange(dates)}
           dropdownClassName="custom-dropdown"
-          style={{ width: isMobile ? "100%" : 300, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          className="mecanicos-input"
+          style={{ width: isMobile ? "100%" : 300 }}
           inputReadOnly={false}
         />
-        <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'} >
+        <Button className="button-premium" colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'} >
           Buscar
         </Button>
       </Flex>
-
+      <Box maxH="73vh" overflowY="auto">
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
         {data.map(record => (
           <Box
             key={record.id}
-            bg="#2D3748"
-            color="white"
-            borderRadius="lg"
+            bg="white"
+            color="gray.800"
+            borderRadius="xl"
             boxShadow="lg"
+
             p={4}
             width="100%"
           >
             <Image
-              src={"https://i.ibb.co/1fVkC8x0/20241227-Capa-Card-Event3-2-1.jpg"}
+              src="https://i.ibb.co/1fVkC8x0/20241227-Capa-Card-Event3-2-1.jpg"
               borderRadius="md"
               mb={3}
-              width={'100%'}
-              objectFit={"cover"}
+              width="100%"
+              objectFit="cover"
             />
             <VStack align="start" spacing={2}>
-              <Text fontSize="lg" fontWeight="bold">
+              <Text className="indicator-title" fontSize="lg" fontWeight="bold">
                 {record.nome_evento}
               </Text>
-              <Text fontSize="sm" color="gray.300">
+              <Text className="indicator-title" fontSize="sm" color="gray.600">
                 {record.cidade}, {record.estado}, {record?.dataEvento
                   ? format(new Date(record.dataEvento), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
                   : "Data indisponível"}
               </Text>
               <HStack mt={3} width="100%" justifyContent="space-between">
-                <Button isDisabled={record.inscrito ? true : false} w={"full"}
-                  colorScheme="blue" size="sm" onClick={() => {
+                <Button
+                  variant={record?.inscrito ? "plain" : "subtle"}
+                  isDisabled={record.inscrito}
+                  w="full"
+                  colorScheme={record?.inscrito ? "green" : "blue"}
+                  size="sm"
+                  onClick={() => {
                     const eventDetails = {
                       nome: record?.nome_evento,
                       dataInicio: new Date(record?.createdAt),
@@ -250,16 +253,19 @@ const TodosEventosList: React.FC = () => {
                       descricao: record?.tema,
                       local: record?.cidade + ", " + record?.estado,
                     };
-                    handleIncreverSe(Number(record.id), eventDetails)
-                  }}>
+                    handleIncreverSe(Number(record.id), eventDetails);
+                  }}
+                >
                   {record.inscrito ? "Inscrito" : "Inscreva-se"}
                 </Button>
               </HStack>
             </VStack>
           </Box>
+
         ))}
       </SimpleGrid>
-    </>
+      </Box>
+    </Box>
   );
 };
 

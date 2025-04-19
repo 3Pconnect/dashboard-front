@@ -55,61 +55,29 @@ export const CreateNovosApoiadores = () => {
   };
 
   return (
-    <>
-      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
-        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
-          <Button
-            colorScheme="white"
-            variant="ghost"
-            leftIcon={<Icon as={MdArrowBack} />}
-            mr={{ base: 0, md: 4 }}
-            mb={{ base: 2, md: 0 }}
-            onClick={() => window.history.back()}
-          >
-            Voltar
-          </Button>
-          {!isMobile && (
-            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="#">Novos Membros</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
-          )}
-        </Flex>
-        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign={{ base: 'left', md: 'right' }}>
-          Cadastrar Novo Apoiador
-        </Heading>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4} >
+      <Flex mb={6} justify='space-between' align='center' width='100%'>
+        <Heading className='heading-title' fontSize='2xl' >Novo Apoiador</Heading>
       </Flex>
 
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+
+      <Grid className="indicator-title" templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box mb={4}>
           <Text mb={2}>Nome</Text>
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder="Digite o nome do membro"
             value={nome_empresa}
             onChange={(e) => setNomeEmpresa(e.target.value)}
-            style={{
-              height: "40px",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px", borderColor: "#2596be",
-              borderWidth: "1px"
-            }}
+
           />
         </Box>
 
         <Box mb={4}>
           <Text mb={2}>E-mail</Text>
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder="Digite o e-mail do membro"
             value={email}
@@ -125,11 +93,11 @@ export const CreateNovosApoiadores = () => {
         </Box>
       </Grid>
 
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+      <Grid className="indicator-title" templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box mb={4}>
           <Text mb={2}>Empresa</Text>
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder="Digite o CNPJ do membro"
             value={cnpj}
@@ -147,7 +115,7 @@ export const CreateNovosApoiadores = () => {
         <Box mb={4}>
           <Text mb={2}>Cargo</Text>
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder="Digite o telefone do membro"
             value={cargo}
@@ -162,10 +130,10 @@ export const CreateNovosApoiadores = () => {
           />
         </Box>
 
-        <Box mb={4}>
+        <Box className="indicator-title" mb={4}>
           <Text mb={2}>Atividade</Text>
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder="Digite a atividade do membro"
             value={atividade}
@@ -181,16 +149,22 @@ export const CreateNovosApoiadores = () => {
         </Box>
       </Grid>
 
-      <VStack alignItems={"end"} mt={5}>
+      <Flex justify="flex-start" mt={5}>
+
         <Button
-          colorScheme="green"
+          className="button-premium"
           onClick={handleSubmit}
           isLoading={loading}
-          loadingText="Cadastrando..."
+          loadingText="Salvando..."
+          bg="#1b5ebc"
+          color="white"
+          colorScheme="green"
+          w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
         >
-          Salvar
+          {loading ? "Salvando..." : "Salvar"}
         </Button>
-      </VStack>
-    </>
+
+      </Flex>
+    </Box>
   );
 };

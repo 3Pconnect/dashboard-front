@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast, useBreakpointValue } from "@chakra-ui/react";
+import { Button, Flex, Heading, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, Checkbox, Stack, useToast, useBreakpointValue, SimpleGrid } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { createProfile } from "../services/api";
@@ -53,71 +53,31 @@ export const CreatePerfil: React.FC = () => {
   };
 
   return (
-    <>
-      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
-        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
-          <Button
-            colorScheme="white"
-            variant="ghost"
-            leftIcon={<Icon as={MdArrowBack} />}
-            mr={{ base: 0, md: 4 }}
-            mb={{ base: 2, md: 0 }}
-            onClick={() => window.history.back()}
-          >
-            Voltar
-          </Button>
-          {!isMobile && (
-            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="#">Perfil</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
-          )}
-        </Flex>
-        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="semibold" textAlign={{ base: 'left', md: 'right' }}>
+    <Box  bg="white" borderRadius="xl" h={"90vh"} p={4}>
+      <Flex mb={6} justify="space-between" align="center" width="100%">
+        <Heading className="heading-title" fontSize="2xl" fontWeight="bold">
           Cadastrar Perfil
         </Heading>
       </Flex>
 
-      <Box mb={6}>
-        <Text mb={2}>Nome do Perfil</Text>
+
+      <Box mb={6} className="text-color">
+        <Text className="indicator-title" mb={2}>Nome do Perfil</Text>
         <Input
-          className='button-premium'
+          style={{ width: "100%" }}
           allowClear
           placeholder={`Digite aqui o nome do perfil`}
           value={nomePerfil}
           onChange={(e) => setNomePerfil(e.target.value)}
-          style={{
-            height: "40px",
-            width: "100%",
-            backgroundColor: "transparent",
-            color: "white",
-            borderRadius: "0px",
-            borderColor: "#2596be",
-            borderWidth: "1px",
-          }}
+          className="mecanicos-input"
         />
       </Box>
 
-      <Box>
-        <Heading fontSize="lg" mb={2}>Permissões</Heading>
-        <Stack spacing={4}>
-          <Box>
-            <Text fontWeight="semibold">Dashboard</Text>
-            <Checkbox
-              colorScheme="gray"
-              isChecked={permissoes.includes("dashboard")}
-              onChange={(e) => handleCheckboxChange(e, "dashboard")}
-            >
-              Dashboard
-            </Checkbox>
-          </Box>
+      <Box className="text-color">
+        <Heading className="indicator-title" fontSize="lg" mb={2}>Permissões</Heading>
+
+        <SimpleGrid columns={{ base: 1, sm: 2, lg: 5 }} spacing={4}>
+
 
           <Box>
             <Text fontWeight="semibold">Usuários</Text>
@@ -206,6 +166,7 @@ export const CreatePerfil: React.FC = () => {
               </Checkbox>
             </Stack>
           </Box>
+
           <Box>
             <Text fontWeight="semibold">Apoiadores</Text>
             <Stack pl={4}>
@@ -232,6 +193,7 @@ export const CreatePerfil: React.FC = () => {
               </Checkbox>
             </Stack>
           </Box>
+
           <Box>
             <Text fontWeight="semibold">Gerenciar Eventos</Text>
             <Stack pl={4}>
@@ -251,6 +213,7 @@ export const CreatePerfil: React.FC = () => {
               </Checkbox>
             </Stack>
           </Box>
+
           <Box>
             <Text fontWeight="semibold">Gerenciar Compras Coletiva</Text>
             <Stack pl={4}>
@@ -270,22 +233,38 @@ export const CreatePerfil: React.FC = () => {
               </Checkbox>
             </Stack>
           </Box>
-        </Stack>
+
+          <Box>
+            <Text fontWeight="semibold">Dashboard</Text>
+            <Checkbox
+              colorScheme="gray"
+              isChecked={permissoes.includes("dashboard")}
+              onChange={(e) => handleCheckboxChange(e, "dashboard")}
+            >
+              Dashboard
+            </Checkbox>
+          </Box>
+        </SimpleGrid>
       </Box>
 
       {error && <Text color="red.500">{error}</Text>}
 
-      <VStack alignItems="end" mt={6}>
+
+      <Flex justify="flex-start" mt={5}>
         <Button
-          colorScheme="green"
+          className="button-premium"
           onClick={handleSave}
           isLoading={loading}
           loadingText="Salvando..."
-          spinnerPlacement="end"
+          bg="#1b5ebc"
+          color="white"
+          colorScheme="green"
+          w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
         >
-          Salvar
+          {loading ? "Salvando..." : "Salvar"}
         </Button>
-      </VStack>
-    </>
+      </Flex>
+
+    </Box>
   );
 };

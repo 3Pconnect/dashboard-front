@@ -99,43 +99,16 @@ export const CreateNovoEvento = () => {
   ];
 
   return (
-    <>
-      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
-        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
-          <Button
-            colorScheme="white"
-            variant="ghost"
-            leftIcon={<Icon as={MdArrowBack} />}
-            mr={{ base: 0, md: 4 }}
-            mb={{ base: 2, md: 0 }}
-            onClick={() => window.history.back()}
-          >
-            Voltar
-          </Button>
-          {!isMobile && (
-            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/agenda">Agenda</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="#">Eventos</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
-          )}
-        </Flex>
-        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign={{ base: 'left', md: 'right' }}>
-          Agendar Evento
-        </Heading>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
+      <Flex mb={6} justify='space-between' align='center' width='100%'>
+        <Heading className='heading-title' fontSize='2xl' >Agendar evento </Heading>
       </Flex>
 
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+      <Grid className="indicator-title" templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box mb={4}>
           <Text mb={2}>Nome do Evento</Text>
           <Input
-            className="button-premium"
+           className="mecanicos-input"
             allowClear
             placeholder="Digite o nome do evento"
             value={nomeEvento}
@@ -172,7 +145,7 @@ export const CreateNovoEvento = () => {
         </Box>
       </Grid>
 
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+      <Grid className="indicator-title" templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box mb={4}>
           <Text mb={2}>Cidade</Text>
           <Select
@@ -197,7 +170,7 @@ export const CreateNovoEvento = () => {
         <Box mb={4}>
           <Text mb={2}>Tema</Text>
           <Input
-            className="button-premium"
+     className="mecanicos-input"
             allowClear
             placeholder="Digite o tema do evento"
             value={temaEvento}
@@ -214,9 +187,10 @@ export const CreateNovoEvento = () => {
         </Box>
       </Grid>
 
-      <Box mt={5}>
+      <Box mt={5} className="indicator-title">
         <Text mb={2}>Data do Evento</Text>
         <DatePicker
+         className="mecanicos-input"
           style={{
             width: "100%",
             height: "40px",
@@ -234,7 +208,7 @@ export const CreateNovoEvento = () => {
         />
       </Box>
 
-      <Box mt={5}>
+      <Box className="indicator-title" mt={5}>
         <Text mb={2}>Situação</Text>
         <Select
           className="button-premium"
@@ -249,15 +223,22 @@ export const CreateNovoEvento = () => {
         />
       </Box>
 
-      <VStack alignItems={"end"} mt={5}>
-        <Button
-          colorScheme="green"
-          isLoading={isLoading}
-          onClick={handleSalvar}
-        >
-          Salvar
-        </Button>
-      </VStack>
-    </>
+      <Flex justify="flex-start" mt={5}>
+
+<Button
+  className="button-premium"
+  onClick={handleSalvar}
+  isLoading={isLoading}
+  loadingText="Salvando..."
+  bg="#1b5ebc"
+  color="white"
+  colorScheme="green"
+  w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
+>
+  {isLoading ? "Salvando..." : "Salvar"}
+</Button>
+
+</Flex>
+    </Box>
   );
 };

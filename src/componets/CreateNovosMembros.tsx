@@ -28,23 +28,23 @@ export const CreateNovosMembros = () => {
   const navigate = useNavigate();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
-    const [dataEvento, setDataEvento] = useState<Dayjs | null>(dayjs());
+  const [dataEvento, setDataEvento] = useState<Dayjs | null>(dayjs());
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
       const response = await registerMembro(
-       {
-         name,
-         email,
-         tipo_usuario,
-         telefone,
-         nome_empresa,
-         cargo,
-         cnpj,
-         dataEvento,
-         atendimento_carros_premium: ""
-       }
+        {
+          name,
+          email,
+          tipo_usuario,
+          telefone,
+          nome_empresa,
+          cargo,
+          cnpj,
+          dataEvento,
+          atendimento_carros_premium: ""
+        }
 
       );
       console.log("Membro registrado com sucesso", response);
@@ -71,54 +71,23 @@ export const CreateNovosMembros = () => {
   };
 
   return (
-    <>
-      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
-        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
-          <Button
-            colorScheme="white"
-            variant="ghost"
-            leftIcon={<Icon as={MdArrowBack} />}
-            mr={{ base: 0, md: 4 }}
-            mb={{ base: 2, md: 0 }}
-            onClick={() => window.history.back()}
-          >
-            Voltar
-          </Button>
-          {!isMobile && (
-            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="#">Novos Membros</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
-          )}
-        </Flex>
-        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign={{ base: 'left', md: 'right' }}>
-          Cadastrar Novo Membro
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
+      <Flex mb={6} justify="space-between" align="center" width="100%">
+        <Heading className="heading-title" fontSize="2xl" fontWeight="bold">
+          Criar Membro
         </Heading>
       </Flex>
 
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+      <Grid className="indicator-title" templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box mb={4}>
-          <Text mb={2}>Nome</Text>
+          <Text className="indicator-title" mb={2}>Nome</Text>
           <Input
-            className='button-premium'
+
             allowClear
             placeholder="Digite o nome do membri"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={{
-              height: "40px",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px", borderColor: "#2596be",
-              borderWidth: "1px"
-            }}
+            className="mecanicos-input"
           />
         </Box>
 
@@ -126,45 +95,33 @@ export const CreateNovosMembros = () => {
         <Box mb={4}>
           <Text mb={2}>E-mail</Text>
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder="Digite o e-mail do membro"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            style={{
-              height: "40px",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px", borderColor: "#2596be",
-              borderWidth: "1px"
-            }}
+
           />
         </Box>
       </Grid>
 
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+      <Grid className="indicator-title" templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box mb={4}>
           <Text mb={2}>Empresa</Text>
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder="Digite o e-mail do membro"
             value={nome_empresa}
             onChange={(e) => setNomeEmpresa(e.target.value)}
-            style={{
-              height: "40px",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px", borderColor: "#2596be",
-              borderWidth: "1px"
-            }}
+
           />
         </Box>
 
         <Box mb={4}>
           <Text mb={2}>Cargo</Text>
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder="Digite o cargo do membro"
             value={cargo}
@@ -179,10 +136,10 @@ export const CreateNovosMembros = () => {
           />
         </Box>
 
-        <Box mb={4}>
+        <Box className="indicator-title" mb={4}>
           <Text mb={2}>CNPJ</Text>
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder="Digite o cnpj aqui"
             value={cnpj}
@@ -196,27 +153,17 @@ export const CreateNovosMembros = () => {
             }}
           />
         </Box>
-            <Box>
-                  <Text mb={2}>Próximo Vencimento</Text>
-                  <DatePicker
-                  value={dataEvento}
-                    style={{
-                      width: "100%",
-                      height: "40px",
-                      backgroundColor: "transparent",
-                      color: "white",
-                      borderRadius: "0px",
-                      borderColor: "#2596be",
-                      borderWidth: "1px",
-                      "::placeholder": {
-                        color: "white",
-                      },
-                    } as any}
-                    inputReadOnly={false}
-                    onChange={(date) => setDataEvento(date)}
-                  />
-                </Box>
         <Box>
+          <Text mb={2}>Próximo Vencimento</Text>
+          <DatePicker
+            value={dataEvento}
+            className="mecanicos-input"
+            inputReadOnly={false}
+            style={{ width: "100%" }}
+            onChange={(date) => setDataEvento(date)}
+          />
+        </Box>
+        <Box w={{ base: "100%", md: "200px" }} >
           <Text mb={2}>Situação</Text>
           <Select
             className="button-premium"
@@ -224,7 +171,7 @@ export const CreateNovosMembros = () => {
             value={filterType}
             onChange={setFilterType}
             style={{
-              width: 180,
+              width: "100%",
               height: "40px",
               color: "white",
             }}
@@ -232,19 +179,22 @@ export const CreateNovosMembros = () => {
         </Box>
       </Grid>
 
+      <Flex justify="flex-start" mt={5}>
 
-
-
-      <VStack alignItems={"end"} mt={5}>
         <Button
-          colorScheme="green"
+          className="button-premium"
           onClick={handleSubmit}
           isLoading={loading}
-          loadingText="Cadastrando..."
+          loadingText="Salvando..."
+          bg="#1b5ebc"
+          color="white"
+          colorScheme="green"
+          w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
         >
-          Salvar
+          {loading ? "Salvando..." : "Salvar"}
         </Button>
-      </VStack>
-    </>
+
+      </Flex>
+    </Box>
   );
 };

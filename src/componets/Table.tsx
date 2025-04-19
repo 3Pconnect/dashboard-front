@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker, Select } from 'antd';
-import { Heading, Flex, Button, useToast, Tag, useMediaQuery } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, Tag, useMediaQuery, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchUsers, deleteUser } from '../services/api';
@@ -129,110 +129,102 @@ const TableUsers: React.FC = () => {
 
   const columns: TableColumnsType<DataType> = isMobile
     ? [
-        {
-          title: 'Email',
-          dataIndex: 'email',
-          key: 'email',
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
-        {
-          title: 'Ações',
-          key: 'actions',
-          render: (_, record) => (
-            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(record.id);
-            }}>
-              <AiFillDelete />
-            </Button>
-          ),
-        },
-      ]
+      {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+        ellipsis: true,
+        render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+      },
+      {
+        title: 'Ações',
+        key: 'actions',
+        render: (_, record) => (
+          <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(record.id);
+          }}>
+            <AiFillDelete />
+          </Button>
+        ),
+      },
+    ]
     : [
-        {
-          title: 'Nome',
-          dataIndex: 'username',
-          key: 'username',
-          sorter: (a, b) => a.username.length - b.username.length,
-          sortOrder: sortedInfo.columnKey === 'username' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
+      {
+        title: 'Nome',
+        dataIndex: 'username',
+        key: 'username',
+        sorter: (a, b) => a.username.length - b.username.length,
+        sortOrder: sortedInfo.columnKey === 'username' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span >{text}</span>,
+      },
+      {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+        sorter: (a, b) => a.email.length - b.email.length,
+        sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+      },
+      {
+        title: 'Cadastrado em',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+      },
+      {
+        title: 'Situação',
+        dataIndex: 'situacao',
+        key: 'situacao',
+        render: (status: string) => {
+          let color = 'gray';
+          if (status === 'ATIVO') {
+            color = 'green';
+          } else if (status === 'INATIVO') {
+            color = 'red';
+          } else if (status === 'PENDENTE') {
+            color = 'orange';
+          }
+          return <Tag colorScheme={color}>{status.toLocaleLowerCase()}</Tag>;
         },
-        {
-          title: 'Email',
-          dataIndex: 'email',
-          key: 'email',
-          sorter: (a, b) => a.email.length - b.email.length,
-          sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
-        {
-          title: 'Cadastrado em',
-          dataIndex: 'createdAt',
-          key: 'createdAt',
-          sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-          sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
-        },
-        {
-          title: 'Situação',
-          dataIndex: 'situacao',
-          key: 'situacao',
-          render: (status: string) => {
-            let color = 'gray';
-            if (status === 'ATIVO') {
-              color = 'green';
-            } else if (status === 'INATIVO') {
-              color = 'red';
-            } else if (status === 'PENDENTE') {
-              color = 'orange';
-            }
-            return <Tag colorScheme={color}>{status.toLocaleLowerCase()}</Tag>;
-          },
-          filters: [
-            { text: 'Ativo', value: 'ATIVO' },
-            { text: 'Inactive', value: 'Inactive' },
-            { text: 'Pending', value: 'Pending' },
-          ],
-          filteredValue: filteredInfo.status || null,
-          onFilter: (value, record) => record.situacao.includes(value as string),
-        },
-        {
-          title: 'Perfil',
-          dataIndex: 'profile',
-          key: 'profile',
-          render: (profile: { name: string }) => <span>{profile?.name}</span>,
-        },
-        {
-          title: 'Ações',
-          key: 'actions',
-          render: (_, record) => (
-            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(record.id);
-            }}>
-              <AiFillDelete />
-            </Button>
-          ),
-        },
-      ];
+        filters: [
+          { text: 'Ativo', value: 'ATIVO' },
+          { text: 'Inactive', value: 'Inactive' },
+          { text: 'Pending', value: 'Pending' },
+        ],
+        filteredValue: filteredInfo.status || null,
+        onFilter: (value, record) => record.situacao.includes(value as string),
+      },
+      {
+        title: 'Perfil',
+        dataIndex: 'profile',
+        key: 'profile',
+        render: (profile: { name: string }) => <span>{profile?.name}</span>,
+      },
+      {
+        title: 'Ações',
+        key: 'actions',
+        render: (_, record) => (
+          <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(record.id);
+          }}>
+            <AiFillDelete />
+          </Button>
+        ),
+      },
+    ];
 
   return (
-    <>
+    <Box bg="white" borderRadius="xl" h={"90vh"} p={4}>
       <Flex mb={6} justify='space-between' align='center' width='100%'>
         <Heading className='heading-title' fontSize='2xl' fontWeight='bold'>Usuários</Heading>
-        <Button
-          className='button-premium'
-          onClick={() => navigate('/main/create-user')}
-          colorScheme='green'
-          fontSize='16px'
-          fontWeight='bold'
-        >
-          Adicionar
-        </Button>
+
       </Flex>
       <Flex mb={6} justify="flex-start" align="center" gap={isMobile ? 2 : 4} width="100%" flexWrap="wrap">
         <Select
@@ -252,23 +244,34 @@ const TableUsers: React.FC = () => {
           />
         ) : (
           <Input
-            className='button-premium'
+            className='mecanicos-input'
             allowClear
             placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-            style={{ height: "40px", width: isMobile ? "100%" : 240, backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+            style={{ width: isMobile ? "100%" : 240 }}
           />
         )}
+        <Box w={{ base: "100%", md: "250px" }} >
         <DatePicker.RangePicker
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
           onChange={(dates) => setDateRange(dates)}
           dropdownClassName="custom-dropdown"
-          style={{ width: isMobile ? "100%" : 300, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          className='mecanicos-input'
+          style={{ width: "100%" }}
           inputReadOnly={false}
         />
+        </Box>
         <Button className='button-premium' colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'}>
           Buscar
+        </Button>
+        <Button
+        width={isMobile ? '100%' : 'auto'}
+          className='button-premium'
+          onClick={() => navigate('/main/create-user')}
+          colorScheme='green'
+        >
+          Adicionar
         </Button>
       </Flex>
 
@@ -286,7 +289,7 @@ const TableUsers: React.FC = () => {
           style: { cursor: 'pointer' },
         })}
       />
-    </>
+    </ Box>
   );
 };
 

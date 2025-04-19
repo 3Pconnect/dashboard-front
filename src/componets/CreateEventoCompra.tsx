@@ -164,36 +164,16 @@ export const CreateEventoCompra = () => {
   };
 
   return (
-    <>
-      <Flex direction={{ base: 'column', md: 'row' }} mb={10} justify="space-between" align="center" width="100%">
-        <Flex align="center" mb={{ base: 2, md: 0 }}>
-          <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />}
-            mr={{ base: 0, md: 4 }} onClick={() => window.history.back()}>
-            Voltar
-          </Button>
-          {!isMobile && (
-            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="#">Compra Coletiva</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
-          )}
-        </Flex>
-        <Heading className="heading-title"
-          fontSize={{ base: 'xl', md: '2xl' }} style={{ fontWeight: 'bold' }}>Compra Coletiva</Heading>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4} >
+   <Flex mb={6} justify='space-between' align='center' width='100%'>
+        <Heading className='heading-title' fontSize='2xl' >Compra coletiva</Heading>
       </Flex>
 
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box>
           <Text className="indicator-title" mb={2}>Quantidade</Text>
           <Input
-            className="button-premium"
+         className="mecanicos-input"
             allowClear
             placeholder="Ex: 2"
             value={quantidade}
@@ -212,7 +192,7 @@ export const CreateEventoCompra = () => {
         <Box>
           <Text className="indicator-title" mb={2}>Quantidade Máxima Por Usuário</Text>
           <Input
-            className="button-premium"
+             className="mecanicos-input"
             allowClear
             placeholder="Ex: 1"
             value={quantidadeMaxima}
@@ -233,7 +213,7 @@ export const CreateEventoCompra = () => {
           <Text className="indicator-title" mb={2}>Produto</Text>
           <Input
             disabled
-            className="button-premium"
+           className="mecanicos-input"
             allowClear
             placeholder="Ex: 1"
             value={productName}
@@ -251,6 +231,7 @@ export const CreateEventoCompra = () => {
         <Box w="100%">
           <Text className="indicator-title" mb={2}>Périodo</Text>
           <DatePicker.RangePicker
+           className="mecanicos-input"
             value={dateRange ? [dateRange[0], dateRange[1]] : null}
             onChange={(dates) => setDateRange(dates)}
             dropdownClassName="custom-dropdown"
@@ -292,11 +273,23 @@ export const CreateEventoCompra = () => {
         )}
       </VStack>
 
-      <VStack alignItems={"end"} mt={5}>
-        <Button className="button-premium" colorScheme="green" onClick={handleSave} isLoading={saving} loadingText="Salvando...">
-          {saving ? "Salvando..." : "Salvar"}
-        </Button>
-      </VStack>
-    </>
+
+      <Flex justify="flex-start" mt={5}>
+
+<Button
+  className="button-premium"
+  onClick={handleSave}
+  isLoading={saving}
+  loadingText="Salvando..."
+  bg="#1b5ebc"
+  color="white"
+  colorScheme="green"
+  w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
+>
+  {saving ? "Salvando..." : "Salvar"}
+</Button>
+
+</Flex>
+    </Box>
   );
 };

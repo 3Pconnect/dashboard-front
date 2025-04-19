@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker, Select } from 'antd';
-import { Heading, Flex, Button, useToast, Tag, useMediaQuery } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, Tag, useMediaQuery, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchUsers, deleteUser, fetchMembros, deleteMembro, aprovarMembro } from '../services/api';
 import dayjs, { Dayjs } from 'dayjs';
+import { reduzirTexto } from '../utils/util';
 
 interface DataType {
   id: number;
@@ -137,143 +138,138 @@ const NovosMembrosTable: React.FC = () => {
 
   const columns: TableColumnsType<DataType> = isMobile
     ? [
-        {
-          title: 'Email',
-          dataIndex: 'email',
-          key: 'email',
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
-        // {
-        //   title: 'Situação',
-        //   dataIndex: 'situacao',
-        //   key: 'situacao',
-        //   render: (status: string) => {
-        //     let color = '';
-        //     switch (status) {
-        //       case 'ativo':
-        //         color = 'green';
-        //         break;
-        //       case 'inativo':
-        //         color = 'red';
-        //         break;
-        //       case 'pendente':
-        //         color = 'orange';
-        //         break;
-        //       default:
-        //         color = 'gray';
-        //     }
-        //     return <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
-        //   },
-        // },
-        {
-          title: 'Ações',
-          key: 'actions',
-          render: (_, record) => (
-            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(record.id);
-            }}>
-              <AiFillDelete />
-            </Button>
-          ),
-        },
-      ]
+      {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+        ellipsis: true,
+        render: (text) => <span >{text}</span>,
+      },
+      // {
+      //   title: 'Situação',
+      //   dataIndex: 'situacao',
+      //   key: 'situacao',
+      //   render: (status: string) => {
+      //     let color = '';
+      //     switch (status) {
+      //       case 'ativo':
+      //         color = 'green';
+      //         break;
+      //       case 'inativo':
+      //         color = 'red';
+      //         break;
+      //       case 'pendente':
+      //         color = 'orange';
+      //         break;
+      //       default:
+      //         color = 'gray';
+      //     }
+      //     return <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
+      //   },
+      // },
+      {
+        title: 'Ações',
+        key: 'actions',
+        render: (_, record) => (
+          <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(record.id);
+          }}>
+            <AiFillDelete />
+          </Button>
+        ),
+      },
+    ]
     : [
-        {
-          title: 'Nome',
-          dataIndex: 'name',
-          key: 'name',
-          sorter: (a, b) => a.name.length - b.name.length,
-          sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
+      {
+        title: 'Nome',
+        dataIndex: 'name',
+        key: 'name',
+        sorter: (a, b) => a.name.length - b.name.length,
+        sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span >{reduzirTexto(text, 25)}</span>,
+      },
+      {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+        sorter: (a, b) => a.email.length - b.email.length,
+        sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span>{text}</span>,
+      },
+      {
+        title: 'Empresa',
+        dataIndex: 'nome_empresa',
+        key: 'nome_empresa',
+        sorter: (a, b) => a.nome_empresa.length - b.nome_empresa.length,
+        sortOrder: sortedInfo.columnKey === 'nome_empresa' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span >{reduzirTexto(text, 25)}</span>,
+      },
+      {
+        title: 'Cargo',
+        dataIndex: 'cargo',
+        key: 'cargo',
+        sorter: (a, b) => a.cargo.length - b.cargo.length,
+        sortOrder: sortedInfo.columnKey === 'cargo' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span >{text}</span>,
+      },
+      {
+        title: 'Criado',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+      },
+      {
+        title: 'Situação',
+        dataIndex: 'situacao',
+        key: 'situacao',
+        render: (status: string) => {
+          let color = '';
+          switch (status) {
+            case 'ativo':
+              color = 'green';
+              break;
+            case 'inativo':
+              color = 'red';
+              break;
+            case 'pendente':
+              color = 'orange';
+              break;
+            default:
+              color = 'gray';
+          }
+          return <Tag colorScheme={color} >{status}</Tag>;
         },
-        {
-          title: 'Email',
-          dataIndex: 'email',
-          key: 'email',
-          sorter: (a, b) => a.email.length - b.email.length,
-          sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
-        {
-          title: 'Empresa',
-          dataIndex: 'nome_empresa',
-          key: 'nome_empresa',
-          sorter: (a, b) => a.nome_empresa.length - b.nome_empresa.length,
-          sortOrder: sortedInfo.columnKey === 'nome_empresa' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
-        {
-          title: 'Cargo',
-          dataIndex: 'cargo',
-          key: 'cargo',
-          sorter: (a, b) => a.cargo.length - b.cargo.length,
-          sortOrder: sortedInfo.columnKey === 'cargo' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
-        {
-          title: 'Cadastrado em',
-          dataIndex: 'createdAt',
-          key: 'createdAt',
-          sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-          sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
-        },
-        {
-          title: 'Situação',
-          dataIndex: 'situacao',
-          key: 'situacao',
-          render: (status: string) => {
-            let color = '';
-            switch (status) {
-              case 'ativo':
-                color = 'green';
-                break;
-              case 'inativo':
-                color = 'red';
-                break;
-              case 'pendente':
-                color = 'orange';
-                break;
-              default:
-                color = 'gray';
-            }
-            return <Tag colorScheme={color} style={{ fontSize: '14px', fontWeight: 'bold' }}>{status}</Tag>;
-          },
-        },
-        {
-          title: 'Ações',
-          key: 'actions',
-          render: (_, record) => (
-            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(record.id);
-            }}>
-              <AiFillDelete />
-            </Button>
-          ),
-        },
-      ];
+      },
+      {
+        title: 'Ações',
+        key: 'actions',
+        render: (_, record) => (
+          <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(record.id);
+          }}>
+            <AiFillDelete />
+          </Button>
+        ),
+      },
+    ];
 
   return (
-    <>
-      <Flex mb={6} justify='space-between' align='center' width='100%'>
-        <Heading fontSize='2xl' fontWeight='bold'>Membros</Heading>
-        <Button
-          onClick={() => navigate('/main/create-membro')}
-          colorScheme='green'
-          fontSize='16px'
-          fontWeight='bold'
-        >
-          Adicionar
-        </Button>
+    <Box bg="white" borderRadius="xl" h={"90vh"} p={4}>
+      <Flex mb={6} justify="space-between" align="center" width="100%">
+        <Heading className="heading-title" fontSize="2xl" fontWeight="bold">
+          Membros
+        </Heading>
       </Flex>
+
       <Flex mb={6} justify="flex-start" align="center" gap={isMobile ? 2 : 4} width="100%" flexWrap="wrap">
         <Select
           className="button-premium"
@@ -284,6 +280,7 @@ const NovosMembrosTable: React.FC = () => {
         />
         {filterType === 'situacao' ? (
           <Select
+            className="button-premium"
             options={situacaoFilterOptions}
             value={situacaoFilterType}
             onChange={setSituacaoFilterType}
@@ -291,41 +288,55 @@ const NovosMembrosTable: React.FC = () => {
           />
         ) : (
           <Input
-            className='button-premium'
+            className="mecanicos-input"
             allowClear
             placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-            style={{ height: "40px", width: isMobile ? "100%" : 240, backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+            style={{ width: isMobile ? "100%" : 240 }}
           />
         )}
         <DatePicker.RangePicker
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
           onChange={(dates) => setDateRange(dates)}
+          style={{ width: isMobile ? "100%" : 300 }}
           dropdownClassName="custom-dropdown"
-          style={{ width: isMobile ? "100%" : 300, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          className="mecanicos-input"
           inputReadOnly={false}
         />
-        <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'}>
+        <Button colorScheme="blue" className="button-premium" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'}>
           Buscar
+        </Button>
+
+        <Button
+          className="button-premium"
+          onClick={() => navigate('/main/create-membro')}
+          colorScheme='green'
+          fontSize='16px'
+          fontWeight='bold'
+          style={{ width: isMobile ? "100%" : 300 }}
+        >
+          Adicionar
         </Button>
       </Flex>
 
-      <Table<DataType>
-        columns={columns}
-        dataSource={data}
-        loading={loading}
-        onChange={handleTableChange}
-        pagination={{ ...pagination, total }}
-        scroll={{ x: 'max-content' }}
-        onRow={(record) => ({
-          onClick: () => {
-            navigate('/main/update-membro/' + record?.id);
-          },
-          style: { cursor: 'pointer', minHeight: '70vh' }
-        })}
-      />
-    </>
+      <Box w="100%" maxW="100vw" overflowX="hidden">
+        <Table<DataType>
+          columns={columns}
+          dataSource={data}
+          loading={loading}
+          onChange={handleTableChange}
+          pagination={{ ...pagination, total }}
+          style={{ width: "100%" }}
+          scroll={{ x: 'max-content', y: 550 }} // Ajustando o scroll horizontal
+          onRow={(record) => ({
+            onClick: () => navigate('/main/update-membro/' + record?.id),
+            style: { cursor: 'pointer', minHeight: '70vh' },
+          })}
+        />
+      </Box>
+
+    </Box>
   );
 };
 

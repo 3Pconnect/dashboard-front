@@ -62,33 +62,15 @@ export const CreateProduct = () => {
   };
 
   return (
-    <>
-      <Flex mb={10} className="indicator-title" justify="space-between" align="center" width="100%">
-        <Flex align="center">
-          <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />}
-            mr={4} onClick={() => window.history.back()}>
-            Voltar
-          </Button>
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="#">Produtos</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
-        </Flex>
-        <Heading className="heading-title" fontSize="2xl" style={{ fontWeight: 'bold' }}>Cadastrar Produto</Heading>
+    <Box  className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
+      <Flex mb={6} justify='space-between' align='center' width='100%'>
+        <Heading className='heading-title' fontSize='2xl' >Novo produto</Heading>
       </Flex>
-
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box>
           <Text className="indicator-title" mb={2}>Nome</Text>
           <Input
-            className="button-premium"
+     className="mecanicos-input"
             allowClear
             placeholder="Digite o nome do produto"
             value={nome}
@@ -99,7 +81,7 @@ export const CreateProduct = () => {
         <Box>
           <Text className="indicator-title" mb={2}>Descrição</Text>
           <Input
-            className="button-premium"
+className="mecanicos-input"
             allowClear
             placeholder="Digite a descrição"
             value={descricao}
@@ -110,7 +92,7 @@ export const CreateProduct = () => {
         <Box>
           <Text className="indicator-title" mb={2}>Preço</Text>
           <Input
-            className="button-premium"
+ className="mecanicos-input"
             allowClear
             placeholder="Digite o preço"
             value={preco}
@@ -122,7 +104,7 @@ export const CreateProduct = () => {
         <Box>
           <Text className="indicator-title" mb={2}>Estoque</Text>
           <Input
-            className="button-premium"
+    className="mecanicos-input"
             allowClear
             placeholder="Digite a quantidade em estoque"
             value={estoque}
@@ -133,11 +115,22 @@ export const CreateProduct = () => {
         </Box>
       </Grid>
 
-      <VStack alignItems={"end"} mt={5}>
-        <Button className="button-premium" colorScheme="green" onClick={handleSave} isLoading={saving} loadingText="Salvando...">
-          {saving ? "Salvando..." : "Salvar"}
-        </Button>
-      </VStack>
-    </>
+      <Flex justify="flex-start" mt={5}>
+
+<Button
+  className="button-premium"
+  onClick={handleSave}
+  isLoading={saving}
+  loadingText="Salvando..."
+  bg="#1b5ebc"
+  color="white"
+  colorScheme="green"
+  w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
+>
+  {saving ? "Salvando..." : "Salvar"}
+</Button>
+
+</Flex>
+    </Box>
   );
 };

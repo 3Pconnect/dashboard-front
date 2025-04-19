@@ -20,24 +20,24 @@ const TotalAssociadosChartPorEstado: React.FC<{ dados: Array<Record<string, numb
         type: "bar",
         height: 600,
         background: "transparent",
-        fontFamily: "Bai Jamjuree, sans-serif",
+        fontFamily: "Montserrat, sans-serif",
       },
       title: {
         text: "Total de Membros por Estado",
         align: "left",
         style: {
-          color: "#FFFFFF", // Cor do título
-          fontSize: "18px",
-          fontFamily: "Bai Jamjuree, sans-serif",
+          color: "#000", // Cor padrão preta
+          fontSize: "16px",
+          fontWeight: 400,
         },
       },
       xaxis: {
         categories: [],
         labels: {
           style: {
-            colors: "#FFFFFF", // Cor dos rótulos do eixo X
+            colors: "#000", // Preto
             fontSize: "14px",
-            fontFamily: "Bai Jamjuree, sans-serif",
+            fontWeight: 400,
           },
         },
       },
@@ -45,22 +45,21 @@ const TotalAssociadosChartPorEstado: React.FC<{ dados: Array<Record<string, numb
         title: {
           text: "Total de Membros",
           style: {
-            color: "#FFFFFF", // Cor do título do eixo Y
+            color: "#000", // Preto
             fontSize: "16px",
-            fontFamily: "Bai Jamjuree, sans-serif",
+            fontWeight: 400,
           },
         },
         labels: {
           style: {
-            colors: "#FFFFFF", // Cor dos números do eixo Y
+            colors: "#000", // Preto
             fontSize: "14px",
-            fontFamily: "Bai Jamjuree, sans-serif",
           },
         },
       },
-      colors: ["#4cb8b0"], // Cor das barras
+      colors: ["#008FFB"], // Azul padrão da biblioteca
       theme: {
-        mode: "dark",
+        mode: "light", // Modo claro por padrão
       },
       plotOptions: {
         bar: {
@@ -70,9 +69,8 @@ const TotalAssociadosChartPorEstado: React.FC<{ dados: Array<Record<string, numb
       },
       dataLabels: {
         style: {
-          colors: ["#FFFFFF"], // Cor dos valores dentro das barras
+          colors: ["#000"], // Preto para o contraste
           fontSize: "14px",
-          fontFamily: "Bai Jamjuree, sans-serif",
         },
       },
     },
@@ -109,9 +107,19 @@ const TotalAssociadosChartPorEstado: React.FC<{ dados: Array<Record<string, numb
   }, [dados]);
 
   return (
-    <SimpleGrid columns={{ base: 1, md: 1 }} spacing={4} p={4}>
-      <VStack spacing={4} p={4} w="full" h="600px" bg="#0B244D" justifyContent="center" borderRadius="10px">
-        <ReactApexChart  style={{ width: "100%"}}  options={state.options} series={state.series} type="bar" height={550} />
+    <SimpleGrid className="indicator-title" columns={{ base: 1, md: 1 }} spacing={4} p={4}>
+      <VStack
+        spacing={4}
+        p={4}
+        w="full"
+        h="600px"
+        bg="white"
+        border="1px solid #E2E8F0"
+        borderRadius="10px"
+        justifyContent="center"
+        boxShadow="sm"
+      >
+        <ReactApexChart style={{ width: "100%" }} options={state.options} series={state.series} type="bar" height={550} />
       </VStack>
     </SimpleGrid>
   );

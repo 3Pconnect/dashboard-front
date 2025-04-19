@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker } from 'antd';
-import { Heading, Flex, Button, useToast, useMediaQuery } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, useMediaQuery, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchProfiles, deleteProfile } from '../services/api';
@@ -92,89 +92,95 @@ const PerfilsTable: React.FC = () => {
 
   const columns: TableColumnsType<DataType> = isMobile
     ? [
-        {
-          title: 'Nome',
-          dataIndex: 'name',
-          key: 'name',
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{truncateString(text, 10)}</span>,
-        },
-        {
-          title: 'Ações',
-          key: 'actions',
-          render: (_, record) => (
-            <Flex onClick={() => navigate(`/main/update-perfil/${record.id}`)} style={{ cursor: 'pointer' }}>
-              <Button variant={'ghost'} colorScheme='red' onClick={(e) => { e.stopPropagation(); handleDelete(record.id); }}>
-                <AiFillDelete />
-              </Button>
-            </Flex>
-          ),
-        },
-      ]
+      {
+        title: 'Nome',
+        dataIndex: 'name',
+        key: 'name',
+        render: (text) => <span >{truncateString(text, 10)}</span>,
+      },
+      {
+        title: 'Ações',
+        key: 'actions',
+        render: (_, record) => (
+          <Flex onClick={() => navigate(`/main/update-perfil/${record.id}`)} style={{ cursor: 'pointer' }}>
+            <Button variant={'ghost'} colorScheme='red' onClick={(e) => { e.stopPropagation(); handleDelete(record.id); }}>
+              <AiFillDelete />
+            </Button>
+          </Flex>
+        ),
+      },
+    ]
     : [
-        {
-          title: 'Nome',
-          dataIndex: 'name',
-          key: 'name',
-          sorter: (a, b) => a.name.length - b.name.length,
-          sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{truncateString(text, 10)}</span>,
-        },
-        {
-          title: 'Cadastrado em',
-          dataIndex: 'createdAt',
-          key: 'createdAt',
-          sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-          sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
-        },
-        {
-          title: 'Ações',
-          key: 'actions',
-          render: (_, record) => (
-            <Flex onClick={() => navigate(`/main/update-perfil/${record.id}`)} style={{ cursor: 'pointer' }}>
-              <Button variant={'ghost'} colorScheme='red' onClick={(e) => { e.stopPropagation(); handleDelete(record.id); }}>
-                <AiFillDelete />
-              </Button>
-            </Flex>
-          ),
-        },
-      ];
+      {
+        title: 'Nome',
+        dataIndex: 'name',
+        key: 'name',
+        sorter: (a, b) => a.name.length - b.name.length,
+        sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span >{truncateString(text, 10)}</span>,
+      },
+      {
+        title: 'Cadastrado em',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+      },
+      {
+        title: 'Ações',
+        key: 'actions',
+        render: (_, record) => (
+          <Flex onClick={() => navigate(`/main/update-perfil/${record.id}`)} style={{ cursor: 'pointer' }}>
+            <Button variant={'ghost'} colorScheme='red' onClick={(e) => { e.stopPropagation(); handleDelete(record.id); }}>
+              <AiFillDelete />
+            </Button>
+          </Flex>
+        ),
+      },
+    ];
 
   return (
-    <>
-      <Flex mb={6} justify='space-between' align='center' width='100%'>
-        <Heading fontSize='2xl' fontWeight='bold'>Perfis</Heading>
-        <Button
-          onClick={() => navigate('/main/create-perfil')}
-          colorScheme='green'
-          fontSize='16px'
-          fontWeight='bold'
-        >
-          Adicionar
-        </Button>
+    <Box  bg="white" borderRadius="xl" h={"90vh"} p={4}>
+      <Flex mb={6} justify="space-between" align="center" width="100%">
+        <Heading className="heading-title" fontSize="2xl" fontWeight="bold">
+          Perfis
+        </Heading>
       </Flex>
+
 
       <Flex mb={6} justify='flex-start' align='center' gap={isMobile ? 2 : 4} width='100%' flexWrap="wrap">
         <Input
-          className='button-premium'
+          className="mecanicos-input"
           allowClear
           placeholder={`Buscar por nome`}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ height: "40px", width: isMobile ? "100%" : 240, backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          style={{ width: isMobile ? "100%" : 240 }}
         />
 
         <DatePicker.RangePicker
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
+          style={{ width: isMobile ? "100%" : 300 }}
           onChange={(dates) => setDateRange(dates)}
           dropdownClassName="custom-dropdown"
-          style={{ width: isMobile ? "100%" : 300, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
+          className="mecanicos-input"
           inputReadOnly={false}
         />
-        <Button w={isMobile ? '100%' : 200} colorScheme='blue' onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
+        <Button w={isMobile ? '100%' : 200} className="button-premium" colorScheme='blue' onClick={handleSearch} leftIcon={<AiOutlineSearch />}>
           Buscar
+        </Button>
+
+        <Button
+          w={isMobile ? '100%' : 200}
+          onClick={() => navigate('/main/create-perfil')}
+          colorScheme='green'
+          className="button-premium"
+          fontWeight='bold'
+        >
+          Adicionar
         </Button>
       </Flex>
 
@@ -190,7 +196,7 @@ const PerfilsTable: React.FC = () => {
           style: { cursor: 'pointer' }
         })}
       />
-    </>
+    </Box>
   );
 };
 

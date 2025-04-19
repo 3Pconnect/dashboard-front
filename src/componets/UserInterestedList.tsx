@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps } from 'antd';
-import { Heading, Flex, Button, useToast, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useBreakpointValue, Tag } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useBreakpointValue, Tag, Box } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MdArrowBack } from 'react-icons/md';
 import { fetchInteressadosCompra } from '../services/api';
@@ -113,31 +113,9 @@ const UserInterestedList: React.FC = () => {
   ];
 
   return (
-    <>
-      <Flex mb={6} justify="space-between" align="center" width="100%">
-        <Heading className="heading-title" fontSize="2xl" fontWeight="bold">
-          Interessados
-        </Heading>
-      </Flex>
-      <Flex direction={{ base: 'column', md: 'row' }} mb={10} justify="space-between" align="center" width="100%">
-        <Flex align="center" mb={{ base: 2, md: 0 }}>
-          <Button colorScheme="white" variant="ghost" leftIcon={<Icon as={MdArrowBack} />} mr={{ base: 0, md: 4 }} onClick={() => window.history.back()}>
-            Voltar
-          </Button>
-          {!isMobile && (
-            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/cadastro">Compras Coletivas</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="#">Interessados</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
-          )}
-        </Flex>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4} >
+      <Flex mb={6} justify='space-between' align='center' width='100%'>
+        <Heading className='heading-title' fontSize='2xl' >Interessados</Heading>
       </Flex>
 
       <Table<DataType>
@@ -148,7 +126,7 @@ const UserInterestedList: React.FC = () => {
         pagination={{ ...pagination, total }}
         scroll={{ x: 'max-content' }}
       />
-    </>
+    </Box>
   );
 };
 

@@ -86,62 +86,27 @@ export const CreateUser = () => {
   };
 
   return (
-    <Flex direction="column" p={4}>
-      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
-        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
-          <Button
-            colorScheme="white"
-            variant="ghost"
-            leftIcon={<Icon as={MdArrowBack} />}
-            mr={{ base: 0, md: 4 }}
-            mb={{ base: 2, md: 0 }}
-            onClick={() => window.history.back()}
-          >
-            Voltar
-          </Button>
-          {!isMobile && (
-            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="#">Usuários</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
-          )}
-        </Flex>
-        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign={{ base: 'left', md: 'right' }}>
-          Cadastrar Usuário
-        </Heading>
+    <Flex className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4} direction="column" >
+      <Flex mb={6} justify='space-between' align='center' width='100%'>
+        <Heading className='heading-title' fontSize='2xl' >Cadastrar Usuário</Heading>
       </Flex>
 
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+
+      <Grid className="indicator-title" templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box>
-          <Text className="indicator-title" mb={2}>Nome</Text>
+          <Text mb={2} className="indicator-title">Nome</Text>
           <Input
-            className="button-premium"
+            className="mecanicos-input"
             allowClear
             placeholder="Digite o nome"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            style={{
-              height: "40px",
-              width: "100%",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px",
-              borderColor: "#2596be",
-              borderWidth: "1px"
-            }}
+
           />
         </Box>
-        <Box>
-          <Text className="indicator-title" mb={2}>E-mail</Text>
+        <Box className="indicator-title">
+          <Text mb={2} color="gray.600">E-mail</Text>
           <Input
-            className="button-premium"
             allowClear
             placeholder="Digite o e-mail"
             value={email}
@@ -149,40 +114,63 @@ export const CreateUser = () => {
             style={{
               height: "40px",
               width: "100%",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px",
-              borderColor: "#2596be",
-              borderWidth: "1px"
+              backgroundColor: "#f9f9f9",
+              color: "#333",
+              borderRadius: "6px",
+              border: "1px solid #ccc"
             }}
           />
         </Box>
       </Grid>
 
       <VStack mt={5} spacing={4} align="stretch">
-        <Box>
-          <Text className="indicator-title" mb={2}>Situação do Usuário</Text>
-          <Select style={{ width: "100px" }} className="button-premium" options={situacaoFilterOptions} placeholder="Selecione a situação" value={situacao} onChange={setSituacao} />
+        <Box w={{ base: "100%", md: "200px" }} >
+          <Text mb={2} className="indicator-title">Situação do Usuário</Text>
+          <Select
+            style={{ width: "100%" }}
+            options={situacaoFilterOptions}
+            placeholder="Selecione a situação"
+            value={situacao}
+            onChange={setSituacao}
+            className="button-premium"
+          />
         </Box>
       </VStack>
 
       <VStack mt={5} alignItems="start">
-        <Text className="indicator-title" mb={2}>Perfil de Acesso</Text>
+        <Text mb={2} className="indicator-title">Perfil de Acesso</Text>
         {loading ? (
           <Spinner size="md" />
         ) : (
           profiles.map((profile) => (
-            <Checkbox key={profile.id} isChecked={selectedProfile === profile.id} onChange={() => handleCheckboxChange(profile.id)}>
+            <Checkbox
+              key={profile.id}
+              isChecked={selectedProfile === profile.id}
+              onChange={() => handleCheckboxChange(profile.id)}
+              colorScheme="orange"
+              color="gray.700"
+            >
               {profile.name}
             </Checkbox>
           ))
         )}
       </VStack>
 
-      <Flex justify="flex-end" mt={5}>
-        <Button className="button-premium" colorScheme="green" onClick={handleSave} isLoading={saving} loadingText="Salvando...">
+      <Flex justify="flex-start" mt={5}>
+
+        <Button
+          className="button-premium"
+          onClick={handleSave}
+          isLoading={saving}
+          loadingText="Salvando..."
+          bg="#1b5ebc"
+          color="white"
+          colorScheme="green"
+          w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
+        >
           {saving ? "Salvando..." : "Salvar"}
         </Button>
+
       </Flex>
     </Flex>
   );

@@ -105,83 +105,41 @@ export const UpdateUser = () => {
   };
 
   return (
-    <>
-      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-between" mb={10}>
-        <Flex direction={{ base: 'column', md: 'row' }} align="center" mb={{ base: 2, md: 0 }}>
-          <Button
-            colorScheme="white"
-            variant="ghost"
-            leftIcon={<Icon as={MdArrowBack} />}
-            mr={{ base: 0, md: 4 }}
-            mb={{ base: 2, md: 0 }}
-            onClick={() => window.history.back()}
-          >
-            Voltar
-          </Button>
-          {!isMobile && (
-            <Breadcrumb display={{ base: 'none', md: 'flex' }}>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/cadastro">Cadastro</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href="#">Usuários</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
-          )}
-        </Flex>
-        <Heading fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign={{ base: 'left', md: 'right' }}>
-          Atualizar Usuário
-        </Heading>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
+      <Flex mb={6} justify='space-between' align='center' width='100%'>
+        <Heading className='heading-title' fontSize='2xl' >Atualizar Usuário</Heading>
+
+
       </Flex>
 
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box>
           <Text className="indicator-title" mb={2}>Nome</Text>
           <Input
-            className="button-premium"
             allowClear
             placeholder="Digite o nome"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            style={{
-              height: "40px",
-              width: "100%",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px",
-              borderColor: "#2596be",
-              borderWidth: "1px"
-            }}
+            className='mecanicos-input'
           />
         </Box>
         <Box>
           <Text className="indicator-title" mb={2}>E-mail</Text>
           <Input
-            className="button-premium"
             allowClear
             placeholder="Digite o e-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            style={{
-              height: "40px",
-              width: "100%",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px",
-              borderColor: "#2596be",
-              borderWidth: "1px"
-            }}
+            className='mecanicos-input'
+
           />
         </Box>
       </Grid>
 
       <VStack mt={5} spacing={4} align="stretch">
-        <Box>
+        <Box w={{ base: "100%", md: "200px" }} >
           <Text className="indicator-title" mb={2}>Situação do Usuário</Text>
-          <Select style={{ width: "100px" }}
+          <Select style={{ width: "100%" }}
             className="button-premium"
             options={situacaoFilterOptions}
             placeholder="Selecione a situação"
@@ -190,23 +148,26 @@ export const UpdateUser = () => {
       </VStack>
 
       <VStack mt={5} alignItems={"start"}>
-        <Text mb={2}>Perfil de Acesso</Text>
+        <Text className="indicator-title" mb={2}>Perfil de Acesso</Text>
         {loading ? (
           <Spinner size="md" />
         ) : (
           profiles.map((profile) => (
-            <Checkbox key={profile.id} isChecked={selectedProfile === profile.id} onChange={() => handleCheckboxChange(profile.id)}>
+            <Checkbox color="gray.700" key={profile.id} isChecked={selectedProfile === profile.id} onChange={() => handleCheckboxChange(profile.id)}>
               {profile.name}
             </Checkbox>
           ))
         )}
       </VStack>
 
-      <VStack alignItems={"end"} mt={5}>
-        <Button colorScheme="green" onClick={handleSave} isLoading={saving} loadingText="Atualizando...">
+      <Flex justify="flex-start" mt={5}>
+
+        <Button w={{ base: "100%", md: "200px" }} color={"white"} bg={"#1b5ebc"} onClick={handleSave} isLoading={saving} loadingText="Atualizando...">
           {saving ? "Atualizando..." : "Atualizar"}
         </Button>
-      </VStack>
-    </>
+
+      </Flex>
+
+    </Box>
   );
 };

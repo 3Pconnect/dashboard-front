@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Heading, Button, VStack, Link, useBreakpointValue, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, HStack, Image } from '@chakra-ui/react';
+import { Box, Flex, Heading, Button, VStack, Link, useBreakpointValue, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, HStack, Image, Text } from '@chakra-ui/react';
 import { FaHome, FaInfoCircle, FaCog, FaSignOutAlt, FaBars, FaUser, FaUsersCog, FaCalendarAlt, FaUpload } from 'react-icons/fa';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { NovosMembrosList } from './NovosMembrosList';
@@ -52,11 +52,11 @@ function Out() {
   };
 
   return (
-    <Flex minHeight="100vh" backgroundColor="#060c32" color="white">
+    <Flex minHeight="100vh" backgroundColor="#f8f9fa" color="white">
       {/* Menu Lateral para dispositivos grandes */}
       <Box bg={"red"}
         width={{ base: '100%', md: '250px' }}
-        backgroundColor="#07104A"
+        backgroundColor="#132132"
         padding={4}
         boxShadow="md"
         display={{ base: 'none', md: 'flex' }}
@@ -78,8 +78,9 @@ function Out() {
             color="white"
             onClick={() => navigate('/main/dashboard')}
           >
-            <FaHome style={{ marginRight: '8px' }} />
-            Dashboard
+            <FaHome  style={{ marginRight: '8px' }} />
+          
+            <Text className="indicator-title">  Dashboard</Text>
           </Link>
 
           {/* Categoria Cadastros */}
@@ -93,7 +94,7 @@ function Out() {
               onClick={() => toggleSubMenu('cadastros')}
             >
               <FaUser style={{ marginRight: '8px' }} />
-              Cadastros
+              <Text className="indicator-title">  Cadastros</Text>
             </Link>
             {activeMenu === 'cadastros' && (
               <VStack align="start" spacing={2} pl={6}>
@@ -107,7 +108,7 @@ function Out() {
                     onClick={() => navigate('/main/users')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
-                    Usuários
+                    <Text className="indicator-title">Usuários</Text>
                   </Link>
                 }
                 {permissoes.includes('read.profiles') &&
@@ -120,7 +121,7 @@ function Out() {
                     onClick={() => navigate('/main/perfis')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
-                    Perfis
+                    <Text className="indicator-title">  Perfis</Text>
                   </Link>
                 }
                 {permissoes.includes('read.membros') &&
@@ -133,7 +134,7 @@ function Out() {
                     onClick={() => navigate('/main/novos-membros')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
-                    Novos Membros
+                    <Text className="indicator-title">Membros</Text>
                   </Link>
                 }
                 {permissoes.includes('read.apoiadores') &&
@@ -146,7 +147,7 @@ function Out() {
                     onClick={() => navigate('/main/apoiadores')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
-                    Novos Parceiros
+                    <Text className="indicator-title">Apoiadores</Text>
                   </Link>
                 }
               </VStack>
@@ -164,7 +165,7 @@ function Out() {
               onClick={() => toggleSubMenu('eventos')}
             >
               <FaCalendarAlt style={{ marginRight: '8px' }} />
-              Eventos
+              <Text className="indicator-title">Eventos</Text>
             </Link>
             {activeMenu === 'eventos' && (
               <VStack align="start" spacing={2} pl={6}>
@@ -179,7 +180,7 @@ function Out() {
                       onClick={() => navigate('/main/todos-eventos')}
                     >
                       <FaCalendarAlt style={{ marginRight: '8px' }} />
-                      Eventos
+                      <Text className="indicator-title">Todos</Text>
                     </Link>
 
                     <Link
@@ -191,7 +192,7 @@ function Out() {
                       onClick={() => navigate('/main/meus-eventos')}
                     >
                       <FaCalendarAlt style={{ marginRight: '8px' }} />
-                      Meus Eventos
+                      <Text className="indicator-title">Meus eventos</Text>
                     </Link>
                   </>
                 }
@@ -205,7 +206,7 @@ function Out() {
                     onClick={() => navigate('/main/agenda-eventos')}
                   >
                     <FaCalendarAlt style={{ marginRight: '8px' }} />
-                    Agenda de Eventos
+                    <Text className="indicator-title">  Agenda</Text>
                   </Link>}
               </VStack>
             )}
@@ -223,7 +224,7 @@ function Out() {
               onClick={() => toggleSubMenu('compras')}
             >
               <FaUsersCog style={{ marginRight: '8px' }} />
-              Compras
+              <Text className="indicator-title">  Compras</Text>
             </Link>
             {activeMenu === 'compras' && (
               <>
@@ -239,7 +240,7 @@ function Out() {
                       onClick={() => navigate('/main/list-evento-compras')}
                     >
                       <FaUsersCog style={{ marginRight: '8px' }} />
-                      Gerenciar Compra Coletiva
+                      <Text className="indicator-title">Gestão</Text>
                     </Link>
                   }
                   <Link
@@ -251,7 +252,8 @@ function Out() {
                     onClick={() => navigate('/main/list-compra-coletiva')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
-                    Compras
+                    
+                    <Text className="indicator-title">Todas</Text>
                   </Link>
                   {permissoes.includes('manage.compras') &&
                     <Link
@@ -263,7 +265,7 @@ function Out() {
                       onClick={() => navigate('/main/list-product')}
                     >
                       <FaUsersCog style={{ marginRight: '8px' }} />
-                      Produtos
+                      <Text className="indicator-title">Produtos</Text>
                     </Link>
                   }
                 </VStack>
@@ -281,7 +283,7 @@ function Out() {
             onClick={handleLogout}
           >
             <FaSignOutAlt style={{ marginRight: '8px' }} />
-            Sair
+            <Text className="indicator-title">Sair</Text>
           </Link>
         </VStack>
       </Box>

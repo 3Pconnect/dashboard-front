@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, DatePicker } from 'antd';
-import { Heading, Flex, Button, useToast, useBreakpointValue, Tag } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, useBreakpointValue, Tag, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineFileText, AiOutlineSearch } from 'react-icons/ai';
 import { fetchSales } from '../services/api';
@@ -201,15 +201,14 @@ const CompraColetivaList: React.FC = () => {
   ];
 
   return (
-    <>
-      <Flex mb={6} justify="space-between" align="center" width="100%">
-        <Heading fontSize="2xl" fontWeight="bold">
-          Compra Coletiva
-        </Heading>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
+      <Flex mb={6} justify='space-between' align='center' width='100%'>
+        <Heading className='heading-title' fontSize='2xl' >Compra coletiva</Heading>
       </Flex>
 
       <Flex mb={6} justify={{ base: 'center', md: 'flex-start' }} align="center" gap={4} width="100%" flexWrap="wrap">
         <DatePicker.RangePicker
+         className="mecanicos-input"
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
           onChange={(dates) => setDateRange(dates)}
           dropdownClassName="custom-dropdown"
@@ -225,7 +224,7 @@ const CompraColetivaList: React.FC = () => {
           inputReadOnly={false}
         />
 
-        <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} flexGrow={{ base: 1, md: 0 }}>
+        <Button className="button-premium" colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} flexGrow={{ base: 1, md: 0 }}>
           Buscar
         </Button>
       </Flex>
@@ -244,7 +243,7 @@ const CompraColetivaList: React.FC = () => {
         })}
         rowKey="id"
       />
-    </>
+    </Box>
   );
 };
 

@@ -1,17 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 body {
-    font-family: 'Bai Jamjuree', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 16px;
     line-height: 50px;
     font-weight: 700;
     letter-spacing: normal;
     color: #D63939;
+    background-color: #ffffff;
+    overflow-x: hidden;
 }
 
 .button-menu-nav {
-    font-family: 'Bai Jamjuree', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 16px;
     line-height: 20px;
     font-weight: 700;
@@ -24,159 +25,226 @@ body {
 }
 
 .button-menu-nav:hover {
-    color: #D63939;
+    color: #3182ce;
+    font-weight: bolder;
 }
 
 .indicator-title {
-    font-family: "Bai Jamjuree", sans-serif !important;
+    font-family: "Montserrat", sans-serif !important;
     line-height: 25.6px !important;
     font-weight: 400 !important;
     letter-spacing: normal !important;
 }
+
 .heading-title {
-    font-family: "Bai Jamjuree", sans-serif !important;
+    font-family: "Montserrat", sans-serif !important;
     line-height: 25.6px !important;
     font-weight: 600 !important;
     letter-spacing: normal !important;
+    color: #000;
 }
+
 .button-premium .ant-input-clear-icon {
-  color: white; /* Ou qualquer outra cor que você desejar */
+    color: rgb(219, 219, 219) !important;
 }
 
 .button-premium {
-    font-family: "Bai Jamjuree", sans-serif !important;
+    font-family: "Montserrat", sans-serif !important;
     line-height: 25.6px !important;
     font-weight: 400 !important;
     letter-spacing: normal !important;
-    color: aliceblue !important;
-}
-.button-premium input::placeholder {
-    color: rgba(255, 255, 255, 0.7) !important; /* Cor do placeholder */
-  }
-.ant-input {
-    font-family: 'Bai Jamjuree', sans-serif;
+    color: #ffffff !important;
     
+}
+
+.button-premium input::placeholder {
+    color: rgb(219, 219, 219) !important;
+}
+
+.ant-input {
+    font-family: 'Montserrat', sans-serif;
     border-radius: 0px !important;
-    /* Arredondar bordas */
-    color: white !important;
-    /* Cor do texto */
+    color: #000 !important;
 }
 
 .ant-picker input {
-    font-family: "Bai Jamjuree", sans-serif !important;
+    font-family: "Montserrat", sans-serif !important;
     border-radius: 8px !important;
-    /* Arredondar bordas */
-    border-color: blue !important;
-    /* Cor do texto */
+    border-color: #2596be !important;
 }
 
 .input-premium {
-    font-family: 'Bai Jamjuree', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 400;
-    /* Regular weight */
 }
 
 .ant-picker-range .ant-picker-input > input::placeholder {
-    color: rgba(255, 255, 255, 0.7); /* Cor do texto */
-  }
-  
-  /* Para os rótulos "Start date" e "End date" */
-  .ant-picker-range .ant-picker-label {
-    color: rgba(255, 255, 255, 0.7); /* Cor do rótulo */
-    font-size: 14px; /* Tamanho da fonte */
-    font-family: "Bai Jamjuree", sans-serif; /* Fonte customizada */
-  }
+    color: rgba(0, 0, 0, 0.5);
+}
 
+.ant-picker-range .ant-picker-label {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 14px;
+    font-family: "Montserrat", sans-serif;
+}
 
-
-  /* Estilo para o campo de entrada do Select */
+/* Campo do Select */
 .button-premium .ant-select-selector {
-    background-color: transparent !important;  /* Cor do fundo do campo */
-    color: white !important;           /* Cor do texto */
-    border-radius: 0px !important;     /* Borda arredondada */
-    border-color: #2596be !important; /* Cor da borda */
-  }
-  
-  /* Estilo para a lista de opções do Select */
-  .button-premium .ant-select-dropdown {
-    background-color: transparent !important; /* Cor de fundo da lista de opções */
-    color: white !important;          /* Cor do texto nas opções */
-    border-radius: 8px !important;    /* Borda arredondada nas opções */
-  }
-  
-  /* Se quiser garantir que o botão de "filtro" também tenha a cor de fundo vermelha */
-  .button-premium .ant-select-arrow {
-    color: white !important; /* Cor da seta */
-  }
-  
+    background-color: #f9f9f9 !important;
+    color: #333 !important;
+    border-radius: 6px !important;
+    border: 1px solid #ccc !important;
+    height: 40px !important;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    box-shadow: none !important;
+}
 
-/* Estiliza o campo de input do Select */
+/* Dropdown do Select */
+.button-premium .ant-select-dropdown {
+    background-color: #f9f9f9 !important;
+    color: #333 !important;
+    border-radius: 8px !important;
+}
+
+/* Seta do Select */
+.button-premium .ant-select-arrow {
+    color: #333 !important;
+}
+
 .ant-select-selector {
-    background-color: #07104A !important; /* Cor de fundo do campo */
-    color: white !important;              /* Cor do texto no campo */
-    border-radius: 8px !important;        /* Borda arredondada */
-    border-color: #2596be !important;     /* Cor da borda */
-    font-family: "Bai Jamjuree", sans-serif !important; /* Fonte customizada */
-  }
-  
-  /* Estiliza a lista de opções no dropdown */
-  .ant-select-dropdown {
-    background-color: #07104A !important; /* Cor de fundo do dropdown */
-    color: white !important;               /* Cor do texto no dropdown */
-    font-family: "Bai Jamjuree", sans-serif !important; /* Fonte customizada */
-  }
-  
-  /* Estiliza as opções no dropdown */
-  .ant-select-item-option {
-    background-color: #07104A !important; /* Cor de fundo das opções */
-    color: white !important;               /* Cor do texto das opções */
-    font-family: "Bai Jamjuree", sans-serif !important; /* Fonte customizada */
-  }
-  
-  /* Estiliza a opção selecionada */
-  .ant-select-item-option-selected {
-    background-color: #2596be !important; /* Cor de fundo da opção selecionada */
-    font-family: "Bai Jamjuree", sans-serif !important; /* Fonte customizada */
-  }
-  
-  /* Estilo geral para a Tabela */
+    background-color: #fff !important;
+    color: #000 !important;
+    border-radius: 8px !important;
+    border-color: #2596be !important;
+    font-family: "Montserrat", sans-serif !important;
+}
+
+.ant-select-dropdown {
+    background-color: #fff !important;
+    color: #000 !important;
+    font-family: "Montserrat", sans-serif !important;
+}
+
+.ant-select-item-option {
+    background-color: #fff !important;
+    color: #000 !important;
+    font-family: "Montserrat", sans-serif !important;
+}
+
+.ant-select-item-option-selected {
+    background-color: #e6f7ff !important;
+    font-family: "Montserrat", sans-serif !important;
+}
+
+/* Tabela */
 .ant-table {
-    font-family: 'Bai Jamjuree', sans-serif !important;
-    background-color: #0B244D !important; /* Cor escura para o fundo da tabela */
-    color: #FFFFFF !important; /* Cor do texto */
+    font-family: 'Montserrat', sans-serif !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-weight: 500 !important;
 }
 
-/* Estilo para as células da tabela */
+.chakra-checkbox__label {
+font-weight: normal;
+}
+
+.text-color {
+    color: #1a202c;
+}
+
 .ant-table-tbody > tr > td {
-    color: #FFFFFF !important; /* Cor do texto nas células */
-    background-color: #0B244D !important; /* Garantir que o fundo da célula seja a cor escura */
-    border-color: #0B244D !important; /* Bordas da mesma cor de fundo */
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    border-color: #f0f0f0 !important;
 }
 
-/* Estilo para os cabeçalhos da tabela */
 .ant-table-thead > tr > th {
-    color: #FFFFFF !important; /* Cor branca para o texto */
-    background-color: #0B244D !important; /* Fundo do cabeçalho com a cor escolhida */
-    font-weight: 700 !important; /* Negrito nos cabeçalhos */
+    color: #000000 !important;
+    background-color: #f5f5f5 !important;
+
 }
 
-/* Estilo para bordas da tabela */
 .ant-table-bordered .ant-table-cell {
-    border-color: #0B244D !important; /* Bordas da mesma cor de fundo */
+    border-color: #f0f0f0 !important;
 }
 
-/* Estilo para o efeito de hover nas linhas */
 .ant-table-row:hover {
-    background-color: #1c3650 !important; /* Cor mais clara ao passar o mouse */
-    color: white !important; /* Cor do texto ao passar o mouse */
+    background-color: #f0faff !important;
+    color: #000000 !important;
 }
 
-/* Efeito para as células ao passar o mouse */
 .ant-table-tbody > tr > td:hover {
-    background-color: #1c3650 !important; /* Efeito suave de hover nas células */
+    background-color: #f0faff !important;
 }
 
-/* Garantir que o fundo da célula não fique branco após o hover */
 .ant-table-tbody > tr > td:not(:hover) {
-    background-color: #0B244D !important; /* Mantém a cor de fundo original quando não está em hover */
+    background-color: #ffffff !important;
 }
+
+.mecanicos-input {
+    height: 40px !important;
+    background-color: #f9f9f9 !important;
+    color: #333 !important;
+    border-radius: 6px !important;
+    border: 1px solid #ccc !important;
+    padding: 0 8px !important;
+    box-sizing: border-box !important;
+}
+
+/* Inputs com borda azul, fundo branco e texto preto */
+.input-light {
+    height: 40px;
+    width: 100%;
+    background-color: #fff !important;
+    color: #000 !important;
+    border-radius: 0px !important;
+    border: 1px solid #2596be !important;
+    font-family: "Montserrat", sans-serif;
+}
+
+/* Botão primário com fundo azul e hover */
+.button-save {
+    background-color: #2596be !important;
+    color: #fff !important;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+}
+
+.button-save:hover {
+    background-color: #1b7fa4 !important;
+}
+
+/* Botão "Voltar" */
+.button-back {
+    background-color: transparent !important;
+    color: #D63939 !important;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.button-back:hover {
+    color: #a82828 !important;
+}
+
+
+/* Estilo moderno e discreto para a barra de scroll */
+.ant-table-body::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .ant-table-body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .ant-table-body::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+  
+  .ant-table-body {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Firefox */
+  }
+  

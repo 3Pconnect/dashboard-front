@@ -33,24 +33,26 @@ const TotalAssociadosChart: React.FC<TotalAssociadosChartProps> = ({
         stacked: false,
         height: 350,
         background: "transparent",
-        fontFamily: "Bai Jamjuree, sans-serif",
+        fontFamily: "Montserrat, sans-serif", // Alterado para Montserrat
       },
       title: {
         text: "Total de Membros por Mês",
         align: "left",
         style: {
-          color: "#FFFFFF",
-          fontSize: "18px",
-          fontFamily: "Bai Jamjuree, sans-serif",
+          color: "#000000", // Preto para o tema claro
+          fontSize: "16px",
+          fontWeight: 400,
+          fontFamily: "Montserrat, sans-serif", // Alterado para Montserrat
         },
       },
       xaxis: {
         type: "datetime",
         labels: {
           style: {
-            colors: "#FFFFFF",
+            colors: "#000000", // Preto
             fontSize: "14px",
-            fontFamily: "Bai Jamjuree, sans-serif",
+            fontWeight: 400,
+            fontFamily: "Montserrat, sans-serif", // Alterado para Montserrat
           },
         },
       },
@@ -58,54 +60,62 @@ const TotalAssociadosChart: React.FC<TotalAssociadosChartProps> = ({
         title: {
           text: "Membros",
           style: {
-            color: "#FFFFFF",
+            color: "#000000", // Preto
             fontSize: "16px",
-            fontFamily: "Bai Jamjuree, sans-serif",
+            fontWeight: 400,
+            fontFamily: "Montserrat, sans-serif", // Alterado para Montserrat
           },
         },
         labels: {
           style: {
-            colors: "#FFFFFF",
+            colors: "#000000", // Preto
             fontSize: "14px",
-            fontFamily: "Bai Jamjuree, sans-serif",
+            fontFamily: "Montserrat, sans-serif", // Alterado para Montserrat
           },
         },
       },
       theme: {
-        mode: "dark",
+        mode: "light", // Modo claro
       },
       dataLabels: {
         style: {
-          colors: ["#FFFFFF"],
+          colors: ["#000000"], // Preto
           fontSize: "14px",
-          fontFamily: "Bai Jamjuree, sans-serif",
+          fontFamily: "Montserrat, sans-serif", // Alterado para Montserrat
         },
       },
     },
   });
 
-  // Atualiza o estado com os dados dos membros
   useEffect(() => {
     const data = totalMembrosPorMes.map((item) => ({
       x: new Date(item.mes).getTime(),
       y: parseInt(item.totalMembros),
     }));
 
-    setState({
+    setState((prevState) => ({
+      ...prevState,
       series: [
         {
           name: "Total Membros",
           data,
         },
       ],
-      options: state.options,
-    });
+    }));
   }, [totalMembrosPorMes]);
 
   return (
     <SimpleGrid columns={{ base: 1, md: 1 }} spacing={4}>
-      <VStack spacing={4} p={4} w="full" bg="#0B244D" justifyContent="center"
-       borderRadius="10px">
+      <VStack
+        spacing={4}
+        p={4}
+        w="full"
+        bg="white"
+        border="1px solid #E2E8F0"
+        boxShadow="sm"
+        justifyContent="center"
+        borderRadius="10px"
+      >
         <ReactApexChart
           style={{ borderRadius: "10px", width: "100%" }}
           options={state.options}

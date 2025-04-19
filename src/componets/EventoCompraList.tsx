@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, DatePicker } from 'antd';
-import { Heading, Flex, Button, useToast, Tag, useBreakpointValue } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, Tag, useBreakpointValue, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { deleteUser, deleteVenda, fetchVendasDisponiveis } from '../services/api';
@@ -147,10 +147,11 @@ const VendasDisponiveisList: React.FC = () => {
   ] as TableColumnsType<VendaType>;
   
   return (
-    <>
-      <Flex mb={6} justify="space-between" align="center" width="100%">
-        <Heading fontSize="2xl" fontWeight="bold">Compras Coletivas</Heading>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
+      <Flex mb={6} justify='space-between' align='center' width='100%'>
+        <Heading className='heading-title' fontSize='2xl' >Compras coletivas</Heading>
       </Flex>
+
 
       <Flex
       mb={6}
@@ -164,6 +165,7 @@ const VendasDisponiveisList: React.FC = () => {
         value={dateRange ? [dateRange[0], dateRange[1]] : null}
         onChange={(dates) => setDateRange(dates)}
         dropdownClassName="custom-dropdown"
+         className="mecanicos-input"
         style={{
           width: datePickerWidth,
           height: "40px",
@@ -177,6 +179,7 @@ const VendasDisponiveisList: React.FC = () => {
       />
 
       <Button
+      className="button-premium"
         colorScheme="blue"
         onClick={handleSearch}
         leftIcon={<AiOutlineSearch />}
@@ -186,7 +189,7 @@ const VendasDisponiveisList: React.FC = () => {
       </Button>
 
       <Button
-        className="button-premium"
+className="button-premium"
         onClick={() => navigate("/main/create-event-compras")}
         colorScheme="green"
         fontSize="16px"
@@ -211,7 +214,7 @@ const VendasDisponiveisList: React.FC = () => {
         })}
         rowKey="id"
       />
-    </>
+    </Box>
   );
 };
 

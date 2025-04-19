@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker, Select } from 'antd';
-import { Heading, Flex, Button, useToast, useMediaQuery } from '@chakra-ui/react';
+import { Heading, Flex, Button, useToast, useMediaQuery, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { fetchUsers, deleteUser, fetchMembros, deleteMembro, fetchApoiadores } from '../services/api';
@@ -128,114 +128,106 @@ const NovosApoiadoresTable: React.FC = () => {
 
   const columns: TableColumnsType<DataType> = isMobile
     ? [
-        {
-          title: 'Nome',
-          dataIndex: 'nome_empresa',
-          key: 'nome_empresa',
-          ellipsis: true,
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
-        },
-        // {
-        //   title: 'E-mail',
-        //   dataIndex: 'email',
-        //   key: 'email',
-        //   ellipsis: true,
-        //   render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        // },
-        {
-          title: 'Ações',
-          key: 'actions',
-          render: (_, record) => (
-            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(record.id);
-            }}>
-              <AiFillDelete />
-            </Button>
-          ),
-        },
-      ]
+      {
+        title: 'Nome',
+        dataIndex: 'nome_empresa',
+        key: 'nome_empresa',
+        ellipsis: true,
+        render: (text) => <span>{text}</span>,
+      },
+      // {
+      //   title: 'E-mail',
+      //   dataIndex: 'email',
+      //   key: 'email',
+      //   ellipsis: true,
+      //   render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
+      // },
+      {
+        title: 'Ações',
+        key: 'actions',
+        render: (_, record) => (
+          <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(record.id);
+          }}>
+            <AiFillDelete />
+          </Button>
+        ),
+      },
+    ]
     : [
-        {
-          title: 'Nome',
-          dataIndex: 'nome_empresa',
-          key: 'nome_empresa',
-          sorter: (a, b) => a.nome_empresa.length - b.nome_empresa.length,
-          sortOrder: sortedInfo.columnKey === 'nome_empresa' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{text}</span>,
-        },
-        {
-          title: 'CNPJ',
-          dataIndex: 'cnpj',
-          key: 'cnpj',
-          sorter: (a, b) => a.cnpj.localeCompare(b.cnpj),
-          sortOrder: sortedInfo.columnKey === 'cnpj' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
-        {
-          title: 'Cadastrado em',
-          dataIndex: 'createdAt',
-          key: 'createdAt',
-          sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-          sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
-        },
-        {
-          title: 'E-mail',
-          dataIndex: 'email',
-          key: 'email',
-          sorter: (a, b) => a.email.length - b.email.length,
-          sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
-        {
-          title: 'Telefone',
-          dataIndex: 'telefone',
-          key: 'telefone',
-          sorter: (a, b) => a.telefone.localeCompare(b.telefone),
-          sortOrder: sortedInfo.columnKey === 'telefone' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
-        {
-          title: 'Atividade',
-          dataIndex: 'area_atuacao',
-          key: 'area_atuacao',
-          sorter: (a, b) => a.area_atuacao.length - b.area_atuacao.length,
-          sortOrder: sortedInfo.columnKey === 'area_atuacao' ? sortedInfo.order : null,
-          ellipsis: true,
-          render: (text) => <span style={{ fontSize: '14px' }}>{text}</span>,
-        },
-        {
-          title: 'Ações',
-          key: 'actions',
-          render: (_, record) => (
-            <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(record.id);
-            }}>
-              <AiFillDelete />
-            </Button>
-          ),
-        },
-      ];
+      {
+        title: 'Nome',
+        dataIndex: 'nome_empresa',
+        key: 'nome_empresa',
+        sorter: (a, b) => a.nome_empresa.length - b.nome_empresa.length,
+        sortOrder: sortedInfo.columnKey === 'nome_empresa' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span >{text}</span>,
+      },
+      {
+        title: 'CNPJ',
+        dataIndex: 'cnpj',
+        key: 'cnpj',
+        sorter: (a, b) => a.cnpj.localeCompare(b.cnpj),
+        sortOrder: sortedInfo.columnKey === 'cnpj' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span >{text}</span>,
+      },
+      {
+        title: 'Cadastrado em',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+      },
+      {
+        title: 'E-mail',
+        dataIndex: 'email',
+        key: 'email',
+        sorter: (a, b) => a.email.length - b.email.length,
+        sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span >{text}</span>,
+      },
+      {
+        title: 'Telefone',
+        dataIndex: 'telefone',
+        key: 'telefone',
+        sorter: (a, b) => a.telefone.localeCompare(b.telefone),
+        sortOrder: sortedInfo.columnKey === 'telefone' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span >{text}</span>,
+      },
+      {
+        title: 'Atividade',
+        dataIndex: 'area_atuacao',
+        key: 'area_atuacao',
+        sorter: (a, b) => a.area_atuacao.length - b.area_atuacao.length,
+        sortOrder: sortedInfo.columnKey === 'area_atuacao' ? sortedInfo.order : null,
+        ellipsis: true,
+        render: (text) => <span>{text}</span>,
+      },
+      {
+        title: 'Ações',
+        key: 'actions',
+        render: (_, record) => (
+          <Button variant={'ghost'} colorScheme='red' onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(record.id);
+          }}>
+            <AiFillDelete />
+          </Button>
+        ),
+      },
+    ];
 
   return (
-    <>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4} >
       <Flex mb={6} justify='space-between' align='center' width='100%'>
-        <Heading fontSize='2xl' fontWeight='bold'>Apoiadores</Heading>
-        <Button
-          onClick={() => navigate('/main/create-apoiador')}
-          colorScheme='green'
-          fontSize='16px'
-          fontWeight='bold'
-        >
-          Adicionar
-        </Button>
+        <Heading className='heading-title' fontSize='2xl' >Apoiadores</Heading>
       </Flex>
       <Flex mb={6} justify="flex-start" align="center" gap={isMobile ? 2 : 4} width="100%" flexWrap="wrap">
         <Select
@@ -254,7 +246,7 @@ const NovosApoiadoresTable: React.FC = () => {
           />
         ) : (
           <Input
-            className='button-premium'
+    className="mecanicos-input"
             allowClear
             placeholder={`Buscar por ${filterOptions.find(opt => opt.value === filterType)?.label.toLowerCase()}`}
             value={searchValue}
@@ -263,14 +255,27 @@ const NovosApoiadoresTable: React.FC = () => {
           />
         )}
         <DatePicker.RangePicker
+        className="mecanicos-input"
           value={dateRange ? [dateRange[0], dateRange[1]] : null}
           onChange={(dates) => setDateRange(dates)}
           dropdownClassName="custom-dropdown"
           style={{ width: isMobile ? "100%" : 300, height: "40px", backgroundColor: "transparent", color: "white", borderRadius: "0px", borderColor: "#2596be", borderWidth: "1px" }}
           inputReadOnly={false}
         />
-        <Button colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'}>
+        <Button
+                 style={{ width: isMobile ? "100%" : 180,}}
+        className="button-premium" colorScheme="blue" onClick={handleSearch} leftIcon={<AiOutlineSearch />} width={isMobile ? '100%' : 'auto'}>
           Buscar
+        </Button>
+        <Button
+          style={{ width: isMobile ? "100%" : 180,}}
+         className="button-premium"
+          onClick={() => navigate('/main/create-apoiador')}
+          colorScheme='green'
+          fontSize='16px'
+          fontWeight='bold'
+        >
+          Adicionar
         </Button>
       </Flex>
 
@@ -288,7 +293,7 @@ const NovosApoiadoresTable: React.FC = () => {
           style: { cursor: 'pointer' }
         })}
       />
-    </>
+    </Box>
   );
 };
 
