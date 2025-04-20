@@ -8,35 +8,32 @@ interface TaxaRenovacaoChartProps {
 }
 
 const TaxaRenovacaoAssociadoChart: React.FC<TaxaRenovacaoChartProps> = ({ taxaRenovacao }) => {
-  // Tipando explicitamente as opções com ApexOptions
   const [state, setState] = useState<{
     series: number[];
-    options: ApexOptions; // Usando ApexOptions para tipar corretamente
+    options: ApexOptions;
   }>({
-    series: [taxaRenovacao, 100 - taxaRenovacao], // Taxa de renovação e o restante para completar 100%
+    series: [taxaRenovacao, 100 - taxaRenovacao],
     options: {
       chart: {
-        background: "transparent",
-        type: "donut", // Tipo do gráfico
+        type: "donut", // Tipo do gráfico donut
         height: 350,
-        fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
-        
+        background: "transparent",
+        fontFamily: "Montserrat, sans-serif",
       },
       title: {
         text: "Taxa de Renovação",
-        align: "left",
+        align: "center",
         style: {
-          color: "#2D3748", // Cor escura para o tema claro
+          color: "#2D3748", // Cor escura para o título
           fontSize: "18px",
-          fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
+          fontFamily: "Montserrat, sans-serif",
           fontWeight: 400,
         },
       },
-      labels: ["Renovação", "Não Renovação"], // Labels para as duas partes
       plotOptions: {
         pie: {
           donut: {
-            size: "60%", // Controla o tamanho do buraco no meio
+            size: "70%", // Tamanho maior do buraco no centro
           },
         },
       },
@@ -44,18 +41,18 @@ const TaxaRenovacaoAssociadoChart: React.FC<TaxaRenovacaoChartProps> = ({ taxaRe
         enabled: true,
         style: {
           fontWeight: 400,
-          fontSize: "14px",
-          colors: ["#2D3748"], // Cor escura para o tema claro
-          fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
+          fontSize: "16px", // Tamanho ajustado para maior legibilidade
+          colors: ["#2D3748"],
+          fontFamily: "Montserrat, sans-serif",
         },
-        formatter: (val: number) => `${val.toFixed(1)}%`, // Mostra a porcentagem com 1 casa decimal
+        formatter: (val: number) => `${val.toFixed(1)}%`, // Exibe a porcentagem
       },
       tooltip: {
         y: {
-          formatter: (val: number) => `${val.toFixed(1)}%`, // Mostra a porcentagem na tooltip
+          formatter: (val: number) => `${val.toFixed(1)}%`, // Tooltip com porcentagem
         },
       },
-      colors: ["#48BB78", "#E53E3E"], // Cores para o tema claro (verde e vermelho)
+      colors: ["#48BB78", "#E53E3E"], // Verde para renovação e vermelho para não renovação
     },
   });
 
@@ -69,16 +66,19 @@ const TaxaRenovacaoAssociadoChart: React.FC<TaxaRenovacaoChartProps> = ({ taxaRe
 
   return (
     <SimpleGrid columns={{ base: 1, md: 1 }} spacing={4}>
-      <VStack spacing={4} p={4} w="full" bg="white"         border="1px solid #E2E8F0"
-        boxShadow="sm" justifyContent="center" borderRadius="10px">
+      <VStack
+        spacing={4}
+        p={4}
+        w="full"
+        bg="white"
+        border="1px solid #E2E8F0"
+        boxShadow="sm"
+        justifyContent="center"
+        borderRadius="10px"
+      >
         <ReactApexChart
           style={{ borderRadius: "10px", width: "100%" }}
-          options={{
-            ...state.options,
-            theme: {
-              mode: "light", // Modo claro
-            },
-          }}
+          options={state.options}
           series={state.series}
           type="donut"
           height={350}

@@ -27,7 +27,7 @@ export const CardsIndicadoresNumericos = ({
   ];
 
   return (
-    <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={4} p={4}>
+    <SimpleGrid columns={{ base: 1, sm: 1, md: 3 }} spacing={4} p={4}>
       {cards.map((card, index) => (
         <VStack
           key={index}

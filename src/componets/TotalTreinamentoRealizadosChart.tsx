@@ -32,23 +32,26 @@ const TotalTreinamentoRealizadosChart: React.FC<TotalTreinamentoRealizadosChartP
         type: "bar", // Usando gráfico de barras para representar treinamentos
         height: 350,
         background: "transparent",
-        fontFamily: "Montserrat, sans-serif", // Mantendo a fonte padrão
+        fontFamily: "Montserrat, sans-serif", // Mantendo a fonte padrão Montserrat
       },
       title: {
         text: "Treinamentos Realizados por Mês",
         align: "left",
         style: {
-          color: "#FFFFFF", // Cor do título
+          color: "#000000", // Cor do título para modo claro
           fontSize: "16px", // Tamanho ajustado
-          fontFamily: "Montserrat, sans-serif", // Mantendo a fonte padrão
+          fontFamily: "Montserrat, sans-serif", // Usando Montserrat
+          fontWeight: 400, // Definindo o peso da fonte como 400
         },
       },
       xaxis: {
         type: "category", // Usando categorias para os meses
         labels: {
           style: {
-            colors: "#FFFFFF", // Cor das labels do eixo X
+            colors: "#000000", // Cor das labels do eixo X para o modo claro
             fontSize: "14px", // Ajuste no tamanho da fonte
+            fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
+            fontWeight: 400, // Peso da fonte 400
           },
         },
       },
@@ -56,14 +59,18 @@ const TotalTreinamentoRealizadosChart: React.FC<TotalTreinamentoRealizadosChartP
         title: {
           text: "Treinamentos",
           style: {
-            color: "#FFFFFF", // Cor do título do eixo Y
+            color: "#000000", // Cor do título do eixo Y para o modo claro
             fontSize: "16px", // Tamanho ajustado
+            fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
+            fontWeight: 400, // Peso da fonte 400
           },
         },
         labels: {
           style: {
-            colors: "#FFFFFF", // Cor das labels do eixo Y
+            colors: "#000000", // Cor das labels do eixo Y para o modo claro
             fontSize: "14px", // Ajuste no tamanho da fonte
+            fontFamily: "Montserrat, sans-serif", // Fonte Montserrat
+            fontWeight: 400, // Peso da fonte 400
           },
         },
       },
@@ -73,7 +80,7 @@ const TotalTreinamentoRealizadosChart: React.FC<TotalTreinamentoRealizadosChartP
         },
       },
       theme: {
-        mode: "dark", // Mantendo o modo "dark" para o gráfico
+        mode: "light", // Mantendo o modo claro
       },
     },
   });
@@ -103,18 +110,14 @@ const TotalTreinamentoRealizadosChart: React.FC<TotalTreinamentoRealizadosChartP
         spacing={4}
         p={4}
         w="full"
-        bg="#0B244D" // Cor de fundo ajustada para o modo escuro
+        bg="white" // Cor de fundo ajustada para o modo claro
         justifyContent="center"
         borderRadius="10px"
+        border="1px solid #E2E8F0"
         boxShadow="sm" // Adicionando sombra suave para consistência
       >
         <ReactApexChart
-          options={{
-            ...state.options,
-            theme: {
-              mode: "light", // Modo escuro
-            },
-          }}
+          options={state.options}
           style={{ borderRadius: "10px", width: "100%" }}
           series={state.series}
           type="bar"

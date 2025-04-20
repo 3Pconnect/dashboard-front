@@ -63,13 +63,14 @@ const TotalAssociadosChartPorEstado: React.FC<{ dados: Array<Record<string, numb
       },
       plotOptions: {
         bar: {
-          horizontal: false,
+          horizontal: true, // Barra horizontal
           columnWidth: "50%",
+          borderRadius: 2, // Aqui você define o arredondamento das barras
         },
       },
       dataLabels: {
         style: {
-          colors: ["#000"], // Preto para o contraste
+          colors: ["white"], // Preto para o contraste
           fontSize: "14px",
         },
       },

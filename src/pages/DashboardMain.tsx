@@ -100,10 +100,12 @@ const DashboardMain: React.FC = () => {
     <TotalAssociadosChartPorEstado dados={dashboardData.totalUserByState}/>
     <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} p={4}>
   <TotalAssociadosChart totalMembrosPorMes={dashboardData.totalMembrosPorMes} />
+  <TotalTreinamentoRealizadosChart totalMembrosPorMes={eventosData?.taxaRenovacao ?? []} />
 
-      <TaxaRenovacaoAssociadoChart taxaRenovacao={dashboardData.taxaRenovacao.taxa_renovacao} />
-      <TotalInadimplentes totalInadimplentes={dashboardData.taxaInadimplencia.taxa_inadimplencia} />
-      <TotalTreinamentoRealizadosChart totalMembrosPorMes={eventosData?.taxaRenovacao ?? []} />
+{/* 
+<TaxaRenovacaoAssociadoChart taxaRenovacao={dashboardData.taxaRenovacao.taxa_renovacao} />
+<TotalInadimplentes totalInadimplentes={dashboardData.taxaInadimplencia.taxa_inadimplencia} />
+*/}
 
     </SimpleGrid>
     </>
