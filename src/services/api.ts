@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 const url = process.env.REACT_APP_API_URL;
 console.log("URL:", url)
 const api = axios.create({
- baseURL: 'https://api.seminariomecanicospremium.com.br',
- //baseURL: 'http://localhost:3001',
+ //baseURL: 'https://api.seminariomecanicospremium.com.br',
+ baseURL: 'http://localhost:3001',
 });
 
 api.interceptors.request.use(
@@ -41,6 +41,29 @@ export const createProfile = async (name: string, permissions: string[]) => {
     }
   }
 };
+
+export const updateUserPassword = async (id: string, password: string) => {
+  try {
+    const response = await api.put(`/auth/${id}/password/update`, { password });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao atualizar senha:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao atualizar senha");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao atualizar senha.");
+    }
+  }
+};
+
 
 export const fetchUser = async (userId: number) => {
   try {
