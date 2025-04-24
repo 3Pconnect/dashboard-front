@@ -1,6 +1,7 @@
 import {
   Button, Flex, Heading, Grid, Box, Text, VStack,
-  Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, Image, Stack, Checkbox
+  Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, Image, Stack, Checkbox,
+  HStack
 } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
 import { useState } from "react";
@@ -204,7 +205,7 @@ export const SejaMembroForm: React.FC = () => {
 
   if (submissionSuccess) {
     return (
-      <Box bg={"#07104a"} color={"white"} h={"100vh"} py={20} px={{ base: 4, md: 20 }} w={"full"} display="flex" justifyContent="center" alignItems="center">
+      <Box bg={"#f8f9fa"} color={"white"} h={"100vh"} py={20} px={{ base: 4, md: 20 }} w={"full"} display="flex" justifyContent="center" alignItems="center">
         <Box borderRadius={"5px"} p={10} bg={"#060c32"} maxWidth={{ base: "95%", md: "container.md", lg: "70%" }} width="100%" textAlign="center">
           <VStack className="indicator-title" spacing={4} align="center">
             <Image src="https://mecanicospremium.com.br/build/assets/logo-e787336c.png" alt="Logo Mecânicos Premium" boxSize="80px" />
@@ -225,16 +226,16 @@ export const SejaMembroForm: React.FC = () => {
   }
 
   return (
-    <Box className="indicator-title" bg={"#07104a"} color={"white"} h={"auto"} pb={10} px={{ base: 4, md: 20 }} w={"full"} display="flex" justifyContent="center" alignItems="center">
-      <Box borderRadius={"5px"} p={5} bg={"#060c32"} maxWidth={{ base: "95%", md: "container.md", lg: "70%" }} width="100%">
+    <Box className="indicator-title" bg={"#f8f9fa"} color={"white"} h={"auto"} pb={10} px={{ base: 4, md: 20 }} w={"full"} display="flex" justifyContent="center" alignItems="center">
+      <Box borderRadius={"5px"} p={5} bg={"white"} maxWidth={{ base: "95%", md: "container.md", lg: "70%" }} width="100%">
         <VStack py={8} align="center">
-          <Image src="https://mecanicospremium.com.br/build/assets/logo-e787336c.png" alt="Logo Mecânicos Premium" boxSize="50px" />
           <Heading className="heading-title" fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" mt={4}>
-            Seja Membro
+            Cadastro para membros
           </Heading>
         </VStack>
 
         <Grid
+          className="indicator-title"
           templateColumns={{ base: "1fr", md: "1fr 1fr" }}
           gap={4}
           mb={6}
@@ -242,7 +243,7 @@ export const SejaMembroForm: React.FC = () => {
           <Box>
             <Text mb={2}>Nome</Text>
             <Input
-              className='button-premium'
+              className="mecanicos-input"
               allowClear
               placeholder="Digite o nome do membro"
               value={name}
@@ -262,7 +263,7 @@ export const SejaMembroForm: React.FC = () => {
           <Box>
             <Text mb={2}>E-mail</Text>
             <Input
-              className='button-premium'
+              className="mecanicos-input"
               allowClear
               placeholder="Digite o email"
               value={email}
@@ -288,7 +289,7 @@ export const SejaMembroForm: React.FC = () => {
           <Box>
             <Text mb={2}>Empresa</Text>
             <Input
-              className='button-premium'
+              className="mecanicos-input"
               allowClear
               placeholder="Digite o nome da empresa"
               value={nome_empresa}
@@ -307,7 +308,7 @@ export const SejaMembroForm: React.FC = () => {
           <Box>
             <Text mb={2}>Telefone</Text>
             <Input
-              className='button-premium'
+              className="mecanicos-input"
               allowClear
               placeholder="Digite o telefone"
               value={telefone}
@@ -326,7 +327,7 @@ export const SejaMembroForm: React.FC = () => {
           <Box>
             <Text mb={2}>Cargo</Text>
             <Input
-              className='button-premium'
+              className="mecanicos-input"
               allowClear
               placeholder="Digite o cargo do membro"
               value={cargo}
@@ -346,7 +347,7 @@ export const SejaMembroForm: React.FC = () => {
           <Box>
             <Text mb={2}>Site</Text>
             <Input
-              className='button-premium'
+              className="mecanicos-input"
               allowClear
               placeholder="Digite a url do site"
               value={site}
@@ -366,7 +367,7 @@ export const SejaMembroForm: React.FC = () => {
           <Box>
             <Text mb={2}>Instagram</Text>
             <Input
-              className='button-premium'
+              className="mecanicos-input"
               allowClear
               placeholder="Digite o @"
               value={instagram}
@@ -386,7 +387,7 @@ export const SejaMembroForm: React.FC = () => {
           <Box>
             <Text mb={2}>cnpj</Text>
             <Input
-              className='button-premium'
+              className="mecanicos-input"
               allowClear
               placeholder="Digite o CNPJ"
               value={cnpj}
@@ -404,48 +405,54 @@ export const SejaMembroForm: React.FC = () => {
           </Box>
         </Grid>
 
-        <Box mb={5}>
-          <Text mb={2}>Atendimento Premium</Text>
-          <Select
-            className="button-premium"
-            style={{
-              width: "100%",
-              height: "40px",
-              color: "white",
-            }}
-            value={atendimentoCarrosPremium}
-            onChange={(value) => setAtendimentoCarrosPremium(value as string)}
-          >
-            <option value="0a20">De 0 a 20%</option>
-            <option value="20a40">De 20 a 40%</option>
-            <option value="40a60">De 40 a 60%</option>
-            <option value="acima80">Acima de 80%</option>
-          </Select>
-        </Box>
+        <Stack
+          direction={["column", "row"]} // coluna no mobile, linha no desktop
+          spacing={4}
+          width="100%"
+        >
+          <Box flex={1} mb={[4, 5]}>
+            <Text mb={2}>Atendimento Premium</Text>
+            <Select
+              className="button-premium"
+              style={{
+                width: "100%",
+                height: "40px",
+                color: "white",
+              }}
+              value={atendimentoCarrosPremium}
+              onChange={(value) => setAtendimentoCarrosPremium(value as string)}
+            >
+              <option value="0a20">De 0 a 20%</option>
+              <option value="20a40">De 20 a 40%</option>
+              <option value="40a60">De 40 a 60%</option>
+              <option value="acima80">Acima de 80%</option>
+            </Select>
+          </Box>
 
-        <Box mb={5}>
-          <Text mb={2}>Categoria da Empresa</Text>
-          <Select
-            className="button-premium"
-            style={{
-              width: "100%",
-              height: "40px",
-              color: "white",
-            }}
-            value={categoria}
-            onChange={(value) => setCategoria(value as string)}
-          >
-            <option value="simples_nacional">Simples Nacional</option>
-            <option value="lucro_presumido">Lucro Presumido</option>
-            <option value="lucro_real">Lucro Real</option>
-          </Select>
-        </Box>
+          <Box flex={1} mb={[0, 5]}>
+            <Text mb={2}>Categoria da Empresa</Text>
+            <Select
+              className="button-premium"
+              style={{
+                width: "100%",
+                height: "40px",
+                color: "white",
+              }}
+              value={categoria}
+              onChange={(value) => setCategoria(value as string)}
+            >
+              <option value="simples_nacional">Simples Nacional</option>
+              <option value="lucro_presumido">Lucro Presumido</option>
+              <option value="lucro_real">Lucro Real</option>
+            </Select>
+          </Box>
+        </Stack>
 
-        <Box mb={6}>
+
+        <Box mb={6} color={"black"} className="indicator-title">
           <Text fontWeight="semibold" mb={3}>Avaliação de Requisitos para novo Associado</Text>
           <Stack pl={4} spacing={3}>
             <Checkbox
-              colorScheme="gray"
               isChecked={bosch_car_service}
               onChange={(e) => setBoschCarService(e.target.checked)}
             >
@@ -485,17 +492,23 @@ export const SejaMembroForm: React.FC = () => {
             </Checkbox>
           </Stack>
         </Box>
-        <VStack alignItems={"end"} mt={5}>
+
+        <Flex justify="flex-start" mt={5}>
+
           <Button
-            colorScheme="green"
+            className="button-premium"
             onClick={handleSubmit}
             isLoading={loading}
-            loadingText="Cadastrando..."
-            width={{ base: "full", md: "auto" }}
+            loadingText="Salvando..."
+            bg="#1b5ebc"
+            color="white"
+            colorScheme="green"
+            w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
           >
-            Enviar
+            {loading ? "Salvando..." : "Salvar"}
           </Button>
-        </VStack>
+
+        </Flex>
       </Box>
     </Box>
   );
