@@ -65,11 +65,11 @@ const CompraColetivaList: React.FC = () => {
 
       const vendasFormatadas = response.data.map((venda: any) => {
         const interesseDoUsuario = venda.interesses?.find(
-          (interesse: any) => interesse.usuario.id === venda?.usuario?.id
+          (interesse: any) => interesse.usuario?.id === venda?.usuario?.id
         );
       
         return {
-          id: venda.id,
+          id: venda?.id,
           produto: venda.produto.nome,
           preco: parseFloat(venda.produto.preco),
           inicio: venda.dataInicio,
