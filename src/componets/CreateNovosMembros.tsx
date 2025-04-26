@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Grid, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, useBreakpointValue } from "@chakra-ui/react";
+import { Button, Flex, Heading, Grid, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, useBreakpointValue, Stack, Checkbox } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
 import { useState } from "react";
 import { registerMembro } from "../services/api";
@@ -28,6 +28,18 @@ export const CreateNovosMembros = () => {
   const navigate = useNavigate();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
+
+  const [bosch_car_service, setBoschCarService] = useState(false);
+  const [modulo_diagnostico_bosch, setModuloDiagnosticoBosch] = useState(false);
+  const [equipamento_bosch, setEquipamentoBosch] = useState(false);
+  const [em_dia_com_obrigacoes, setEmDiaComObrigacoes] = useState(false);
+  const [afiliacao, setAfiliadoEntidade] = useState(false);
+  const [atendimentoCarrosPremium, setAtendimentoCarrosPremium] = useState("");
+  const [categoria, setCategoria] = useState("");
+
+  const [site, setSite] = useState("");
+  const [instagram, setInstagram] = useState("");
+
   const [dataEvento, setDataEvento] = useState<Dayjs | null>(dayjs());
 
   const handleSubmit = async () => {
@@ -43,7 +55,14 @@ export const CreateNovosMembros = () => {
           cargo,
           cnpj,
           dataEvento,
-          atendimento_carros_premium: ""
+          atendimento_carros_premium: atendimentoCarrosPremium,
+          bosch_car_service,
+          modulo_diagnostico_bosch,
+          equipamento_bosch,
+          em_dia_com_obrigacoes,
+          afiliacao,
+          site,
+          instagram
         }
 
       );
@@ -135,6 +154,46 @@ export const CreateNovosMembros = () => {
             }}
           />
         </Box>
+        <Box>
+          <Text mb={2}>Site</Text>
+          <Input
+            className="mecanicos-input"
+            allowClear
+            placeholder="Digite a url do site"
+            value={site}
+            onChange={(e) => setSite(e.target.value)}
+            style={{
+              height: "40px",
+              width: "100%",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px",
+            }}
+          />
+        </Box>
+
+        <Box>
+          <Text mb={2}>Instagram</Text>
+          <Input
+            className="mecanicos-input"
+            allowClear
+            placeholder="Digite o @"
+            value={instagram}
+            onChange={(e) => setInstagram(e.target.value)}
+            style={{
+              height: "40px",
+              width: "100%",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px",
+            }}
+          />
+        </Box>
+
 
         <Box className="indicator-title" mb={4}>
           <Text mb={2}>CNPJ</Text>
@@ -163,25 +222,114 @@ export const CreateNovosMembros = () => {
             onChange={(date) => setDataEvento(date)}
           />
         </Box>
-        <Box w={{ base: "100%", md: "200px" }} >
-          <Text mb={2}>Situação</Text>
-          <Select
-            className="button-premium"
-            options={filterOptions}
-            value={filterType}
-            onChange={setFilterType}
-            style={{
-              width: "100%",
-              height: "40px",
-              color: "white",
-            }}
-          />
-        </Box>
+
+  
       </Grid>
+
+      <Grid className="indicator-title" w={"100%"} templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={5}>
+          <Box mb={[4, 0]} w="100%">
+            <Text mb={2}>Atendimento Premium</Text>
+            <Select
+              className="button-premium"
+              style={{
+                width: "100%",
+                height: "40px",
+                color: "white",
+              }}
+              value={atendimentoCarrosPremium}
+              onChange={(value) => setAtendimentoCarrosPremium(value as string)}
+            >
+              <option value="0a20">De 0 a 20%</option>
+              <option value="20a40">De 20 a 40%</option>
+              <option value="40a60">De 40 a 60%</option>
+              <option value="acima80">Acima de 80%</option>
+            </Select>
+          </Box>
+
+          <Box mb={[0, 0]} w="100%">
+            <Text mb={2}>Categoria da Empresa</Text>
+            <Select
+              className="button-premium"
+              style={{
+                width: "100%",
+                height: "40px",
+                color: "white",
+              }}
+              value={categoria}
+              onChange={(value) => setCategoria(value as string)}
+            >
+              <option value="simples_nacional">Simples Nacional</option>
+              <option value="lucro_presumido">Lucro Presumido</option>
+              <option value="lucro_real">Lucro Real</option>
+            </Select>
+          </Box>
+
+          <Box w="100%">
+            <Text mb={2}>Situação</Text>
+            <Select
+              className="button-premium"
+              options={filterOptions}
+              value={filterType}
+              onChange={setFilterType}
+              style={{
+                width: "100%",
+                height: "40px",
+                color: "white",
+              }}
+            />
+          </Box>
+        </Grid>
+
+      <Box mt={6} mb={6} color={"black"} className="indicator-title">
+        <Text fontWeight="semibold" mb={3}>
+          Avaliação de Requisitos para novo Associado
+        </Text>
+        <Grid pl={4} templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} rowGap={2} columnGap={4}>
+          <Checkbox
+            isChecked={bosch_car_service}
+            onChange={(e) => setBoschCarService(e.target.checked)}
+          >
+            É Bosch Car Service
+          </Checkbox>
+
+          <Checkbox
+            colorScheme="gray"
+            isChecked={modulo_diagnostico_bosch}
+            onChange={(e) => setModuloDiagnosticoBosch(e.target.checked)}
+          >
+            Módulo de Diagnóstico Bosch
+          </Checkbox>
+
+          <Checkbox
+            colorScheme="gray"
+            isChecked={equipamento_bosch}
+            onChange={(e) => setEquipamentoBosch(e.target.checked)}
+          >
+            Possui Equipamento Bosch
+          </Checkbox>
+
+          <Checkbox
+            colorScheme="gray"
+            isChecked={em_dia_com_obrigacoes}
+            onChange={(e) => setEmDiaComObrigacoes(e.target.checked)}
+          >
+            Em Dia com Obrigações Federais, Estaduais e Municipais
+          </Checkbox>
+
+          <Checkbox
+            colorScheme="gray"
+            isChecked={afiliacao}
+            onChange={(e) => setAfiliadoEntidade(e.target.checked)}
+          >
+            Afiliado a Entidades, Sindicato ou Associação
+          </Checkbox>
+        </Grid>
+      </Box>
 
       <Flex justify="flex-start" mt={5}>
 
         <Button
+          mb={5}
           className="button-premium"
           onClick={handleSubmit}
           isLoading={loading}

@@ -78,7 +78,7 @@ const CompraColetivaList: React.FC = () => {
           formularioEnviado: venda.formulario_enviado,
           quantidadeMaximaPorUsuario: venda.quantidadeMaximaPorUsuario,
           descricaoProduto: venda.produto.descricao,
-          pago: interesseDoUsuario?.pago ?? null // ou 'Teste' como fallback
+          pago: venda.pago ?? null // ou 'Teste' como fallback
         };
       });
 
@@ -194,7 +194,7 @@ const CompraColetivaList: React.FC = () => {
             navigate(`/main/create-interest/${record.id}`, { state: { record } });
           }}
         >
-          {enviado ? 'Preenchido' : 'Preencher'}
+          {enviado ? 'Enviado' : 'Comprar'}
         </Button>
       ),
     },

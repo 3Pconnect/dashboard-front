@@ -163,7 +163,9 @@ export const SejaMembroForm: React.FC = () => {
           modulo_diagnostico_bosch,
           equipamento_bosch,
           em_dia_com_obrigacoes,
-          afiliacao
+          afiliacao,
+          site,
+         instagram:  "instagram_default_"
         }
       );
       console.log("Membro registrado com sucesso", response);

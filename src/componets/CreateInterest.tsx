@@ -85,14 +85,14 @@ export const CreateInterest = () => {
 
     try {
       if (record && record.id) {
-        await demonstrarInteresse(record.id, parseInt(quantidadeDesejada, 10)).then((result=>{
+        await demonstrarInteresse(record.id, parseInt(quantidadeDesejada, 10)).then((result => {
           console.log(result)
-          if(result?.url){
+          if (result?.url) {
             window.open(result?.url, '_blank');
           }
         }))
 
-       
+
 
         toast({
           title: "Interesse Demonstrado",
@@ -135,28 +135,17 @@ export const CreateInterest = () => {
   };
 
   return (
-    <>
-      <Flex mb={10} className="indicator-title" justify="space-between" align="center" width="100%">
-        <Flex  align="center">
-        <Button
-  onClick={() => window.history.back()}
-  variant="ghost"
-  colorScheme="blue"
-  p={2}
->
-  <Icon as={MdArrowBack} w={6} h={6} />
-</Button>
-
-        </Flex>
-        <Heading className="heading-title" fontSize="2xl" style={{ fontWeight: 'bold' }}>Preencher Compra</Heading>
+    <div className="text-color" >
+        <Flex mb={6} justify='space-between' align='center' width='100%'>
+        <Heading className='heading-title' fontSize='2xl' >Comprar</Heading>
       </Flex>
 
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+      <Grid className="indicator-title" templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box>
           <Text className="indicator-title" mb={2}>Nome</Text>
           <Input
             disabled
-            className="button-premium"
+             className="mecanicos-input"
             allowClear
             placeholder="Digite o nome do produto"
             value={nome}
@@ -168,7 +157,7 @@ export const CreateInterest = () => {
           <Text className="indicator-title" mb={2}>Descrição</Text>
           <Input
             disabled
-            className="button-premium"
+           className="mecanicos-input"
             allowClear
             placeholder="Digite a descrição"
             value={descricao}
@@ -180,7 +169,7 @@ export const CreateInterest = () => {
           <Text className="indicator-title" mb={2}>Preço</Text>
           <Input
             disabled
-            className="button-premium"
+           className="mecanicos-input"
             allowClear
             placeholder="Digite o preço"
             value={preco}
@@ -192,7 +181,7 @@ export const CreateInterest = () => {
           <Text className="indicator-title" mb={2}>Quantidade Máxima por Usuário</Text>
           <Input
             disabled
-            className="button-premium"
+          className="mecanicos-input"
             allowClear
             placeholder="Quantidade Máxima"
             value={quantidadeMaxima}
@@ -205,7 +194,7 @@ export const CreateInterest = () => {
         <Box>
           <Text className="indicator-title" mb={2}>Quantidade Desejada</Text>
           <Input
-            className="button-premium"
+        className="mecanicos-input"
             allowClear
             placeholder="Quantidade Desejada"
             value={quantidadeDesejada}
@@ -215,18 +204,30 @@ export const CreateInterest = () => {
           />
         </Box>
       </Grid>
-      <Box className="indicator-title" mt={4}>
+      <Box  className="indicator-title"  mt={4}>
         <Text fontSize="lg" fontWeight="bold">Resumo do Pedido:</Text>
-        <Text>Valor Unitário: {preco}</Text>
+        <Text className="indicator-title">Valor Unitário: {preco}</Text>
         <Text>Quantidade: {quantidadeDesejada}</Text>
         <Text fontWeight="bold">Valor Total: {calcularTotal()}</Text>
       </Box>
 
-      <VStack alignItems={"end"} mt={5}>
-        <Button className="button-premium" colorScheme="green" onClick={handleSave} isLoading={saving} loadingText="Salvando...">
-          {saving ? "Salvando..." : "Demonstrar Interesse"}
-        </Button>
-      </VStack>
-    </>
+
+      <Flex justify="flex-start" mt={5}>
+
+<Button
+  className="button-premium"
+  onClick={handleSave}
+  isLoading={saving}
+  loadingText="Gerando..."
+  bg="#1b5ebc"
+  color="white"
+  colorScheme="green"
+  w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
+>
+  {saving ? "Gerando..." : "Comprar"}
+</Button>
+
+</Flex>
+    </div>
   );
 };
