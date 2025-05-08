@@ -10,7 +10,8 @@ import {
   HStack,
   useBreakpointValue,
   Stack,
-  StackDirection
+  StackDirection,
+  Checkbox
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import {
@@ -32,6 +33,11 @@ const filterOptions = [
   { label: "Pagamento Pendente", value: "pagamento_pendente" }
 ];
 
+interface Estado {
+  sigla: string;
+  nome: string;
+}
+
 export const UpdateNovoMembros = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -48,7 +54,13 @@ export const UpdateNovoMembros = () => {
   const [em_dia_com_obrigacoes, setEmDiaComObrigacoes] = useState(false);
   const [afiliacao, setAfiliacao] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingMembro, setLoadingMembro] = useState(false);
   const [gerouCobranca, setGerouCobranca] = useState(false);
+  const [site, setSite] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [filterType, setFilterType] = useState<string>('inativo');
+  const [categoria, setCategoria] = useState("");
+
 
   const buttonDirection = useBreakpointValue<StackDirection>({
     base: "column",
@@ -61,19 +73,54 @@ export const UpdateNovoMembros = () => {
   const [loadingAprovarReprovar, setLoadingAprovarReprovar] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [dataEvento, setDataEvento] = useState<Dayjs | null>(dayjs());
+  const [estadoSelecionado, setEstadoSelecionado] = useState<string>("");
+  const [estados, setEstados] = useState<Estado[]>([]);
+  const [nivel, setNivel] = useState("");
+
+  const carregarEstados = async () => {
+    try {
+      const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
+      const data = await response.json();
+      setEstados(data);
+    } catch (error) {
+      console.error("Erro ao carregar os estados:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    carregarEstados();
+  }, []);
+
 
   const handleSubmit = async () => {
+
     setLoading(true);
     try {
       const response = await updateMembro(Number(id), {
         name,
         email,
+        tipo_usuario,
+        telefone,
         nome_empresa,
         cargo,
+        cnpj,
         situacao,
-        vencimento: dataEvento
+        dataEvento,
+        atendimento_carros_premium: atendimento_carros_premium,
+        bosch_car_service,
+        modulo_diagnostico_bosch,
+        equipamento_bosch,
+        em_dia_com_obrigacoes,
+        afiliacao,
+        site,
+        instagram,
+        vencimento: dataEvento,
+        estado: estadoSelecionado,
+        categoria_empresa: categoria,
+        nivel
       });
-
+    console.log(response.data)
       toast({
         title: "Usuário Cadastrado",
         description: "Usuário cadastrado com sucesso!",
@@ -97,6 +144,7 @@ export const UpdateNovoMembros = () => {
 
   useEffect(() => {
     const loadMembro = async () => {
+      setLoadingMembro(true)
       try {
         const data = await fetchMembroById(Number(id));
         setName(data?.name);
@@ -111,7 +159,15 @@ export const UpdateNovoMembros = () => {
         setEmDiaComObrigacoes(data?.em_dia_com_obrigacoes);
         setAfiliacao(data?.afiliacao);
         setGerouCobranca(data?.gerouCobranca);
+        setInstagram(data?.instagram)
+        setSite(data?.site)
+        setCnpj(data?.cnpj)
+        setLoadingMembro(false)
+        setEstadoSelecionado(data?.estado)
+        setCategoria(data?.categoria_empresa)
+        setNivel(data?.nivel)
       } catch (error) {
+        setLoadingMembro(false)
         console.error(error);
       }
     };
@@ -199,6 +255,13 @@ export const UpdateNovoMembros = () => {
     }
   ];
 
+    const gridTemplateColumns = useBreakpointValue({
+      base: "1fr",
+      md: "repeat(2, 1fr)",
+      lg: "repeat(3, 1fr)",
+    });
+  
+
   return (
     <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
       <Flex mb={6} justify="space-between" align="center" width="100%">
@@ -207,53 +270,266 @@ export const UpdateNovoMembros = () => {
         </Heading>
       </Flex>
 
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+      <Grid className="indicator-title" templateColumns={gridTemplateColumns} gap={4}>
         <Box mb={4}>
-          <Text mb={2}>Nome</Text>
-          <Input className="mecanicos-input" value={name} onChange={(e) => setName(e.target.value)} allowClear />
+          <Text className="indicator-title" mb={2}>Nome</Text>
+          <Input
+            allowClear
+            placeholder="Digite o nome do membri"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="mecanicos-input"
+          />
         </Box>
+
 
         <Box mb={4}>
           <Text mb={2}>E-mail</Text>
-          <Input className="mecanicos-input" value={email} onChange={(e) => setEmail(e.target.value)} allowClear />
+          <Input
+            className="mecanicos-input"
+            allowClear
+            placeholder="Digite o e-mail do membro"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </Box>
 
         <Box mb={4}>
           <Text mb={2}>Empresa</Text>
-          <Input className="mecanicos-input" value={nome_empresa} onChange={(e) => setNomeEmpresa(e.target.value)} allowClear />
+          <Input
+            className="mecanicos-input"
+            allowClear
+            placeholder="Digite o nome da empresa"
+            value={nome_empresa}
+            onChange={(e) => setNomeEmpresa(e.target.value)}
+          />
         </Box>
 
         <Box mb={4}>
           <Text mb={2}>Cargo</Text>
-          <Input className="mecanicos-input" value={cargo} onChange={(e) => setCargo(e.target.value)} allowClear />
+          <Input
+            className="mecanicos-input"
+            allowClear
+            placeholder="Digite o cargo do membro"
+            value={cargo}
+            onChange={(e) => setCargo(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
+          />
+        </Box>
+
+        <Box>
+          <Text mb={2}>Site</Text>
+          <Input
+            className="mecanicos-input"
+            allowClear
+            placeholder="Digite a url do site"
+            value={site}
+            onChange={(e) => setSite(e.target.value)}
+            style={{
+              height: "40px",
+              width: "100%",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px",
+            }}
+          />
+        </Box>
+
+        <Box>
+          <Text mb={2}>Instagram</Text>
+          <Input
+            className="mecanicos-input"
+            allowClear
+            placeholder="Digite o @"
+            value={instagram}
+            onChange={(e) => setInstagram(e.target.value)}
+            style={{
+              height: "40px",
+              width: "100%",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px",
+              borderColor: "#2596be",
+              borderWidth: "1px",
+            }}
+          />
+        </Box>
+
+        <Box mb={[0, 0]} w="100%">
+          <Text mb={2}>Nível</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            value={nivel}
+            onChange={(value) => setNivel(value as string)}
+          >
+            <option value="junior">Junior</option>
+            <option value="associado">Associado</option>
+          </Select>
+        </Box>
+
+        <Box className="indicator-title" mb={4}>
+          <Text mb={2}>CNPJ</Text>
+          <Input
+            className="mecanicos-input"
+            allowClear
+            placeholder="Digite o cnpj aqui"
+            value={cnpj}
+            onChange={(e) => setCnpj(e.target.value)}
+            style={{
+              height: "40px",
+              backgroundColor: "transparent",
+              color: "white",
+              borderRadius: "0px", borderColor: "#2596be",
+              borderWidth: "1px"
+            }}
+          />
         </Box>
 
         <Box>
           <Text mb={2}>Próximo Vencimento</Text>
           <DatePicker
-            className="mecanicos-input"
             value={dataEvento}
+            className="mecanicos-input"
+            inputReadOnly={false}
             style={{ width: "100%" }}
             onChange={(date) => setDataEvento(date)}
           />
         </Box>
 
-        <Box w={"100%"}>
+        <Box mb={[4, 0]} w="100%">
+          <Text mb={2}>Atendimento Premium</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            value={atendimento_carros_premium}
+            onChange={(value) => setAtendimentoCarrosPremium(value as string)}
+          >
+            <option value="0a20">De 0 a 20%</option>
+            <option value="20a40">De 20 a 40%</option>
+            <option value="40a60">De 40 a 60%</option>
+            <option value="acima80">Acima de 80%</option>
+          </Select>
+        </Box>
+
+        <Box mb={[0, 0]} w="100%">
+          <Text mb={2}>Categoria da Empresa</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            value={categoria}
+            onChange={(value) => setCategoria(value as string)}
+          >
+            <option value="simples_nacional">Simples Nacional</option>
+            <option value="lucro_presumido">Lucro Presumido</option>
+            <option value="lucro_real">Lucro Real</option>
+          </Select>
+        </Box>
+
+        <Box w="100%">
           <Text mb={2}>Situação</Text>
           <Select
             className="button-premium"
             options={filterOptions}
-            value={situacao}
-            onChange={setSituacao}
+            value={filterType}
+            onChange={setFilterType}
             style={{
               width: "100%",
               height: "40px",
-              color: "white"
+              color: "white",
             }}
           />
         </Box>
+
+        <Box mb={4}>
+          <Text mb={2}>Estados</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            placeholder="Selecione o estado"
+            value={estadoSelecionado}
+            onChange={(e) => setEstadoSelecionado(e)}
+          >
+            {estados.map((estado) => (
+              <option key={estado.sigla} value={estado.sigla}>
+                {estado.sigla} - {estado.nome}
+              </option>
+            ))}
+          </Select>
+        </Box>
       </Grid>
 
+
+      <Box mt={6} mb={6} color={"black"} className="indicator-title">
+        <Text fontWeight="semibold" mb={3}>
+          Avaliação de Requisitos para novo Associado
+        </Text>
+        <Grid pl={4} templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} rowGap={2} columnGap={4}>
+          <Checkbox
+            isChecked={bosch_car_service}
+            onChange={(e) => setBoschCarService(e.target.checked)}
+          >
+            É Bosch Car Service
+          </Checkbox>
+
+          <Checkbox
+            colorScheme="gray"
+            isChecked={modulo_diagnostico_bosch}
+            onChange={(e) => setModuloDiagnosticoBosch(e.target.checked)}
+          >
+            Módulo de Diagnóstico Bosch
+          </Checkbox>
+
+          <Checkbox
+            colorScheme="gray"
+            isChecked={equipamento_bosch}
+            onChange={(e) => setEquipamentoBosch(e.target.checked)}
+          >
+            Possui Equipamento Bosch
+          </Checkbox>
+
+          <Checkbox
+            colorScheme="gray"
+            isChecked={em_dia_com_obrigacoes}
+            onChange={(e) => setEmDiaComObrigacoes(e.target.checked)}
+          >
+            Em Dia com Obrigações Federais, Estaduais e Municipais
+          </Checkbox>
+
+          <Checkbox
+            colorScheme="gray"
+            isChecked={afiliacao}
+            onChange={(e) => { setAfiliacao(e.target.checked) }}
+          >
+            Afiliado a Entidades, Sindicato ou Associação
+          </Checkbox>
+        </Grid>
+      </Box>
+      {/* 
       <Box mt={5}>
         <Heading fontSize="lg" mb={4}>Checklist</Heading>
         <Table columns={checklistColumns} dataSource={checklistData} pagination={false} bordered size="middle" />
@@ -263,50 +539,50 @@ export const UpdateNovoMembros = () => {
             As cobranças foram geradas e enviadas para o e-mail. O usuário será ativado após a confirmação do pagamento.
           </Text>
         )}
-      </Box>
+      </Box> */}
 
 
       <Flex justify="flex-start" mt={5}>
 
-      <Stack direction={buttonDirection} spacing={3} w="100%" align={isMobile ? "stretch" : "end"}>
-  {hasPermission("aprovar_reprovar.membro") && (
-    <>
-      {!gerouCobranca && (
-        <Button
-          className="button-premium"
-          colorScheme="red"
-          loadingText="Recusando..."
-          onClick={handleReprovar}
-          isLoading={loadingAprovarReprovar}
-          w={isMobile ? "100%" : "auto"}
-        >
-          Recusar
-        </Button>
-      )}
-      <Button
-        className="button-premium"
-        isDisabled={gerouCobranca}
-        colorScheme="green"
-        onClick={handleAprovar}
-        isLoading={loadingAprovarReprovar}
-        loadingText="Aprovando..."
-        w={isMobile ? "100%" : "auto"}
-      >
-        {gerouCobranca ? "Aprovado e Fatura Gerada" : "Aprovar e Enviar Cobrança"}
-      </Button>
-    </>
-  )}
-  <Button
-    className="button-premium"
-    colorScheme="blue"
-    onClick={handleSubmit}
-    isLoading={loading}
-    loadingText="Salvando..."
-    w={isMobile ? "100%" : "auto"}
-  >
-    Salvar
-  </Button>
-</Stack>
+        <Stack direction={buttonDirection} spacing={3} w="100%" align={isMobile ? "stretch" : "end"}>
+          {hasPermission("aprovar_reprovar.membro") && (
+            <>
+              {!gerouCobranca && (
+                <Button
+                  className="button-premium"
+                  colorScheme="red"
+                  loadingText="Recusando..."
+                  onClick={handleReprovar}
+                  isLoading={loadingAprovarReprovar}
+                  w={isMobile ? "100%" : "auto"}
+                >
+                  Recusar
+                </Button>
+              )}
+              <Button
+                className="button-premium"
+                isDisabled={gerouCobranca}
+                colorScheme="green"
+                onClick={handleAprovar}
+                isLoading={loadingAprovarReprovar}
+                loadingText="Aprovando..."
+                w={isMobile ? "100%" : "auto"}
+              >
+                {gerouCobranca ? "Aprovado e Fatura Gerada" : "Aprovar e Enviar Cobrança"}
+              </Button>
+            </>
+          )}
+          <Button
+            className="button-premium"
+            colorScheme="blue"
+            onClick={handleSubmit}
+            isLoading={loading}
+            loadingText="Salvando..."
+            w={isMobile ? "100%" : "auto"}
+          >
+            Salvar
+          </Button>
+        </Stack>
       </Flex>
     </Box>
   );

@@ -116,7 +116,11 @@ const UserInterestedList: React.FC = () => {
     <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4} >
       <Flex mb={6} justify='space-between' align='center' width='100%'>
         <Heading className='heading-title' fontSize='2xl' >Interessados</Heading>
+        <Button onClick={()=>{
+          navigate('/main/update-event-compras/'+id)
+        }}>Editar</Button>
       </Flex>
+
 
       <Table<DataType>
         columns={isMobile ? mobileColumns : desktopColumns}

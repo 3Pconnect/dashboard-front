@@ -49,6 +49,7 @@ import { CreateInterestPage } from "./pages/CreateInterestPage";
 import { UserInterestedPage } from "./pages/UserInterestedPage";
 import Loading from "./componets/Loading";
 import { CreateNewPassWordPage } from "./pages/CreateNewPassword";
+import { UpdateEventoCompraPage } from "./pages/UpdateEventoCompraPage";
 
 export const App = () => {
   const [permissoes, setPermissoes] = useState(['']);
@@ -122,13 +123,13 @@ export const App = () => {
                 <Route path="list-product" element={<ListProductPage />} />
                 <Route path="create-product" element={<CreateProductPage />} />
                 <Route path="list-evento-compras" element={<EventoCompraPage />} />
+                
+                <Route path="update-event-compras/:id" element={<UpdateEventoCompraPage />} />
                 <Route path="create-event-compras" element={<CreateEventoCompraPage />} />
                 <Route path="list-interested/:id" element={<UserInterestedPage />} />
 
               </>
             }
-
-
 
             <Route path="create-interest/:id" element={<CreateInterestPage />} />
             <Route path="list-compra-coletiva" element={<CompraColetivaPage />} />

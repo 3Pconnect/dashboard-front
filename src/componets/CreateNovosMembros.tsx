@@ -1,6 +1,6 @@
 import { Button, Flex, Heading, Grid, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, useBreakpointValue, Stack, Checkbox } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { registerMembro } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { DatePicker, Input, Select } from "antd";
@@ -12,11 +12,16 @@ const filterOptions = [
   { label: 'Em analise', value: 'em_analise' },
   { label: 'Pagamento Pendente', value: 'pagamento_pendente' },
 ];
+interface Estado {
+  sigla: string;
+  nome: string;
+}
 
 export const CreateNovosMembros = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [tipo_usuario, setTipoUsuario] = useState("");
+  const [nivel, setNivel] = useState("");
   const [telefone, setTelefone] = useState("");
   const [nome_empresa, setNomeEmpresa] = useState("");
   const [cargo, setCargo] = useState("");
@@ -26,8 +31,6 @@ export const CreateNovosMembros = () => {
   const toast = useToast();
   const [filterType, setFilterType] = useState<string>('inativo');
   const navigate = useNavigate();
-  const isMobile = useBreakpointValue({ base: true, md: false });
-
 
   const [bosch_car_service, setBoschCarService] = useState(false);
   const [modulo_diagnostico_bosch, setModuloDiagnosticoBosch] = useState(false);
@@ -36,11 +39,26 @@ export const CreateNovosMembros = () => {
   const [afiliacao, setAfiliadoEntidade] = useState(false);
   const [atendimentoCarrosPremium, setAtendimentoCarrosPremium] = useState("");
   const [categoria, setCategoria] = useState("");
-
+  const [estados, setEstados] = useState<Estado[]>([]);
   const [site, setSite] = useState("");
   const [instagram, setInstagram] = useState("");
-
+  const [estadoSelecionado, setEstadoSelecionado] = useState<string>("");
   const [dataEvento, setDataEvento] = useState<Dayjs | null>(dayjs());
+
+  const carregarEstados = async () => {
+    try {
+      const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
+      const data = await response.json();
+      setEstados(data);
+    } catch (error) {
+      console.error("Erro ao carregar os estados:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    carregarEstados();
+  }, []);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -62,7 +80,9 @@ export const CreateNovosMembros = () => {
           em_dia_com_obrigacoes,
           afiliacao,
           site,
-          instagram
+          instagram,
+          estado: estadoSelecionado,
+          nivel
         }
 
       );
@@ -89,19 +109,24 @@ export const CreateNovosMembros = () => {
     }
   };
 
+  const gridTemplateColumns = useBreakpointValue({
+    base: "1fr",
+    md: "repeat(2, 1fr)",
+    lg: "repeat(3, 1fr)",
+  });
+
   return (
-    <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
+    <Box className="text-color" bg="white" borderRadius="xl" h={"auto"} p={4}>
       <Flex mb={6} justify="space-between" align="center" width="100%">
         <Heading className="heading-title" fontSize="2xl" fontWeight="bold">
           Criar Membro
         </Heading>
       </Flex>
 
-      <Grid className="indicator-title" templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+      <Grid className="indicator-title" templateColumns={gridTemplateColumns} gap={4}>
         <Box mb={4}>
           <Text className="indicator-title" mb={2}>Nome</Text>
           <Input
-
             allowClear
             placeholder="Digite o nome do membri"
             value={name}
@@ -119,21 +144,17 @@ export const CreateNovosMembros = () => {
             placeholder="Digite o e-mail do membro"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-
           />
         </Box>
-      </Grid>
 
-      <Grid className="indicator-title" templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
         <Box mb={4}>
           <Text mb={2}>Empresa</Text>
           <Input
             className="mecanicos-input"
             allowClear
-            placeholder="Digite o e-mail do membro"
+            placeholder="Digite o nome da empresa"
             value={nome_empresa}
             onChange={(e) => setNomeEmpresa(e.target.value)}
-
           />
         </Box>
 
@@ -154,6 +175,7 @@ export const CreateNovosMembros = () => {
             }}
           />
         </Box>
+
         <Box>
           <Text mb={2}>Site</Text>
           <Input
@@ -194,6 +216,22 @@ export const CreateNovosMembros = () => {
           />
         </Box>
 
+        <Box mb={[0, 0]} w="100%">
+          <Text mb={2}>Nível</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            value={nivel}
+            onChange={(value) => setNivel(value as string)}
+          >
+            <option value="junior">Junior</option>
+            <option value="associado">Associado</option>
+          </Select>
+        </Box>
 
         <Box className="indicator-title" mb={4}>
           <Text mb={2}>CNPJ</Text>
@@ -212,6 +250,7 @@ export const CreateNovosMembros = () => {
             }}
           />
         </Box>
+
         <Box>
           <Text mb={2}>Próximo Vencimento</Text>
           <DatePicker
@@ -223,62 +262,79 @@ export const CreateNovosMembros = () => {
           />
         </Box>
 
-  
+        <Box mb={[4, 0]} w="100%">
+          <Text mb={2}>Atendimento Premium</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            value={atendimentoCarrosPremium}
+            onChange={(value) => setAtendimentoCarrosPremium(value as string)}
+          >
+            <option value="0a20">De 0 a 20%</option>
+            <option value="20a40">De 20 a 40%</option>
+            <option value="40a60">De 40 a 60%</option>
+            <option value="acima80">Acima de 80%</option>
+          </Select>
+        </Box>
+
+        <Box mb={[0, 0]} w="100%">
+          <Text mb={2}>Categoria da Empresa</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            value={categoria}
+            onChange={(value) => setCategoria(value as string)}
+          >
+            <option value="simples_nacional">Simples Nacional</option>
+            <option value="lucro_presumido">Lucro Presumido</option>
+            <option value="lucro_real">Lucro Real</option>
+          </Select>
+        </Box>
+
+        <Box w="100%">
+          <Text mb={2}>Situação</Text>
+          <Select
+            className="button-premium"
+            options={filterOptions}
+            value={filterType}
+            onChange={setFilterType}
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+          />
+        </Box>
+
+        <Box mb={4}>
+          <Text mb={2}>Estados</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            placeholder="Selecione o estado"
+            value={estadoSelecionado}
+            onChange={(e) => setEstadoSelecionado(e)}
+          >
+            {estados.map((estado) => (
+              <option key={estado.sigla} value={estado.sigla}>
+                {estado.sigla} - {estado.nome}
+              </option>
+            ))}
+          </Select>
+        </Box>
       </Grid>
-
-      <Grid className="indicator-title" w={"100%"} templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={5}>
-          <Box mb={[4, 0]} w="100%">
-            <Text mb={2}>Atendimento Premium</Text>
-            <Select
-              className="button-premium"
-              style={{
-                width: "100%",
-                height: "40px",
-                color: "white",
-              }}
-              value={atendimentoCarrosPremium}
-              onChange={(value) => setAtendimentoCarrosPremium(value as string)}
-            >
-              <option value="0a20">De 0 a 20%</option>
-              <option value="20a40">De 20 a 40%</option>
-              <option value="40a60">De 40 a 60%</option>
-              <option value="acima80">Acima de 80%</option>
-            </Select>
-          </Box>
-
-          <Box mb={[0, 0]} w="100%">
-            <Text mb={2}>Categoria da Empresa</Text>
-            <Select
-              className="button-premium"
-              style={{
-                width: "100%",
-                height: "40px",
-                color: "white",
-              }}
-              value={categoria}
-              onChange={(value) => setCategoria(value as string)}
-            >
-              <option value="simples_nacional">Simples Nacional</option>
-              <option value="lucro_presumido">Lucro Presumido</option>
-              <option value="lucro_real">Lucro Real</option>
-            </Select>
-          </Box>
-
-          <Box w="100%">
-            <Text mb={2}>Situação</Text>
-            <Select
-              className="button-premium"
-              options={filterOptions}
-              value={filterType}
-              onChange={setFilterType}
-              style={{
-                width: "100%",
-                height: "40px",
-                color: "white",
-              }}
-            />
-          </Box>
-        </Grid>
 
       <Box mt={6} mb={6} color={"black"} className="indicator-title">
         <Text fontWeight="semibold" mb={3}>

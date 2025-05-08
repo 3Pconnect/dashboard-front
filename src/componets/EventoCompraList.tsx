@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableColumnsType, TablePaginationConfig, TableProps, DatePicker } from 'antd';
-import { Heading, Flex, Button, useToast, Tag, useBreakpointValue, Box } from '@chakra-ui/react';
+import { Table, TableColumnsType, TablePaginationConfig, TableProps, DatePicker, Tag } from 'antd';
+import { Heading, Flex, Button, useToast, useBreakpointValue, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
 import { deleteUser, deleteVenda, fetchVendasDisponiveis } from '../services/api';
@@ -14,6 +14,7 @@ interface VendaType {
   status: string;
   inicio: string;
   fim: string;
+  situacao: string;
 }
 
 type OnChange = NonNullable<TableProps<VendaType>['onChange']>;
@@ -71,6 +72,7 @@ const VendasDisponiveisList: React.FC = () => {
         inicio: venda.dataInicio,
         fim: venda.dataFim,  // Ajuste conforme necessário
         status: venda.quantidadeTotal > 0 ? "DISPONÍVEL" : "INDISPONÍVEL",
+        situacao: venda.situacao,
       }));
 
       setData(vendasFormatadas);
@@ -131,7 +133,32 @@ const VendasDisponiveisList: React.FC = () => {
         };
         return <span>{`${formatDate(record.inicio)} - ${formatDate(record.fim)}`}</span>;
       },
-    }]),
+      
+    },
+   {
+        title: 'Tipo',
+        dataIndex: 'situacao',
+        key: 'situacao',
+        sorter: (a:any, b:any) => a.situacao.localeCompare(b.situacao),
+        ellipsis: true,
+        render: (text:any) => {
+          let color;
+          switch (text) {
+            case 'inativo':
+              color = 'red';
+              break;
+            case 'ativo':
+              color = 'green';
+              break;
+            case 'master':
+              color = 'gold';
+              break;
+            default:
+              color = 'default';
+          }
+          return <Tag style={{width: "110px", textAlign: "center"}} color={color}>{text?.toUpperCase()}</Tag>;
+        },
+      },]),
     {
       title: 'Ações',
       key: 'actions',
@@ -144,6 +171,7 @@ const VendasDisponiveisList: React.FC = () => {
         </Button>
       ),
     },
+
   ] as TableColumnsType<VendaType>;
   
   return (

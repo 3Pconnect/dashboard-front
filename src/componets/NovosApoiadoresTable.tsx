@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker, Select } from 'antd';
+import { Table, TableColumnsType, TablePaginationConfig, TableProps, Input, DatePicker, Select, Tag } from 'antd';
 import { Heading, Flex, Button, useToast, useMediaQuery, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
@@ -193,13 +193,29 @@ const NovosApoiadoresTable: React.FC = () => {
         render: (text) => <span >{text}</span>,
       },
       {
-        title: 'Telefone',
-        dataIndex: 'telefone',
-        key: 'telefone',
-        sorter: (a, b) => a.telefone.localeCompare(b.telefone),
-        sortOrder: sortedInfo.columnKey === 'telefone' ? sortedInfo.order : null,
+        title: 'Tipo',
+        dataIndex: 'tipo_usuario',
+        key: 'tipo_usuario',
+        sorter: (a, b) => a.tipo_usuario.localeCompare(b.tipo_usuario),
+        sortOrder: sortedInfo.columnKey === 'tipo_usuario' ? sortedInfo.order : null,
         ellipsis: true,
-        render: (text) => <span >{text}</span>,
+        render: (text) => {
+          let color;
+          switch (text) {
+            case 'apoiador':
+              color = 'blue';
+              break;
+            case 'patrocinador':
+              color = 'green';
+              break;
+            case 'master':
+              color = 'gold';
+              break;
+            default:
+              color = 'default';
+          }
+          return <Tag style={{width: "110px", textAlign: "center"}} color={color}>{text.toUpperCase()}</Tag>;
+        },
       },
       {
         title: 'Atividade',

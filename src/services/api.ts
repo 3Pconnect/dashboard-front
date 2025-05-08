@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 const url = process.env.REACT_APP_API_URL;
 console.log("URL:", url)
 const api = axios.create({
- baseURL: 'https://api.seminariomecanicospremium.com.br',
- //baseURL: 'http://localhost:3001',
+  //baseURL: 'https://api.seminariomecanicospremium.com.br',
+  baseURL: 'http://localhost:3001',
 });
 
 api.interceptors.request.use(
@@ -550,14 +550,16 @@ interface RegisterMembroProps {
   equipamento_bosch?: boolean;
   em_dia_com_obrigacoes?: boolean;
   afiliacao?: boolean;
-  dataEvento?:dayjs.Dayjs | null,
+  dataEvento?: dayjs.Dayjs | null,
   site: string | '';
   instagram: string | '';
+  estado: string | '';
+  nivel: string | '';
 }
 export const registerMembro = async (data: RegisterMembroProps) => {
   try {
     const response = await api.post("/membros", {
-      ...data, situacao: 'em_analise'
+      ...data, situacao: 'em_analise', tipo_usuario: 'membro'
 
     }, {
       headers: {
@@ -659,7 +661,8 @@ export const updateApoiador = async (
   cargo: string,
   nome_empresa: string,
   cnpj: string,
-  area_atuacao: string
+  area_atuacao: string,
+  nivel: string,
 ) => {
   try {
     const response = await api.put("/apoiador/" + id, {
@@ -669,7 +672,7 @@ export const updateApoiador = async (
       nome_empresa,
       cnpj,
       area_atuacao,
-
+      nivel
     }, {
       headers: {
         'Accept': 'application/json',
@@ -727,7 +730,7 @@ export const updateMembro = async (
 ) => {
   try {
     const response = await api.put(`/membros/${id}`, {
-      ...data
+      ...data, tipo_usuario: 'membro'
     });
 
     return response.data;
@@ -776,6 +779,7 @@ export const createVenda = async (venda: {
   quantidadeTotal: number;
   dataInicio: string;
   dataFim: string;
+  situacao: string
 }) => {
   try {
     const response = await api.post("/vendas", venda, {
@@ -799,6 +803,32 @@ export const createVenda = async (venda: {
       throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
     } else {
       throw new Error("Erro inesperado ao criar venda.");
+    }
+  }
+};
+export const updateCompra = async (compraId: number, data: any) => {
+  try {
+    const response = await api.post(`/vendas/${compraId}/update`, {...data}, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API ao atualizar a compra.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao atualizar a compra:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao atualizar a compra.");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu ao atualizar a compra. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao atualizar a compra.");
     }
   }
 };
@@ -829,6 +859,31 @@ export const demonstrarInteresse = async (compraId: number, quantidade: number) 
       throw new Error("Servidor não respondeu ao demonstrar interesse. Tente novamente mais tarde.");
     } else {
       throw new Error("Erro inesperado ao demonstrar interesse na venda.");
+    }
+  }
+};
+export const buscarVendaPorId = async (id: number) => {
+  try {
+    const response = await api.get(`/vendas/${id}/search`, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API ao buscar venda.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar venda:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar venda.");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu ao buscar venda. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar venda.");
     }
   }
 };
@@ -933,25 +988,26 @@ export const fetchInteressadosCompra = async (
     } else {
       throw new Error('Erro inesperado ao buscar interessados.');
     }
-  }}
-  interface InteresseResponse {
-    data: {
-      id: number;
-      quantidade: number;
-      dataInteresse: string;
-      usuario: {
-        id: number;
-        username: string;
-        email: string;
-        password: string;
-        situacao: string;
-        createdAt: string;
-      };
-    }[];
-    total: number;
-    page: string;
-    limit: string;
   }
+}
+interface InteresseResponse {
+  data: {
+    id: number;
+    quantidade: number;
+    dataInteresse: string;
+    usuario: {
+      id: number;
+      username: string;
+      email: string;
+      password: string;
+      situacao: string;
+      createdAt: string;
+    };
+  }[];
+  total: number;
+  page: string;
+  limit: string;
+}
 
 
 export const fetchVendasDisponiveis = async (

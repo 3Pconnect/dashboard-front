@@ -3,7 +3,7 @@ import { MdArrowBack } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { fetchMembroById, updateApoiador } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
-import { Input } from "antd";
+import { Input, Select } from "antd";
 
 export const UpdateNovoApoiadores = () => {
   const [name, setName] = useState("");
@@ -31,7 +31,8 @@ export const UpdateNovoApoiadores = () => {
         cargo,
         nome_empresa,
         cnpj,
-        atividade
+        atividade,
+        "nivel_default"
       );
       console.log("Membro registrado com sucesso", response);
       toast({
@@ -65,6 +66,7 @@ export const UpdateNovoApoiadores = () => {
         setNomeEmpresa(data?.nome_empresa);
         setCargo(data?.cargo);
         setAtividade(data?.area_atuacao);
+        setTipoUsuario(data?.tipo_usuario)
       } catch (error) {
         console.error(error);
       } finally {
@@ -171,6 +173,23 @@ export const UpdateNovoApoiadores = () => {
               borderWidth: "1px"
             }}
           />
+        </Box>
+        <Box mb={[0, 0]} w="100%">
+          <Text mb={2}>Tipo</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            value={tipo_usuario}
+            onChange={(value) => setTipoUsuario(value as string)}
+          >
+            <option value="master">Master</option>
+            <option value="patrocinador">Patrocinador</option>
+            <option value="institucional">Institucional</option>
+          </Select>
         </Box>
       </Grid>
 

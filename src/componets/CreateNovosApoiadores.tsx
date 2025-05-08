@@ -3,7 +3,7 @@ import { MdArrowBack } from "react-icons/md";
 import { useState } from "react";
 import { registerApoiador } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import { Input } from "antd";
+import { Input, Select } from "antd";
 
 export const CreateNovosApoiadores = () => {
   const [name, setName] = useState("");
@@ -146,6 +146,24 @@ export const CreateNovosApoiadores = () => {
               borderWidth: "1px"
             }}
           />
+        </Box>
+
+        <Box mb={[0, 0]} w="100%">
+          <Text mb={2}>Tipo</Text>
+          <Select
+            className="button-premium"
+            style={{
+              width: "100%",
+              height: "40px",
+              color: "white",
+            }}
+            value={tipo_usuario}
+            onChange={(value) => setTipoUsuario(value as string)}
+          >
+            <option value="master">Master</option>
+            <option value="patrocinador">Patrocinador</option>
+            <option value="institucional">Institucional</option>
+          </Select>
         </Box>
       </Grid>
 

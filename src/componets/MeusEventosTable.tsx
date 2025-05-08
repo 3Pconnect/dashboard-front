@@ -16,6 +16,7 @@ interface DataType {
   createdAt: string;
   situacao: string;
   inscrito: boolean;
+  dataEvento: string;
 }
 
 type OnChange = NonNullable<TableProps<DataType>['onChange']>;
@@ -241,6 +242,15 @@ const MeusEventosTable: React.FC = () => {
           key: 'createdAt',
           sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
           sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
+          ellipsis: true,
+          render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+        },
+        {
+          title: 'Evento',
+          dataIndex: 'createdAt',
+          key: 'dataEvento',
+          sorter: (a, b) => new Date(a.dataEvento).getTime() - new Date(b.dataEvento).getTime(),
+          sortOrder: sortedInfo.columnKey === 'dataEvento' ? sortedInfo.order : null,
           ellipsis: true,
           render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
         },

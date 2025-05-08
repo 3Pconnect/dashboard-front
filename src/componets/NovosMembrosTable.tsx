@@ -70,7 +70,6 @@ const NovosMembrosTable: React.FC = () => {
     try {
       const startDate = dateRange?.[0]?.format('YYYY-MM-DD') || undefined;
       const endDate = dateRange?.[1]?.format('YYYY-MM-DD') || undefined;
-      console.clear();
       console.log(searchQuery, filterType);
 
       const obj: any = {};
@@ -209,15 +208,6 @@ const NovosMembrosTable: React.FC = () => {
         render: (text) => <span >{reduzirTexto(text, 25)}</span>,
       },
       {
-        title: 'Cargo',
-        dataIndex: 'cargo',
-        key: 'cargo',
-        sorter: (a, b) => a.cargo.length - b.cargo.length,
-        sortOrder: sortedInfo.columnKey === 'cargo' ? sortedInfo.order : null,
-        ellipsis: true,
-        render: (text) => <span >{text}</span>,
-      },
-      {
         title: 'Criado',
         dataIndex: 'createdAt',
         key: 'createdAt',
@@ -225,6 +215,25 @@ const NovosMembrosTable: React.FC = () => {
         sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
         ellipsis: true,
         render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+      },
+      {
+        title: 'Nível',
+        dataIndex: 'nivel',
+        key: 'nivel',
+        render: (status: string) => {
+          let color = '';
+          switch (status) {
+            case 'junior':
+              color = 'orange';
+              break;
+            case 'associado':
+              color = 'green';
+              break;
+            default:
+              color = 'gray';
+          }
+          return <Tag  style={{width: "85px", justifyContent: 'center'}} colorScheme={color} >{status}</Tag>;
+        },
       },
       {
         title: 'Situação',
@@ -245,7 +254,7 @@ const NovosMembrosTable: React.FC = () => {
             default:
               color = 'gray';
           }
-          return <Tag colorScheme={color} >{status}</Tag>;
+          return <Tag  style={{width: "auto", justifyContent: 'center'}} colorScheme={color} >{status}</Tag>;
         },
       },
       {

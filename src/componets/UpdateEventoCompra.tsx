@@ -4,10 +4,10 @@ import {
   useBreakpointValue, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink,
 } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
-import { createVenda, fetchProducts, fetchProfiles } from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { buscarVendaPorId, createVenda, fetchProducts, fetchProfiles, updateCompra } from "../services/api";
+import { useNavigate, useParams } from "react-router-dom";
 import { DatePicker, Input, Select, Table, TableColumnsType, TablePaginationConfig, TableProps } from "antd";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { truncateString } from "../utils/util";
 
 interface DataType {
@@ -24,7 +24,7 @@ interface Sorts {
   order?: 'ascend' | 'descend';
 }
 
-export const CreateEventoCompra = () => {
+export const UpdateEventoCompra = () => {
   const [profiles, setProfiles] = useState<{ id: number; name: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProfile, setSelectedProfile] = useState<number | null>(null);
@@ -34,6 +34,7 @@ export const CreateEventoCompra = () => {
   const [productId, setProductId] = useState("");
   const [saving, setSaving] = useState(false);
   const toast = useToast();
+    const { id } = useParams();
   const [data, setData] = useState<DataType[]>([]);
 
   const [situacao, setSituacao] = useState("");
@@ -80,6 +81,30 @@ export const CreateEventoCompra = () => {
     }
   };
 
+  const fetchCompra = async () => {
+    setLoading(true);
+    try {
+      const response = await buscarVendaPorId(Number(id)); 
+     console.log(response)
+     const inicio = response.dataInicio ? dayjs(response.dataInicio) : null;
+    const fim = response.dataFim ? dayjs(response.dataFim) : null;
+
+    setDateRange([inicio, fim]);
+    setQuantidade(response.quantidade)
+    setQuantidadeMaxima(response.quantidadeMaximaPorUsuario)
+    setSituacao(response.situacao)
+    setProductName(response.produto.nome)
+    setProductId(response.produto.id)
+    } catch (error) {
+      console.error("Erro ao buscar compra:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchCompra()
+  }, [id]);
+
   useEffect(() => {
     fetchData(pagination.current || 1);
   }, [pagination.current, searchValue]);
@@ -113,16 +138,16 @@ export const CreateEventoCompra = () => {
         situacao
       };
 
-      await createVenda(vendaData);
+      await updateCompra(Number(id), vendaData);
 
       toast({
-        title: "Venda Criada",
-        description: "Venda criada com sucesso!",
+        title: "Compra atualizada",
+        description: "Compra atualizada com sucesso!",
         status: "success",
         duration: 5000,
         isClosable: true,
       });
-      navigate('/main/list-evento-compras');
+      navigate('/main/list-interested/'+id);
     } catch (error: any) {
       toast({
         title: "Erro",
@@ -170,6 +195,23 @@ export const CreateEventoCompra = () => {
     <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4} >
       <Flex mb={6} justify='space-between' align='center' width='100%'>
         <Heading className='heading-title' fontSize='2xl' >Compra coletiva</Heading>
+
+        <Flex justify="flex-start" mt={5}>
+
+          <Button
+            className="button-premium"
+            onClick={handleSave}
+            isLoading={saving}
+            loadingText="Salvando..."
+            bg="#1b5ebc"
+            color="white"
+            colorScheme="green"
+            w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
+          >
+            {saving ? "Salvando..." : "Salvar"}
+          </Button>
+
+        </Flex>
       </Flex>
 
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
@@ -264,10 +306,10 @@ export const CreateEventoCompra = () => {
             onChange={(e) => setSituacao(e)}
           >
             <option key={"inativo"} value={"inativo"}>
-            Inativo
+              Inativo
             </option>
             <option key={"ativo"} value={"ativo"}>
-            Ativo
+              Ativo
             </option>
           </Select>
         </Box>
@@ -298,22 +340,6 @@ export const CreateEventoCompra = () => {
       </VStack>
 
 
-      <Flex justify="flex-start" mt={5}>
-
-        <Button
-          className="button-premium"
-          onClick={handleSave}
-          isLoading={saving}
-          loadingText="Salvando..."
-          bg="#1b5ebc"
-          color="white"
-          colorScheme="green"
-          w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
-        >
-          {saving ? "Salvando..." : "Salvar"}
-        </Button>
-
-      </Flex>
     </Box>
   );
 };

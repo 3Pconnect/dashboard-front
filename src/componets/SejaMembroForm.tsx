@@ -4,11 +4,22 @@ import {
   HStack
 } from "@chakra-ui/react";
 import { MdArrowBack } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { registerMembro } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { Input, Select } from "antd";
 import dayjs from "dayjs";
+interface Estado {
+  sigla: string;
+  nome: string;
+}
+
+const filterOptions = [
+  { label: 'Ativo', value: 'ativo' },
+  { label: 'Inativo', value: 'inativo' },
+  { label: 'Em analise', value: 'em_analise' },
+  { label: 'Pagamento Pendente', value: 'pagamento_pendente' },
+];
 
 export const SejaMembroForm: React.FC = () => {
   const [name, setName] = useState("");
@@ -25,13 +36,31 @@ export const SejaMembroForm: React.FC = () => {
   const [categoria, setCategoria] = useState("");
   const [loading, setLoading] = useState(false);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
-
+  const [filterType, setFilterType] = useState<string>('inativo');
   const [bosch_car_service, setBoschCarService] = useState(false);
   const [modulo_diagnostico_bosch, setModuloDiagnosticoBosch] = useState(false);
   const [equipamento_bosch, setEquipamentoBosch] = useState(false);
   const [em_dia_com_obrigacoes, setEmDiaComObrigacoes] = useState(false);
   const [afiliacao, setAfiliadoEntidade] = useState(false);
   const [vencimento, setVencimento] = useState<dayjs.Dayjs | null>(null);
+  const [estados, setEstados] = useState<Estado[]>([]);
+  const [estadoSelecionado, setEstadoSelecionado] = useState<string>("");
+
+
+  const carregarEstados = async () => {
+    try {
+      const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
+      const data = await response.json();
+      setEstados(data);
+    } catch (error) {
+      console.error("Erro ao carregar os estados:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    carregarEstados();
+  }, []);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -146,6 +175,10 @@ export const SejaMembroForm: React.FC = () => {
       return;
     }
 
+
+
+
+
     setLoading(true);
     try {
       const response = await registerMembro(
@@ -165,7 +198,9 @@ export const SejaMembroForm: React.FC = () => {
           em_dia_com_obrigacoes,
           afiliacao,
           site,
-         instagram:  "instagram_default_"
+          instagram: instagram,
+          estado: estadoSelecionado,
+          nivel: 'junior'
         }
       );
       console.log("Membro registrado com sucesso", response);
@@ -230,11 +265,11 @@ export const SejaMembroForm: React.FC = () => {
   return (
     <Box className="indicator-title" bg={"#f8f9fa"} color={"white"} h={"auto"} pb={10} px={{ base: 4, md: 20 }} w={"full"} display="flex" justifyContent="center" alignItems="center">
       <Box borderRadius={"5px"} p={5} bg={"white"} maxWidth={{ base: "95%", md: "container.md", lg: "70%" }} width="100%">
-        <VStack py={8} align="center">
+        {/* <VStack py={8} align="center">
           <Heading className="heading-title" fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" mt={4}>
             Cadastro para membros
           </Heading>
-        </VStack>
+        </VStack> */}
 
         <Grid
           className="indicator-title"
@@ -407,12 +442,13 @@ export const SejaMembroForm: React.FC = () => {
           </Box>
         </Grid>
 
-        <Stack
-          direction={["column", "row"]} // coluna no mobile, linha no desktop
-          spacing={4}
-          width="100%"
+        <Grid
+          className="indicator-title"
+          w="100%"
+          templateColumns={{ base: "1fr", sm: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
+          gap={5}
         >
-          <Box flex={1} mb={[4, 5]}>
+          <Box mb={[4, 0]} w="100%">
             <Text mb={2}>Atendimento Premium</Text>
             <Select
               className="button-premium"
@@ -431,7 +467,7 @@ export const SejaMembroForm: React.FC = () => {
             </Select>
           </Box>
 
-          <Box flex={1} mb={[0, 5]}>
+          <Box mb={[0, 0]} w="100%">
             <Text mb={2}>Categoria da Empresa</Text>
             <Select
               className="button-premium"
@@ -448,8 +484,30 @@ export const SejaMembroForm: React.FC = () => {
               <option value="lucro_real">Lucro Real</option>
             </Select>
           </Box>
-        </Stack>
 
+
+
+          <Box mb={4}>
+            <Text mb={2}>Estados</Text>
+            <Select
+              className="button-premium"
+              style={{
+                width: "100%",
+                height: "40px",
+                color: "white",
+              }}
+              placeholder="Selecione o estado"
+              value={estadoSelecionado}
+              onChange={(e) => setEstadoSelecionado(e)}
+            >
+              {estados.map((estado) => (
+                <option key={estado.sigla} value={estado.sigla}>
+                  {estado.sigla} - {estado.nome}
+                </option>
+              ))}
+            </Select>
+          </Box>
+        </Grid>
 
         <Box mb={6} color={"black"} className="indicator-title">
           <Text fontWeight="semibold" mb={3}>Avaliação de Requisitos para novo Associado</Text>
