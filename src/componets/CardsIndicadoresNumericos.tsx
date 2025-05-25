@@ -7,6 +7,11 @@ type CardsIndicadoresNumericosType = {
   totalTreinamentos?: number,
   totalTreinamentosFuturos?: number,
   totalUser?: number,
+  totalPatrocinador?: number,
+  totalApoiadores: number,
+  totalAssociadosEmAnalise: number,
+  totalCompras?: number,
+  totalArrecadado?: number
 }
 
 export const CardsIndicadoresNumericos = ({
@@ -16,6 +21,11 @@ export const CardsIndicadoresNumericos = ({
   inadimplentes,
   totalTreinamentos,
   totalTreinamentosFuturos,
+  totalPatrocinador,
+  totalApoiadores,
+  totalAssociadosEmAnalise,
+  totalCompras,
+  totalArrecadado
 }: CardsIndicadoresNumericosType) => {
   const cards = [
     { label: "Total de Associados Premium", value: totalMembros },
@@ -24,6 +34,11 @@ export const CardsIndicadoresNumericos = ({
     { label: "Associados Renovados", value: renovacoes },
     { label: "Total de Inadimplentes", value: inadimplentes },
     { label: "Total Logins", value: totalUser },
+    { label: "Patrocinadores", value: totalPatrocinador },
+    { label: "Apoiadores", value: totalApoiadores },
+    { label: "Associados em análise", value: totalAssociadosEmAnalise },
+    { label: "Compras criadas", value: totalCompras },
+    { label: "Total arrecadado", value: totalArrecadado, isCurrency: true },
   ];
 
   return (
@@ -49,7 +64,12 @@ export const CardsIndicadoresNumericos = ({
             color="gray.800"
             className="heading-title"
           >
-            {card.value ?? 0}
+            {card.isCurrency
+              ? new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(card.value ?? 0)
+              : card.value ?? 0}
           </Text>
           <Text
             fontSize="sm"
@@ -62,4 +82,4 @@ export const CardsIndicadoresNumericos = ({
       ))}
     </SimpleGrid>
   );
-}
+};

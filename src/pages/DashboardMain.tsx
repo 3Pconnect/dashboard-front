@@ -7,7 +7,7 @@ import TotalInadimplentes from "../componets/TotalInadimplentes";
 import { Statistic } from "antd";
 import { CardsIndicadoresNumericos } from "../componets/CardsIndicadoresNumericos";
 import TotalAssociadosChartPorEstado from "../componets/TotalAssociadosChart copy";
-import { fetchTaxaRenovacao, fetchTreinamentos, fetchUserCount } from "../services/api";
+import { fetchComprasDashboard, fetchTaxaRenovacao, fetchTreinamentos, fetchUserCount } from "../services/api";
 import '../css/css.css'
 // Definindo a estrutura do tipo de dados que vem da API
 interface MembrosDashboardData {
@@ -17,6 +17,13 @@ interface MembrosDashboardData {
   totalUserByState:any;
   totalTreinamentos:number;
   totalMembrosPorMes: Array<{ mes: string; totalMembros: string }>;
+  totalPatrocinador: number;
+  totalApoiadores: number;
+  totalAssociadosEmAnalise: number;
+}
+interface ComprasDashboardData {
+  totalCompras: number;
+  totalArrecadado: number;
 }
 interface EventosDashboardData {
   totalTreinamentos:any;
@@ -26,6 +33,7 @@ interface EventosDashboardData {
 
 const DashboardMain: React.FC = () => {
   const [dashboardData, setDashboardData] = useState<MembrosDashboardData | null>(null);
+  const [compraData, setCompraData] = useState<ComprasDashboardData | null>(null);
   const [eventosData, setEventosData] = useState<EventosDashboardData | null>(null);
   const [totalUsers, setUsers] = useState<any>({});
 
@@ -47,6 +55,12 @@ const DashboardMain: React.FC = () => {
       try {
         const data = await fetchTaxaRenovacao();
         setDashboardData(data);
+      } catch (error) {
+        console.error(error);
+      }
+      try {
+        const data = await fetchComprasDashboard();
+        setCompraData(data);
       } catch (error) {
         console.error(error);
       }
@@ -91,6 +105,11 @@ const DashboardMain: React.FC = () => {
   return (
     <>
     <CardsIndicadoresNumericos
+    totalApoiadores={dashboardData.totalPatrocinador}
+    totalArrecadado={compraData?.totalArrecadado}
+    totalCompras={compraData?.totalCompras}
+    totalAssociadosEmAnalise={dashboardData.totalAssociadosEmAnalise}
+    totalPatrocinador={dashboardData.totalAssociadosEmAnalise}    
     totalUser={totalUsers}
     inadimplentes={dashboardData.taxaInadimplencia.inadimplentes}
     renovacoes={dashboardData.taxaRenovacao.renovacoes}

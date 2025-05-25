@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 const url = process.env.REACT_APP_API_URL;
 console.log("URL:", url)
 const api = axios.create({
-  //baseURL: 'https://api.seminariomecanicospremium.com.br',
-  baseURL: 'http://localhost:3001',
+  baseURL: 'https://api.seminariomecanicospremium.com.br',
+  //baseURL: 'http://localhost:3001',
 });
 
 api.interceptors.request.use(
@@ -535,6 +535,31 @@ export const fetchTaxaRenovacao = async () => {
     }
   }
 };
+
+
+export const fetchComprasDashboard = async () => {
+  try {
+    const response = await api.get("/vendas/dashboard/compras", {
+      headers: {
+        accept: "*/*",
+      },
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar dados de compras do dashboard:", error);
+
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Erro ao buscar dados de compras do dashboard");
+    } else if (error.request) {
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      throw new Error("Erro inesperado ao buscar dados de compras do dashboard.");
+    }
+  }
+};
+
+
 interface RegisterMembroProps {
   name: string;
   email: string;

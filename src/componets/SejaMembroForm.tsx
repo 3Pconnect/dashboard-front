@@ -242,8 +242,8 @@ export const SejaMembroForm: React.FC = () => {
 
   if (submissionSuccess) {
     return (
-      <Box bg={"#f8f9fa"} color={"white"} h={"100vh"} py={20} px={{ base: 4, md: 20 }} w={"full"} display="flex" justifyContent="center" alignItems="center">
-        <Box borderRadius={"5px"} p={10} bg={"#060c32"} maxWidth={{ base: "95%", md: "container.md", lg: "70%" }} width="100%" textAlign="center">
+      <Box  h={"100vh"} py={20} px={{ base: 4, md: 20 }} w={"full"} display="flex" justifyContent="center" alignItems="center">
+        <Box borderRadius={"5px"} p={10}  maxWidth={{ base: "95%", md: "container.md", lg: "70%" }} width="100%" textAlign="center">
           <VStack className="indicator-title" spacing={4} align="center">
             <Image src="https://mecanicospremium.com.br/build/assets/logo-e787336c.png" alt="Logo Mecânicos Premium" boxSize="80px" />
             <Heading fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" mt={4}>

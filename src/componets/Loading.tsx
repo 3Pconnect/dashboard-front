@@ -3,6 +3,7 @@ import { Flex, Spinner, Text } from "@chakra-ui/react";
 const Loading = () => {
   return (
     <Flex
+
     className="heading-title"
       direction="column"
       align="center"

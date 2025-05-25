@@ -4,25 +4,23 @@ import { FaHome, FaInfoCircle, FaCog, FaSignOutAlt, FaBars, FaUser, FaUsersCog, 
 import { Outlet, useNavigate } from 'react-router-dom';
 import { NovosMembrosList } from './NovosMembrosList';
 import { fetchMe } from '../services/api';
-import '../css/css.css'
+import '../css/css.css';
 
 function Out() {
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const buttonSize = useBreakpointValue({ base: 'sm', md: 'md' });
-  const [permissoes, setPermissoes] = useState([''])
+  const [permissoes, setPermissoes] = useState(['']);
   const padding = useBreakpointValue({ base: 0, md: 10 });
 
   useEffect(() => {
     const loadUser = async () => {
       try {
         const data = await fetchMe();
-        setPermissoes(data.profile.permissions)
+        setPermissoes(data.profile.permissions);
       } catch (error) {
         console.error(error);
-      } finally {
-        //setLoading(false);
       }
     };
     loadUser();
@@ -34,19 +32,13 @@ function Out() {
     console.log(hasPermission);
   }, [permissoes]);
 
-  // Função de logout
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedOut(true);
-    navigate('/')
-
-    // Aqui você pode adicionar a lógica para logout, como limpar cookies, redirecionar para uma página de login, etc.
+    navigate('/');
   };
 
-  // Estado para gerenciar os submenus
   const [activeMenu, setActiveMenu] = useState(null);
-
-  // Função para alternar a visibilidade dos submenus
   const toggleSubMenu = (menuKey: any) => {
     setActiveMenu(activeMenu === menuKey ? null : menuKey);
   };
@@ -54,7 +46,8 @@ function Out() {
   return (
     <Flex minHeight="100vh" backgroundColor="#f8f9fa" color="white">
       {/* Menu Lateral para dispositivos grandes */}
-      <Box bg={"red"}
+      <Box
+        bg={"red"}
         width={{ base: '100%', md: '250px' }}
         backgroundColor="#132132"
         padding={4}
@@ -63,13 +56,12 @@ function Out() {
         flexDirection="column"
         alignItems="flex-start"
       >
-        {/* Logo no Menu Lateral (Desktop) */}
         <HStack mb={6}>
           <Image src="https://mecanicospremium.com.br/build/assets/logo-e787336c.png" alt="Logo Mecânicos Premium" boxSize="50px" />
         </HStack>
 
         <VStack spacing={4} align="start" width="100%">
-          {/* Menu de Navegação */}
+          {/* Dashboard */}
           <Link
             className='button-menu-nav'
             href="#"
@@ -78,12 +70,11 @@ function Out() {
             color="white"
             onClick={() => navigate('/main/dashboard')}
           >
-            <FaHome  style={{ marginRight: '8px' }} />
-          
-            <Text className="indicator-title">  Dashboard</Text>
+            <FaHome style={{ marginRight: '8px' }} />
+            <Text className="indicator-title">Dashboard</Text>
           </Link>
 
-          {/* Categoria Cadastros */}
+          {/* Categoria Cadastros (AGORA COM "Agenda" e "Gestão" movidos para cá) */}
           <Box width="100%">
             <Link
               className='button-menu-nav'
@@ -94,11 +85,11 @@ function Out() {
               onClick={() => toggleSubMenu('cadastros')}
             >
               <FaUser style={{ marginRight: '8px' }} />
-              <Text className="indicator-title">  Cadastros</Text>
+              <Text className="indicator-title">Cadastros</Text>
             </Link>
             {activeMenu === 'cadastros' && (
               <VStack align="start" spacing={2} pl={6}>
-                {permissoes.includes('read.users') &&
+                {permissoes.includes('read.users') && (
                   <Link
                     href="#"
                     display="flex"
@@ -110,8 +101,8 @@ function Out() {
                     <FaUsersCog style={{ marginRight: '8px' }} />
                     <Text className="indicator-title">Usuários</Text>
                   </Link>
-                }
-                {permissoes.includes('read.profiles') &&
+                )}
+                {permissoes.includes('read.profiles') && (
                   <Link
                     href="#"
                     display="flex"
@@ -121,10 +112,10 @@ function Out() {
                     onClick={() => navigate('/main/perfis')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
-                    <Text className="indicator-title">  Perfis</Text>
+                    <Text className="indicator-title">Perfis</Text>
                   </Link>
-                }
-                {permissoes.includes('read.membros') &&
+                )}
+                {permissoes.includes('read.membros') && (
                   <Link
                     href="#"
                     display="flex"
@@ -136,8 +127,8 @@ function Out() {
                     <FaUsersCog style={{ marginRight: '8px' }} />
                     <Text className="indicator-title">Membros</Text>
                   </Link>
-                }
-                {permissoes.includes('read.apoiadores') &&
+                )}
+                {permissoes.includes('read.apoiadores') && (
                   <Link
                     href="#"
                     display="flex"
@@ -149,12 +140,40 @@ function Out() {
                     <FaUsersCog style={{ marginRight: '8px' }} />
                     <Text className="indicator-title">Apoiadores</Text>
                   </Link>
-                }
+                )}
+                {/* Item movido de Eventos para Cadastros */}
+                {permissoes.includes('manage.eventos') && (
+                  <Link
+                    href="#"
+                    display="flex"
+                    alignItems="center"
+                    color="white"
+                    className='button-menu-nav'
+                    onClick={() => navigate('/main/agenda-eventos')}
+                  >
+                    <FaCalendarAlt style={{ marginRight: '8px' }} />
+                    <Text className="indicator-title">Eventos</Text>
+                  </Link>
+                )}
+                {/* Item movido de Compras para Cadastros */}
+                {permissoes.includes('manage.compras') && (
+                  <Link
+                    href="#"
+                    display="flex"
+                    alignItems="center"
+                    color="white"
+                    className='button-menu-nav'
+                    onClick={() => navigate('/main/list-evento-compras')}
+                  >
+                    <FaUsersCog style={{ marginRight: '8px' }} />
+                    <Text className="indicator-title">Relatório</Text>
+                  </Link>
+                )}
               </VStack>
             )}
           </Box>
 
-          {/* Categoria Eventos */}
+          {/* Categoria Eventos (REMOVIDA a "Agenda" daqui) */}
           <Box width="100%">
             <Link
               href="#"
@@ -169,7 +188,7 @@ function Out() {
             </Link>
             {activeMenu === 'eventos' && (
               <VStack align="start" spacing={2} pl={6}>
-                {permissoes.includes('eventos.inscricao') &&
+                {permissoes.includes('eventos.inscricao') && (
                   <>
                     <Link
                       href="#"
@@ -182,7 +201,6 @@ function Out() {
                       <FaCalendarAlt style={{ marginRight: '8px' }} />
                       <Text className="indicator-title">Todos</Text>
                     </Link>
-
                     <Link
                       href="#"
                       display="flex"
@@ -195,26 +213,13 @@ function Out() {
                       <Text className="indicator-title">Meus eventos</Text>
                     </Link>
                   </>
-                }
-                {permissoes.includes('manage.eventos') &&
-                  <Link
-                    href="#"
-                    display="flex"
-                    alignItems="center"
-                    color="white"
-                    className='button-menu-nav'
-                    onClick={() => navigate('/main/agenda-eventos')}
-                  >
-                    <FaCalendarAlt style={{ marginRight: '8px' }} />
-                    <Text className="indicator-title">  Agenda</Text>
-                  </Link>}
+                )}
               </VStack>
             )}
           </Box>
 
-          {/* Categoria Compras */}
+          {/* Categoria Compras (REMOVIDA a "Gestão" daqui) */}
           <Box width="100%">
-
             <Link
               href="#"
               display="flex"
@@ -224,56 +229,39 @@ function Out() {
               onClick={() => toggleSubMenu('compras')}
             >
               <FaUsersCog style={{ marginRight: '8px' }} />
-              <Text className="indicator-title">  Compras</Text>
+              <Text className="indicator-title">Compras</Text>
             </Link>
             {activeMenu === 'compras' && (
-              <>
-
-                <VStack align="start" spacing={2} pl={6}>
-                  {permissoes.includes('manage.compras') &&
-                    <Link
-                      href="#"
-                      display="flex"
-                      alignItems="center"
-                      color="white"
-                      className='button-menu-nav'
-                      onClick={() => navigate('/main/list-evento-compras')}
-                    >
-                      <FaUsersCog style={{ marginRight: '8px' }} />
-                      <Text className="indicator-title">Gestão</Text>
-                    </Link>
-                  }
+              <VStack align="start" spacing={2} pl={6}>
+                <Link
+                  href="#"
+                  display="flex"
+                  alignItems="center"
+                  color="white"
+                  className='button-menu-nav'
+                  onClick={() => navigate('/main/list-compra-coletiva')}
+                >
+                  <FaUsersCog style={{ marginRight: '8px' }} />
+                  <Text className="indicator-title">Aquisições</Text>
+                </Link>
+                {permissoes.includes('manage.compras') && (
                   <Link
                     href="#"
                     display="flex"
                     alignItems="center"
                     color="white"
                     className='button-menu-nav'
-                    onClick={() => navigate('/main/list-compra-coletiva')}
+                    onClick={() => navigate('/main/list-product')}
                   >
                     <FaUsersCog style={{ marginRight: '8px' }} />
-                    
-                    <Text className="indicator-title">Todas</Text>
+                    <Text className="indicator-title">Produtos</Text>
                   </Link>
-                  {permissoes.includes('manage.compras') &&
-                    <Link
-                      href="#"
-                      display="flex"
-                      alignItems="center"
-                      color="white"
-                      className='button-menu-nav'
-                      onClick={() => navigate('/main/list-product')}
-                    >
-                      <FaUsersCog style={{ marginRight: '8px' }} />
-                      <Text className="indicator-title">Produtos</Text>
-                    </Link>
-                  }
-                </VStack>
-
-              </>
+                )}
+              </VStack>
             )}
           </Box>
 
+          {/* Logout */}
           <Link
             href="#"
             display="flex"
@@ -288,7 +276,7 @@ function Out() {
         </VStack>
       </Box>
 
-      {/* Menu Lateral Responsivo (Drawer) */}
+      {/* Menu Lateral Responsivo (Drawer) - MESMAS ALTERAÇÕES APLICADAS AQUI */}
       <Box display={{ base: 'block', md: 'none' }}>
         <Button onClick={onOpen} colorScheme="teal" variant="ghost">
           <FaBars />
@@ -305,7 +293,7 @@ function Out() {
             </DrawerHeader>
             <DrawerBody>
               <VStack spacing={4} align="start" width="100%">
-                {/* Menu no Drawer */}
+                {/* Dashboard */}
                 <Link
                   href="#"
                   display="flex"
@@ -318,7 +306,7 @@ function Out() {
                   Dashboard
                 </Link>
 
-                {/* Categoria Cadastros (Drawer) */}
+                {/* Cadastros (Drawer) - COM ITENS MOVIDOS */}
                 <Box width="100%">
                   <Link
                     href="#"
@@ -333,7 +321,7 @@ function Out() {
                   </Link>
                   {activeMenu === 'cadastros' && (
                     <VStack align="start" spacing={2} pl={6}>
-                      {permissoes.includes('read.users') &&
+                      {permissoes.includes('read.users') && (
                         <Link
                           pt={3}
                           href="#"
@@ -346,8 +334,8 @@ function Out() {
                           <FaUsersCog style={{ marginRight: '8px' }} />
                           Usuários
                         </Link>
-                      }
-                      {permissoes.includes('read.profiles') &&
+                      )}
+                      {permissoes.includes('read.profiles') && (
                         <Link
                           href="#"
                           display="flex"
@@ -359,8 +347,8 @@ function Out() {
                           <FaUsersCog style={{ marginRight: '8px' }} />
                           Perfis
                         </Link>
-                      }
-                      {permissoes.includes('read.membros') &&
+                      )}
+                      {permissoes.includes('read.membros') && (
                         <Link
                           href="#"
                           display="flex"
@@ -372,8 +360,8 @@ function Out() {
                           <FaUsersCog style={{ marginRight: '8px' }} />
                           Novos Membros
                         </Link>
-                      }
-                      {permissoes.includes('read.apoiadores') &&
+                      )}
+                      {permissoes.includes('read.apoiadores') && (
                         <Link
                           href="#"
                           display="flex"
@@ -385,11 +373,40 @@ function Out() {
                           <FaUsersCog style={{ marginRight: '8px' }} />
                           Novos Parceiros
                         </Link>
-                      }
+                      )}
+                      {/* Item movido de Eventos para Cadastros */}
+                      {permissoes.includes('manage.eventos') && (
+                        <Link
+                          href="#"
+                          display="flex"
+                          alignItems="center"
+                          color="black"
+                          _hover={{ color: 'teal.400' }}
+                          onClick={() => navigate('/main/agenda-eventos')}
+                        >
+                          <FaCalendarAlt style={{ marginRight: '8px' }} />
+                          Eventos
+                        </Link>
+                      )}
+                      {/* Item movido de Compras para Cadastros */}
+                      {permissoes.includes('manage.compras') && (
+                        <Link
+                          href="#"
+                          display="flex"
+                          alignItems="center"
+                          color="black"
+                          _hover={{ color: 'teal.400' }}
+                          onClick={() => navigate('/main/list-evento-compras')}
+                        >
+                          <FaUsersCog style={{ marginRight: '8px' }} />
+                          Relatório
+                        </Link>
+                      )}
                     </VStack>
                   )}
                 </Box>
-                {/* Categoria Eventos (Drawer) */}
+
+                {/* Eventos (Drawer) - SEM "Agenda" */}
                 <Box width="100%">
                   <Link
                     href="#"
@@ -404,7 +421,7 @@ function Out() {
                   </Link>
                   {activeMenu === 'eventos' && (
                     <VStack align="start" spacing={2} pl={6}>
-                      {permissoes.includes('eventos.inscricao') &&
+                      {permissoes.includes('eventos.inscricao') && (
                         <>
                           <Link
                             href="#"
@@ -417,7 +434,6 @@ function Out() {
                             <FaCalendarAlt style={{ marginRight: '8px' }} />
                             Eventos
                           </Link>
-
                           <Link
                             href="#"
                             display="flex"
@@ -430,25 +446,13 @@ function Out() {
                             Meus Eventos
                           </Link>
                         </>
-                      }
-                      {permissoes.includes('manage.eventos') &&
-                        <Link
-                          href="#"
-                          display="flex"
-                          alignItems="center"
-                          color="black"
-                          _hover={{ color: 'teal.400' }}
-                          onClick={() => navigate('/main/agenda-eventos')}
-                        >
-                          <FaCalendarAlt style={{ marginRight: '8px' }} />
-                          Agenda de Eventos
-                        </Link>}
+                      )}
                     </VStack>
                   )}
                 </Box>
-                {/* Categoria Compras (Drawer) */}
-                <Box width="100%">
 
+                {/* Compras (Drawer) - SEM "Gestão" */}
+                <Box width="100%">
                   <Link
                     href="#"
                     display="flex"
@@ -462,50 +466,35 @@ function Out() {
                   </Link>
                   {activeMenu === 'compras' && (
                     <VStack align="start" spacing={2} pl={6}>
-                        {permissoes.includes('manage.compras') &&
                       <Link
                         href="#"
                         display="flex"
                         alignItems="center"
                         color="black"
                         _hover={{ color: 'teal.400' }}
-                        onClick={() => navigate('/main/list-evento-compras')}
+                        onClick={() => navigate('/main/list-compra-coletiva')}
                       >
                         <FaUsersCog style={{ marginRight: '8px' }} />
-                        Gerenciar Compra Coletiva
+                        Aquisições
                       </Link>
-}
-                   
-                        <>
-                          <Link
-                            href="#"
-                            display="flex"
-                            alignItems="center"
-                            color="black"
-                            _hover={{ color: 'teal.400' }}
-                            onClick={() => navigate('/main/list-compra-coletiva')}
-                          >
-                            <FaUsersCog style={{ marginRight: '8px' }} />
-                            Compras
-                          </Link>
-                          {permissoes.includes('manage.compras') &&
-                          <Link
-                            href="#"
-                            display="flex"
-                            alignItems="center"
-                            color="black"
-                            _hover={{ color: 'teal.400' }}
-                            onClick={() => navigate('/main/list-product')}
-                          >
-                            <FaUsersCog style={{ marginRight: '8px' }} />
-                            Produtos
-                          </Link>
-}
-                        </>
-                      
+                      {permissoes.includes('manage.compras') && (
+                        <Link
+                          href="#"
+                          display="flex"
+                          alignItems="center"
+                          color="black"
+                          _hover={{ color: 'teal.400' }}
+                          onClick={() => navigate('/main/list-product')}
+                        >
+                          <FaUsersCog style={{ marginRight: '8px' }} />
+                          Produtos
+                        </Link>
+                      )}
                     </VStack>
                   )}
                 </Box>
+
+                {/* Logout */}
                 <Link
                   href="#"
                   display="flex"

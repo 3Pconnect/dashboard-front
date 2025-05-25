@@ -50,6 +50,7 @@ import { UserInterestedPage } from "./pages/UserInterestedPage";
 import Loading from "./componets/Loading";
 import { CreateNewPassWordPage } from "./pages/CreateNewPassword";
 import { UpdateEventoCompraPage } from "./pages/UpdateEventoCompraPage";
+import Landing from "./componets/Landing";
 
 export const App = () => {
   const [permissoes, setPermissoes] = useState(['']);
@@ -152,6 +153,7 @@ export const App = () => {
           <Route path="/" element={<NewLogin />} />
           <Route path="/create-password/:id" element={<CreateNewPassWordPage />} />
           <Route path="/seja-membro" element={<SejaMembroPage />} />
+             <Route path="/landing" element={<Landing />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
