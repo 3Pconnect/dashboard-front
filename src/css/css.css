@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    line-height: 50px;
+    font-weight: 700;
+    letter-spacing: normal;
+    color: #D63939;
+    background-color: #ffffff;
+    overflow-x: hidden;
+}
+
+.button-menu-nav {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 700;
+    letter-spacing: normal;
+    color: #D63939;
+    background-color: transparent;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.button-menu-nav:hover {
+    color: #3182ce;
+    font-weight: bolder;
+}
+
+.indicator-title {
+    font-family: "Montserrat", sans-serif !important;
+    line-height: 25.6px !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+}
+
+.heading-title {
+    font-family: "Montserrat", sans-serif !important;
+    line-height: 25.6px !important;
+    font-weight: 600 !important;
+    letter-spacing: normal !important;
+    color: #000;
+}
+
+.button-premium .ant-input-clear-icon {
+    color: rgb(219, 219, 219) !important;
+}
+
+.button-premium {
+    font-family: "Montserrat", sans-serif !important;
+    line-height: 25.6px !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+    color: #ffffff !important;
+    
+}
+
+.button-premium input::placeholder {
+    color: rgb(219, 219, 219) !important;
+}
+
+.ant-input {
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 0px !important;
+    color: #000 !important;
+}
+
+.ant-picker input {
+    font-family: "Montserrat", sans-serif !important;
+    border-radius: 8px !important;
+    border-color: #2596be !important;
+}
+
+.input-premium {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+.ant-picker-range .ant-picker-input > input::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.ant-picker-range .ant-picker-label {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 14px;
+    font-family: "Montserrat", sans-serif;
+}
+
+/* Campo do Select */
+.button-premium .ant-select-selector {
+    background-color: #f9f9f9 !important;
+    color: #333 !important;
+    border-radius: 6px !important;
+    border: 1px solid #ccc !important;
+    height: 40px !important;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    box-shadow: none !important;
+}
+
+/* Dropdown do Select */
+.button-premium .ant-select-dropdown {
+    background-color: #f9f9f9 !important;
+    color: #333 !important;
+    border-radius: 8px !important;
+}
+
+/* Seta do Select */
+.button-premium .ant-select-arrow {
+    color: #333 !important;
+}
+
+.ant-select-selector {
+    background-color: #fff !important;
+    color: #000 !important;
+    border-radius: 8px !important;
+    border-color: #2596be !important;
+    font-family: "Montserrat", sans-serif !important;
+}
+
+.ant-select-dropdown {
+    background-color: #fff !important;
+    color: #000 !important;
+    font-family: "Montserrat", sans-serif !important;
+}
+
+.ant-select-item-option {
+    background-color: #fff !important;
+    color: #000 !important;
+    font-family: "Montserrat", sans-serif !important;
+}
+
+.ant-select-item-option-selected {
+    background-color: #e6f7ff !important;
+    font-family: "Montserrat", sans-serif !important;
+}
+
+/* Tabela */
+.ant-table {
+    font-family: 'Montserrat', sans-serif !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-weight: 500 !important;
+}
+
+.chakra-checkbox__label {
+font-weight: normal;
+}
+
+.text-color {
+    color: #1a202c;
+}
+
+.ant-table-tbody > tr > td {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    border-color: #f0f0f0 !important;
+}
+
+.ant-table-thead > tr > th {
+    color: #000000 !important;
+    background-color: #f5f5f5 !important;
+
+}
+
+.ant-table-bordered .ant-table-cell {
+    border-color: #f0f0f0 !important;
+}
+
+.ant-table-row:hover {
+    background-color: #f0faff !important;
+    color: #000000 !important;
+}
+
+.ant-table-tbody > tr > td:hover {
+    background-color: #f0faff !important;
+}
+
+.ant-table-tbody > tr > td:not(:hover) {
+    background-color: #ffffff !important;
+}
+
+.mecanicos-input {
+    height: 40px !important;
+    background-color: #ffffff !important; /* fundo branco real */
+    color: #111 !important; /* texto um pouco mais escuro */
+    border: 1px solid #bbb !important; /* borda um pouco mais marcada */
+    border-radius: 6px !important;
+    padding: 0 8px !important;
+    box-sizing: border-box !important;
+}
+
+
+/* Inputs com borda azul, fundo branco e texto preto */
+.input-light {
+    height: 40px;
+    width: 100%;
+    background-color: #fff !important;
+    color: #000 !important;
+    border-radius: 0px !important;
+    border: 1px solid #2596be !important;
+    font-family: "Montserrat", sans-serif;
+}
+
+/* Botão primário com fundo azul e hover */
+.button-save {
+    background-color: #2596be !important;
+    color: #fff !important;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+}
+
+.button-save:hover {
+    background-color: #1b7fa4 !important;
+}
+
+/* Botão "Voltar" */
+.button-back {
+    background-color: transparent !important;
+    color: #D63939 !important;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.button-back:hover {
+    color: #a82828 !important;
+}
+
+
+/* Estilo moderno e discreto para a barra de scroll */
+.ant-table-body::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .ant-table-body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .ant-table-body::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+  
+  .ant-table-body {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Firefox */
+  }
+  
