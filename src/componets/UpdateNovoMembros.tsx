@@ -18,7 +18,8 @@ import {
   aprovarMembro,
   fetchMembroById,
   updateMembro,
-  reprovarMembro
+  reprovarMembro,
+  pagarMembro
 } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { hasPermission } from "../utils/util";
@@ -26,6 +27,7 @@ import { DatePicker, Input, Select, Table, Tag } from "antd";
 import { CheckCircleTwoTone, CloseCircleTwoTone } from "@ant-design/icons";
 import dayjs, { Dayjs } from "dayjs";
 
+import { MaskedInput } from "antd-mask-input";
 const filterOptions = [
   { label: "Ativo", value: "ativo" },
   { label: "Inativo", value: "inativo" },
@@ -56,6 +58,7 @@ export const UpdateNovoMembros = () => {
   const [loading, setLoading] = useState(false);
   const [loadingMembro, setLoadingMembro] = useState(false);
   const [gerouCobranca, setGerouCobranca] = useState(false);
+
   const [site, setSite] = useState("");
   const [instagram, setInstagram] = useState("");
   const [filterType, setFilterType] = useState<string>('inativo');
@@ -67,12 +70,51 @@ export const UpdateNovoMembros = () => {
     md: "row",
   });
 
+  function validarCNPJ(cnpj: string): boolean {
+    cnpj = cnpj.replace(/[^\d]+/g, ""); // remove pontos, traços e barras
+
+    if (cnpj.length !== 14) return false;
+
+    // Elimina CNPJs inválidos conhecidos
+    if (/^(\d)\1+$/.test(cnpj)) return false;
+
+    let tamanho = cnpj.length - 2;
+    let numeros = cnpj.substring(0, tamanho);
+    let digitos = cnpj.substring(tamanho);
+    let soma = 0;
+    let pos = tamanho - 7;
+
+    for (let i = tamanho; i >= 1; i--) {
+      soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+      if (pos < 2) pos = 9;
+    }
+
+    let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+    if (resultado !== parseInt(digitos.charAt(0))) return false;
+
+    tamanho++;
+    numeros = cnpj.substring(0, tamanho);
+    soma = 0;
+    pos = tamanho - 7;
+    for (let i = tamanho; i >= 1; i--) {
+      soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+      if (pos < 2) pos = 9;
+    }
+
+    resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+    if (resultado !== parseInt(digitos.charAt(1))) return false;
+
+    return true;
+  }
+
+
   const toast = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
   const [loadingAprovarReprovar, setLoadingAprovarReprovar] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [dataEvento, setDataEvento] = useState<Dayjs | null>(dayjs());
+  const [proximoVencimento, setProximoVencimento] = useState<Dayjs | null>(dayjs());
   const [estadoSelecionado, setEstadoSelecionado] = useState<string>("");
   const [estados, setEstados] = useState<Estado[]>([]);
   const [nivel, setNivel] = useState("");
@@ -94,7 +136,6 @@ export const UpdateNovoMembros = () => {
 
 
   const handleSubmit = async () => {
-
     setLoading(true);
     try {
       const response = await updateMembro(Number(id), {
@@ -105,7 +146,7 @@ export const UpdateNovoMembros = () => {
         nome_empresa,
         cargo,
         cnpj,
-        situacao,
+        situacao: filterType,
         dataEvento,
         atendimento_carros_premium: atendimento_carros_premium,
         bosch_car_service,
@@ -120,7 +161,7 @@ export const UpdateNovoMembros = () => {
         categoria_empresa: categoria,
         nivel
       });
-    console.log(response.data)
+      console.log(response.data)
       toast({
         title: "Usuário Cadastrado",
         description: "Usuário cadastrado com sucesso!",
@@ -142,37 +183,46 @@ export const UpdateNovoMembros = () => {
     }
   };
 
-  useEffect(() => {
-    const loadMembro = async () => {
-      setLoadingMembro(true)
-      try {
-        const data = await fetchMembroById(Number(id));
-        setName(data?.name);
-        setEmail(data?.email);
-        setNomeEmpresa(data?.nome_empresa);
-        setCargo(data?.cargo);
-        setSituacao(data?.situacao);
-        setBoschCarService(data?.bosch_car_service);
-        setModuloDiagnosticoBosch(data?.modulo_diagnostico_bosch);
-        setEquipamentoBosch(data?.equipamento_bosch);
-        setAtendimentoCarrosPremium(data?.atendimento_carros_premium);
-        setEmDiaComObrigacoes(data?.em_dia_com_obrigacoes);
-        setAfiliacao(data?.afiliacao);
-        setGerouCobranca(data?.gerouCobranca);
-        setInstagram(data?.instagram)
-        setSite(data?.site)
-        setCnpj(data?.cnpj)
-        setLoadingMembro(false)
-        setEstadoSelecionado(data?.estado)
-        setCategoria(data?.categoria_empresa)
-        setNivel(data?.nivel)
-      } catch (error) {
-        setLoadingMembro(false)
-        console.error(error);
-      }
-    };
-    loadMembro();
-  }, [id]);
+ const isHoje = proximoVencimento ? proximoVencimento.isSame(dayjs(), 'day') : false;
+ const proximoVencimentoMenorQueHoje = proximoVencimento 
+  ? proximoVencimento.isBefore(dayjs(), 'day') 
+  : false;
+ console.log("is hoje", isHoje)
+ console.log("proximoVencimentoMenorQueHoje", proximoVencimentoMenorQueHoje)
+
+useEffect(() => {
+  const loadMembro = async () => {
+    setLoadingMembro(true)
+    try {
+      const data = await fetchMembroById(Number(id));
+      setName(data?.name);
+      setEmail(data?.email);
+      setNomeEmpresa(data?.nome_empresa);
+      setCargo(data?.cargo);
+      setSituacao(data?.situacao);
+      setBoschCarService(data?.bosch_car_service);
+      setModuloDiagnosticoBosch(data?.modulo_diagnostico_bosch);
+      setEquipamentoBosch(data?.equipamento_bosch);
+      setAtendimentoCarrosPremium(data?.atendimento_carros_premium);
+      setEmDiaComObrigacoes(data?.em_dia_com_obrigacoes);
+      setAfiliacao(data?.afiliacao);
+      setGerouCobranca(data?.gerouCobranca);
+      setInstagram(data?.instagram)
+      setSite(data?.site)
+      setCnpj(data?.cnpj)
+      setEstadoSelecionado(data?.estado)
+      setCategoria(data?.categoria_empresa)
+      setNivel(data?.nivel)
+      setProximoVencimento(data?.vencimento ? dayjs(data.vencimento) : null) // ✅ corrigido
+      setLoadingMembro(false)
+    } catch (error) {
+      setLoadingMembro(false)
+      console.error(error);
+    }
+  };
+  loadMembro();
+}, [id, isHoje]);
+
 
   const handleAprovar = async () => {
     setLoadingAprovarReprovar(true);
@@ -191,6 +241,32 @@ export const UpdateNovoMembros = () => {
       toast({
         title: "Erro",
         description: "Não foi possível aprovar o usuário.",
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
+    } finally {
+      setLoadingAprovarReprovar(false);
+    }
+  };
+
+    const handlePagar = async () => {
+    setLoadingAprovarReprovar(true);
+    try {
+      await pagarMembro(Number(id));
+      setGerouCobranca(true);
+      toast({
+        title: "Usuário pago",
+        description: "Pagamento para usuário com sucesso.",
+        status: "success",
+        duration: 3000,
+        isClosable: true
+      });
+      navigate("/main/novos-membros");
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "Não foi possível atualizar pagamento do usuário.",
         status: "error",
         duration: 3000,
         isClosable: true
@@ -255,12 +331,12 @@ export const UpdateNovoMembros = () => {
     }
   ];
 
-    const gridTemplateColumns = useBreakpointValue({
-      base: "1fr",
-      md: "repeat(2, 1fr)",
-      lg: "repeat(3, 1fr)",
-    });
-  
+  const gridTemplateColumns = useBreakpointValue({
+    base: "1fr",
+    md: "repeat(2, 1fr)",
+    lg: "repeat(4, 1fr)",
+  });
+
 
   return (
     <Box className="text-color" bg="white" borderRadius="xl" h={"90vh"} p={4}>
@@ -382,17 +458,18 @@ export const UpdateNovoMembros = () => {
 
         <Box className="indicator-title" mb={4}>
           <Text mb={2}>CNPJ</Text>
-          <Input
-            className="mecanicos-input"
-            allowClear
-            placeholder="Digite o cnpj aqui"
+          <MaskedInput
+            mask="00.000.000/0000-00"
             value={cnpj}
             onChange={(e) => setCnpj(e.target.value)}
+            placeholder="Digite o CNPJ aqui"
+            className="mecanicos-input"
             style={{
               height: "40px",
               backgroundColor: "transparent",
               color: "white",
-              borderRadius: "0px", borderColor: "#2596be",
+              borderRadius: "0px",
+              borderColor: "#2596be",
               borderWidth: "1px"
             }}
           />
@@ -465,22 +542,28 @@ export const UpdateNovoMembros = () => {
           <Text mb={2}>Estados</Text>
           <Select
             className="button-premium"
+            showSearch
+            placeholder="Selecione o estado"
+            optionFilterProp="children"
             style={{
               width: "100%",
               height: "40px",
               color: "white",
             }}
-            placeholder="Selecione o estado"
             value={estadoSelecionado}
             onChange={(e) => setEstadoSelecionado(e)}
+            filterOption={(input, option) =>
+              String(option?.children).toLowerCase().includes(input.toLowerCase())
+            }
           >
             {estados.map((estado) => (
-              <option key={estado.sigla} value={estado.sigla}>
+              <Select.Option key={estado.sigla} value={estado.sigla}>
                 {estado.sigla} - {estado.nome}
-              </option>
+              </Select.Option>
             ))}
           </Select>
         </Box>
+
       </Grid>
 
 
@@ -559,7 +642,8 @@ export const UpdateNovoMembros = () => {
                   Recusar
                 </Button>
               )}
-              <Button
+
+              {gerouCobranca ??   <Button
                 className="button-premium"
                 isDisabled={gerouCobranca}
                 colorScheme="green"
@@ -569,7 +653,8 @@ export const UpdateNovoMembros = () => {
                 w={isMobile ? "100%" : "auto"}
               >
                 {gerouCobranca ? "Aprovado e Fatura Gerada" : "Aprovar e Enviar Cobrança"}
-              </Button>
+              </Button>}
+            
             </>
           )}
           <Button
@@ -581,6 +666,18 @@ export const UpdateNovoMembros = () => {
             w={isMobile ? "100%" : "auto"}
           >
             Salvar
+          </Button>
+
+          <Button
+            className="button-premium"
+            isDisabled={isHoje || !proximoVencimentoMenorQueHoje}
+            colorScheme="green"
+            onClick={handlePagar}
+            isLoading={loadingAprovarReprovar}
+            loadingText="Atualizando..."
+            w={isMobile ? "100%" : "auto"}
+          >
+            {isHoje || !proximoVencimentoMenorQueHoje ? "Pagamento Confirmado" : "Confirmar Pagamento" }
           </Button>
         </Stack>
       </Flex>

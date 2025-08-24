@@ -1,17 +1,20 @@
-import { Button, Flex, Heading, Grid, Box, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon, useToast, useBreakpointValue, Stack, Checkbox } from "@chakra-ui/react";
-import { MdArrowBack } from "react-icons/md";
+import { 
+  Button, Flex, Heading, Grid, Box, Text, Checkbox, useToast, useBreakpointValue 
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { registerMembro } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { DatePicker, Input, Select } from "antd";
+import { MaskedInput } from "antd-mask-input";
 import dayjs, { Dayjs } from "dayjs";
 
 const filterOptions = [
   { label: 'Ativo', value: 'ativo' },
   { label: 'Inativo', value: 'inativo' },
-  { label: 'Em analise', value: 'em_analise' },
+  { label: 'Em análise', value: 'em_analise' },
   { label: 'Pagamento Pendente', value: 'pagamento_pendente' },
 ];
+
 interface Estado {
   sigla: string;
   nome: string;
@@ -55,7 +58,6 @@ export const CreateNovosMembros = () => {
     }
   };
 
-
   useEffect(() => {
     carregarEstados();
   }, []);
@@ -84,7 +86,6 @@ export const CreateNovosMembros = () => {
           estado: estadoSelecionado,
           nivel
         }
-
       );
       console.log("Membro registrado com sucesso", response);
       toast({
@@ -124,18 +125,19 @@ export const CreateNovosMembros = () => {
       </Flex>
 
       <Grid className="indicator-title" templateColumns={gridTemplateColumns} gap={4}>
+        {/* Nome */}
         <Box mb={4}>
           <Text className="indicator-title" mb={2}>Nome</Text>
           <Input
             allowClear
-            placeholder="Digite o nome do membri"
+            placeholder="Digite o nome do membro"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="mecanicos-input"
           />
         </Box>
 
-
+        {/* Email */}
         <Box mb={4}>
           <Text mb={2}>E-mail</Text>
           <Input
@@ -147,6 +149,7 @@ export const CreateNovosMembros = () => {
           />
         </Box>
 
+        {/* Empresa */}
         <Box mb={4}>
           <Text mb={2}>Empresa</Text>
           <Input
@@ -158,6 +161,7 @@ export const CreateNovosMembros = () => {
           />
         </Box>
 
+        {/* Cargo */}
         <Box mb={4}>
           <Text mb={2}>Cargo</Text>
           <Input
@@ -166,16 +170,10 @@ export const CreateNovosMembros = () => {
             placeholder="Digite o cargo do membro"
             value={cargo}
             onChange={(e) => setCargo(e.target.value)}
-            style={{
-              height: "40px",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px", borderColor: "#2596be",
-              borderWidth: "1px"
-            }}
           />
         </Box>
 
+        {/* Site */}
         <Box>
           <Text mb={2}>Site</Text>
           <Input
@@ -184,18 +182,10 @@ export const CreateNovosMembros = () => {
             placeholder="Digite a url do site"
             value={site}
             onChange={(e) => setSite(e.target.value)}
-            style={{
-              height: "40px",
-              width: "100%",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px",
-              borderColor: "#2596be",
-              borderWidth: "1px",
-            }}
           />
         </Box>
 
+        {/* Instagram */}
         <Box>
           <Text mb={2}>Instagram</Text>
           <Input
@@ -204,101 +194,79 @@ export const CreateNovosMembros = () => {
             placeholder="Digite o @"
             value={instagram}
             onChange={(e) => setInstagram(e.target.value)}
-            style={{
-              height: "40px",
-              width: "100%",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px",
-              borderColor: "#2596be",
-              borderWidth: "1px",
-            }}
           />
         </Box>
 
-        <Box mb={[0, 0]} w="100%">
+        {/* Nível */}
+        <Box w="100%">
           <Text mb={2}>Nível</Text>
           <Select
             className="button-premium"
-            style={{
-              width: "100%",
-              height: "40px",
-              color: "white",
-            }}
+            style={{ width: "100%" }}
             value={nivel}
             onChange={(value) => setNivel(value as string)}
           >
-            <option value="junior">Junior</option>
-            <option value="associado">Associado</option>
+            <Select.Option value="junior">Junior</Select.Option>
+            <Select.Option value="associado">Associado</Select.Option>
           </Select>
         </Box>
 
+        {/* CNPJ com máscara */}
         <Box className="indicator-title" mb={4}>
           <Text mb={2}>CNPJ</Text>
-          <Input
-            className="mecanicos-input"
-            allowClear
-            placeholder="Digite o cnpj aqui"
+          <MaskedInput
+            mask="00.000.000/0000-00"
             value={cnpj}
             onChange={(e) => setCnpj(e.target.value)}
-            style={{
-              height: "40px",
-              backgroundColor: "transparent",
-              color: "white",
-              borderRadius: "0px", borderColor: "#2596be",
-              borderWidth: "1px"
-            }}
+            placeholder="Digite o CNPJ aqui"
+            className="mecanicos-input"
+            style={{ width: "100%" }}
           />
         </Box>
 
+        {/* Data */}
         <Box>
           <Text mb={2}>Próximo Vencimento</Text>
           <DatePicker
             value={dataEvento}
             className="mecanicos-input"
-            inputReadOnly={false}
             style={{ width: "100%" }}
             onChange={(date) => setDataEvento(date)}
           />
         </Box>
 
-        <Box mb={[4, 0]} w="100%">
+        {/* Atendimento Premium */}
+        <Box w="100%">
           <Text mb={2}>Atendimento Premium</Text>
           <Select
             className="button-premium"
-            style={{
-              width: "100%",
-              height: "40px",
-              color: "white",
-            }}
+            style={{ width: "100%" }}
             value={atendimentoCarrosPremium}
             onChange={(value) => setAtendimentoCarrosPremium(value as string)}
           >
-            <option value="0a20">De 0 a 20%</option>
-            <option value="20a40">De 20 a 40%</option>
-            <option value="40a60">De 40 a 60%</option>
-            <option value="acima80">Acima de 80%</option>
+            <Select.Option value="0a20">De 0 a 20%</Select.Option>
+            <Select.Option value="20a40">De 20 a 40%</Select.Option>
+            <Select.Option value="40a60">De 40 a 60%</Select.Option>
+            <Select.Option value="acima80">Acima de 80%</Select.Option>
           </Select>
         </Box>
 
-        <Box mb={[0, 0]} w="100%">
+        {/* Categoria */}
+        <Box w="100%">
           <Text mb={2}>Categoria da Empresa</Text>
           <Select
             className="button-premium"
-            style={{
-              width: "100%",
-              height: "40px",
-              color: "white",
-            }}
+            style={{ width: "100%" }}
             value={categoria}
             onChange={(value) => setCategoria(value as string)}
           >
-            <option value="simples_nacional">Simples Nacional</option>
-            <option value="lucro_presumido">Lucro Presumido</option>
-            <option value="lucro_real">Lucro Real</option>
+            <Select.Option value="simples_nacional">Simples Nacional</Select.Option>
+            <Select.Option value="lucro_presumido">Lucro Presumido</Select.Option>
+            <Select.Option value="lucro_real">Lucro Real</Select.Option>
           </Select>
         </Box>
 
+        {/* Situação */}
         <Box w="100%">
           <Text mb={2}>Situação</Text>
           <Select
@@ -306,84 +274,62 @@ export const CreateNovosMembros = () => {
             options={filterOptions}
             value={filterType}
             onChange={setFilterType}
-            style={{
-              width: "100%",
-              height: "40px",
-              color: "white",
-            }}
+            style={{ width: "100%" }}
           />
         </Box>
 
-        <Box mb={4}>
-          <Text mb={2}>Estados</Text>
-          <Select
-            className="button-premium"
-            style={{
-              width: "100%",
-              height: "40px",
-              color: "white",
-            }}
-            placeholder="Selecione o estado"
-            value={estadoSelecionado}
-            onChange={(e) => setEstadoSelecionado(e)}
-          >
-            {estados.map((estado) => (
-              <option key={estado.sigla} value={estado.sigla}>
-                {estado.sigla} - {estado.nome}
-              </option>
-            ))}
-          </Select>
-        </Box>
+        {/* Estados com search */}
+     <Box mb={4}>
+  <Text mb={2}>Estados</Text>
+  <Select
+    showSearch
+    className="button-premium"
+    style={{
+      width: "100%",
+      height: "40px",
+      color: "white",
+    }}
+    placeholder="Selecione o estado"
+    value={estadoSelecionado}
+    onChange={(value) => setEstadoSelecionado(value)}
+    filterOption={(input, option) =>
+      (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+    }
+    options={estados.map((estado) => ({
+      label: `${estado.sigla} - ${estado.nome}`,
+      value: estado.sigla,
+    }))}
+  />
+</Box>
+
       </Grid>
 
+      {/* Checkboxes */}
       <Box mt={6} mb={6} color={"black"} className="indicator-title">
         <Text fontWeight="semibold" mb={3}>
           Avaliação de Requisitos para novo Associado
         </Text>
         <Grid pl={4} templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} rowGap={2} columnGap={4}>
-          <Checkbox
-            isChecked={bosch_car_service}
-            onChange={(e) => setBoschCarService(e.target.checked)}
-          >
+          <Checkbox isChecked={bosch_car_service} onChange={(e) => setBoschCarService(e.target.checked)}>
             É Bosch Car Service
           </Checkbox>
-
-          <Checkbox
-            colorScheme="gray"
-            isChecked={modulo_diagnostico_bosch}
-            onChange={(e) => setModuloDiagnosticoBosch(e.target.checked)}
-          >
+          <Checkbox isChecked={modulo_diagnostico_bosch} onChange={(e) => setModuloDiagnosticoBosch(e.target.checked)}>
             Módulo de Diagnóstico Bosch
           </Checkbox>
-
-          <Checkbox
-            colorScheme="gray"
-            isChecked={equipamento_bosch}
-            onChange={(e) => setEquipamentoBosch(e.target.checked)}
-          >
+          <Checkbox isChecked={equipamento_bosch} onChange={(e) => setEquipamentoBosch(e.target.checked)}>
             Possui Equipamento Bosch
           </Checkbox>
-
-          <Checkbox
-            colorScheme="gray"
-            isChecked={em_dia_com_obrigacoes}
-            onChange={(e) => setEmDiaComObrigacoes(e.target.checked)}
-          >
+          <Checkbox isChecked={em_dia_com_obrigacoes} onChange={(e) => setEmDiaComObrigacoes(e.target.checked)}>
             Em Dia com Obrigações Federais, Estaduais e Municipais
           </Checkbox>
-
-          <Checkbox
-            colorScheme="gray"
-            isChecked={afiliacao}
-            onChange={(e) => setAfiliadoEntidade(e.target.checked)}
-          >
+          <Checkbox isChecked={afiliacao} onChange={(e) => setAfiliadoEntidade(e.target.checked)}>
             Afiliado a Entidades, Sindicato ou Associação
           </Checkbox>
         </Grid>
       </Box>
 
+      {/* Botão */}
       <Flex justify="flex-start" mt={5}>
-
         <Button
           mb={5}
           className="button-premium"
@@ -392,12 +338,10 @@ export const CreateNovosMembros = () => {
           loadingText="Salvando..."
           bg="#1b5ebc"
           color="white"
-          colorScheme="green"
-          w={{ base: "100%", md: "200px" }} // 100% no mobile, 200px no desktop
+          w={{ base: "100%", md: "200px" }}
         >
           {loading ? "Salvando..." : "Salvar"}
         </Button>
-
       </Flex>
     </Box>
   );
