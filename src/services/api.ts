@@ -285,6 +285,32 @@ export const aprovarMembro = async (id: number) => {
     }
   }
 };
+
+export const pagarMembro = async (id: number) => {
+  try {
+    const response = await api.put(`/membros/${id}/pagar`);
+
+    if (!response.data) {
+      throw new Error("Resposta inesperada da API.");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro ao buscar informações do usuário:", error);
+
+    if (error.response) {
+      // Caso o erro venha da resposta da API (status 4xx ou 5xx)
+      throw new Error(error.response.data?.message || "Erro ao buscar informações do usuário.");
+    } else if (error.request) {
+      // Caso o erro seja por falta de resposta (sem resposta do servidor)
+      throw new Error("Servidor não respondeu. Tente novamente mais tarde.");
+    } else {
+      // Caso seja um erro inesperado
+      throw new Error("Erro inesperado ao buscar informações do usuário.");
+    }
+  }
+};
+
 export const reprovarMembro = async (id: number) => {
   try {
     const response = await api.put(`/membros/${id}/reprovar`);
